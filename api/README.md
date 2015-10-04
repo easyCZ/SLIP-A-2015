@@ -10,3 +10,5 @@ Activate virtual environment `source ./venv/bin/activate`
 Install dependencies `pip install -r requirements.txt`
 
 
+## Adding Python dependencies
+Use pip: `pip install <dependency>` and update the requirements file with `pip freeze > requirements.txt`
