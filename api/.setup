@@ -1,0 +1,6 @@
+#!/bin/bash
+
+virtualenv-3.4 venv
+source ./venv/bin/activate
+
+pip install -r requirements.txt
