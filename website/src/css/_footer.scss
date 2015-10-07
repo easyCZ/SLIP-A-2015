@@ -1,0 +1,22 @@
+// Sticky footer styles
+
+$footer-height: 100px;
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: $footer-height;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: $footer-height;
+
+  color: $jumbotron-color;
+  background-color: $jumbotron-bg;
+}

@@ -1,0 +1,20 @@
+@import 'bootstrap-sass/assets/stylesheets/bootstrap/variables';
+
+// Our variables
+$body-bg: $gray-darker;
+
+$brand-primary: $gray-base;
+$text-color: $gray-lighter;
+$navbar-default-color: $brand-primary;
+$navbar-default-link-color: $brand-primary;
+
+$jumbotron-bg: $gray-dark;
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import 'bootstrap-sass/assets/stylesheets/bootstrap';
+@import 'footer';
+@import 'jumbotron';
+
+.navbar {
+  margin-bottom: 0;
+}
