@@ -1,0 +1,8 @@
+{
+  "name": "slip-a-2015-website",
+  "version": "0.0.0",
+  "homepage": "https://github.com/easyCZ/SLIP-A-2015",
+  "dependencies": {
+    "marionette": "~2.4.3"
+  }
+}
