@@ -90,6 +90,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         # GETTING-STARTED: change 'db.sqlite3' to your sqlite3 database:
         'NAME': os.path.join(DATA_DIR, 'db.sqlite3'),
+
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'api',                      # Or path to database file if using sqlite3.
+        # The following settings are not used with sqlite3:
+        'USER': os.environ.get('OPENSHIFT_POSTGRESQL_DB_USERNAME'),
+        'PASSWORD': os.environ.get('OPENSHIFT_POSTGRESQL_DB_PASSWORD'),
+        'HOST': os.environ.get('OPENSHIFT_POSTGRESQL_DB_HOST'),                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
+        'PORT': os.environ.get('OPENSHIFT_POSTGRESQL_DB_PORT'),                      # Set to empty string for default.
     }
 }
 
