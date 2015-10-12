@@ -6,7 +6,8 @@
     "marionette": "~2.4.3",
     "bootstrap-sass": "~3.3.5",
     "handlebars": "< 4.0.0",
-    "requirejs": "~2.1.20"
+    "requirejs": "~2.1.20",
+    "backbone.radio": "~1.0.2"
   },
   "devDependencies": {
     "smoothie": "~1.27.0"
