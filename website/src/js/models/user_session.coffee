@@ -26,9 +26,14 @@ define [
     setCurrentUser: (user) =>
       @currentUser = user
 
-      localStorage.setItem('authToken', user.authToken)
-      localStorage.setItem('firstname', user.firstname)
-      localStorage.setItem('lastname', user.lastname)
+      if user
+        localStorage.setItem('authToken', user.authToken)
+        localStorage.setItem('firstname', user.firstname)
+        localStorage.setItem('lastname', user.lastname)
+      else
+        localStorage.removeItem('authToken')
+        localStorage.removeItem('firstname')
+        localStorage.removeItem('lastname')
 
     getCurrentUser: =>
       return @currentUser if @currentUser?
