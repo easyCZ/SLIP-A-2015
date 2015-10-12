@@ -20,8 +20,8 @@ define [
         @setCurrentUser(null)
 
     bindResponders: ->
-      Radio.channel('authentication').reply 'currentUser', (callback) =>
-        callback? @getCurrentUser()
+      Radio.channel('authentication').reply 'currentUser', =>
+        @getCurrentUser()
 
     setCurrentUser: (user) =>
       @currentUser = user
