@@ -3,6 +3,7 @@ define [
   'backbone.radio',
 
   'views/index',
+  'views/dashboard',
   'views/about',
   'views/login',
 ], (
@@ -10,6 +11,7 @@ define [
   Radio,
 
   IndexView,
+  DashboardView,
   AboutView,
   LoginView,
 ) ->
@@ -26,7 +28,10 @@ define [
         @navigate url, options
 
     index: ->
-      @app.rootView.main.show new IndexView()
+      if Radio.channel('authentication').request('currentUser')
+        @app.rootView.main.show new DashboardView()
+      else
+        @app.rootView.main.show new IndexView()
 
     about: ->
       @app.rootView.main.show new AboutView()
