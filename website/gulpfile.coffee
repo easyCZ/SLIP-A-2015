@@ -25,7 +25,7 @@ gulp.task 'styles', ['sass']
 #
 coffee = require 'gulp-coffee'
 mainBowerFiles = require 'main-bower-files'
-rjs = require 'gulp-requirejs'
+rjs = require 'gulp-requirejs-optimize'
 
 handlebars = require 'gulp-handlebars'
 defineModule = require 'gulp-define-module'
@@ -57,14 +57,17 @@ gulp.task 'rjsBuild', ['coffee', 'bowerScripts', 'handlebars'], ->
     name: 'main',
     out: 'rjsBuild.js',
     wrap: true
-  .pipe gulp.dest('.tmp/js')
+
+  requireJs = gulp.src '.tmp/js/require.js'
+
+  merge(requireJs, rjsBuild)
+    .pipe concat ('app.js')
+    .pipe gulp.dest('dist/js')
+    .pipe gulp.dest('.tmp/js')
 
   return
 
-gulp.task 'scripts', ['rjsBuild'], ->
-  gulp.src ['.tmp/js/require.js', '.tmp/js/rjsBuild.js']
-    .pipe concat ('app.js')
-    .pipe gulp.dest('dist/js')
+gulp.task 'scripts', ['rjsBuild']
 
 #
 # HTML
