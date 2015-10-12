@@ -24,6 +24,9 @@ define [
       return data
 
     initialize: ->
+      Radio.channel('authentication').request 'currentUser', (user) =>
+        @user = user
+
       @listenTo Radio.channel('authentication'), 'login', (user) =>
         @user = user
 
