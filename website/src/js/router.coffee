@@ -1,10 +1,14 @@
 define [
   'backbone',
+  'backbone.radio',
+
   'views/index',
   'views/about',
   'views/login',
 ], (
   Backbone,
+  Radio,
+
   IndexView,
   AboutView,
   LoginView,
@@ -17,6 +21,9 @@ define [
 
     initialize: (options) ->
       @app = options.app
+
+      @listenTo Radio.channel('navigation'), 'navigate', (url, options) =>
+        @navigate url, options
 
     index: ->
       @app.rootView.main.show new IndexView()

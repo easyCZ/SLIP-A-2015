@@ -23,12 +23,14 @@ define [
       alert("Logging in with #{formData}")
 
       # Fire off an event after login
-      authToken = '123456789'
-      firstname = 'Test'
-      lastname  = 'Tester'
-      Radio.channel('authentication').trigger 'login',
-        authToken: authToken
-        firstname: firstname
-        lastname:  lastname
+      loginCallback = (user) ->
+        Radio.channel('authentication').trigger 'login', user
+
+        Radio.channel('navigation').trigger 'navigate', '/', trigger: true
+
+      loginCallback
+        authToken: '123456789'
+        firstname: 'Test'
+        lastname: 'Tester'
 
       return false
