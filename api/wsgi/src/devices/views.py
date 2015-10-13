@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from devices.models import Device
+from devices.serializers import DeviceSerializer
+from rest_framework import viewsets
+from rest_framework.generics import ListCreateAPIView
+from rest_framework.viewsets import ModelViewSet
 
-# Create your views here.
+
+class DevicesListView(ModelViewSet):
+    queryset = Device.objects.all()
+    serializer_class = DeviceSerializer
