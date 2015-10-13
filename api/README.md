@@ -8,7 +8,7 @@
 
 ### Running
 1. Run `<api_root>/manage runserver`
-2. Navigate to [http://localhost:8080](http://localhost:8080)
+2. Navigate to [http://localhost:8000](http://localhost:8080)
 
 ### Database Management & Migrations
 Taken care of by django. To update schema, run the following:
