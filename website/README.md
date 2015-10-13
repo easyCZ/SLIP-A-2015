@@ -28,7 +28,7 @@ bower install
 gulp server
 ```
 
-and browse to http://localhost:4000/
+and browse to http://localhost:9000/
 
 ### Build
 

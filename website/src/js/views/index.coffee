@@ -1,4 +1,5 @@
 define [
+  'jquery',
   'underscore',
   'marionette',
   'smoothie',
@@ -7,6 +8,7 @@ define [
 
   'helpers/liveChart',
 ],(
+  $,
   _,
   Marionette,
   Smoothie,
@@ -21,7 +23,12 @@ define [
     initialize: ->
       @generateInterval = setInterval =>
         @generateDemoSeries()
-      , 500
+      , 4
+
+      $.getJSON '/sample_data/ecg.json', (response) =>
+        @sampleData.ecg = response.data
+
+    sampleData: {}
 
     demoSeries:
       ecg: new TimeSeries()
@@ -39,9 +46,21 @@ define [
       @liveCharts.resipiratory = @.$('.respiratory-live').liveChart(@demoSeries.resipiratory)
 
     generateDemoSeries: =>
-      @demoSeries.ecg.append (new Date).getTime(), Math.random() * 10000
-      @demoSeries.heartRate.append (new Date).getTime(), Math.random() * 10000
-      @demoSeries.resipiratory.append (new Date).getTime(), Math.random() * 10000
+      # @demoSeries.heartRate.append (new Date).getTime(), Math.random() * 10000
+      # @demoSeries.resipiratory.append (new Date).getTime(), Math.random() * 10000
+
+      if @sampleData.ecg
+        date = new Date()
+        # We have 2500 samples in 10 seconds
+        time = date.getTime()
+        sampleTime = (time % 10000)
+        sampleNo = Math.round(sampleTime / 4)
+
+        sample = @sampleData.ecg[sampleNo]
+
+        if sample
+          time = date.getTime()
+          @demoSeries.ecg.append time, sample
 
     onDestroy: =>
       clearInterval(@generateInterval)

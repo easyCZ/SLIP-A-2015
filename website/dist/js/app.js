@@ -24127,7 +24127,7 @@ var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); 
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-define('views/index',['underscore', 'marionette', 'smoothie', 'templates/index', 'helpers/liveChart'], function(_, Marionette, Smoothie, template, liveChart) {
+define('views/index',['jquery', 'underscore', 'marionette', 'smoothie', 'templates/index', 'helpers/liveChart'], function($, _, Marionette, Smoothie, template, liveChart) {
   var IndexView;
   return IndexView = (function(superClass) {
     extend(IndexView, superClass);
@@ -24142,12 +24142,19 @@ define('views/index',['underscore', 'marionette', 'smoothie', 'templates/index',
     IndexView.prototype.template = template;
 
     IndexView.prototype.initialize = function() {
-      return this.generateInterval = setInterval((function(_this) {
+      this.generateInterval = setInterval((function(_this) {
         return function() {
           return _this.generateDemoSeries();
         };
-      })(this), 500);
+      })(this), 4);
+      return $.getJSON('/sample_data/ecg.json', (function(_this) {
+        return function(response) {
+          return _this.sampleData.ecg = response.data;
+        };
+      })(this));
     };
+
+    IndexView.prototype.sampleData = {};
 
     IndexView.prototype.demoSeries = {
       ecg: new TimeSeries(),
@@ -24168,9 +24175,18 @@ define('views/index',['underscore', 'marionette', 'smoothie', 'templates/index',
     };
 
     IndexView.prototype.generateDemoSeries = function() {
-      this.demoSeries.ecg.append((new Date).getTime(), Math.random() * 10000);
-      this.demoSeries.heartRate.append((new Date).getTime(), Math.random() * 10000);
-      return this.demoSeries.resipiratory.append((new Date).getTime(), Math.random() * 10000);
+      var date, sample, sampleNo, sampleTime, time;
+      if (this.sampleData.ecg) {
+        date = new Date();
+        time = date.getTime();
+        sampleTime = time % 10000;
+        sampleNo = Math.round(sampleTime / 4);
+        sample = this.sampleData.ecg[sampleNo];
+        if (sample) {
+          time = date.getTime();
+          return this.demoSeries.ecg.append(time, sample);
+        }
+      }
     };
 
     IndexView.prototype.onDestroy = function() {
@@ -24185,13 +24201,90 @@ define('views/index',['underscore', 'marionette', 'smoothie', 'templates/index',
   })(Marionette.ItemView);
 });
 
-define('templates/dashboard',["handlebars"], function(Handlebars) { return Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "Dashboard.\n";
+var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+define('models/device',['backbone'], function(Backbone) {
+  var Device;
+  return Device = (function(superClass) {
+    extend(Device, superClass);
+
+    function Device() {
+      return Device.__super__.constructor.apply(this, arguments);
+    }
+
+    Device.prototype.url = function() {
+      if (typeof id !== "undefined" && id !== null) {
+        return Radio.channel('application').request('apiUrl') + ("/devices/" + id + ".json");
+      } else {
+        return Radio.channel('application').request('apiUrl') + '/devices.json';
+      }
+    };
+
+    return Device;
+
+  })(Backbone.Model);
+});
+
+var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+define('collections/device_collection',['backbone', 'backbone.radio', 'models/device'], function(Backbone, Radio, Device) {
+  var DeviceCollection;
+  return DeviceCollection = (function(superClass) {
+    extend(DeviceCollection, superClass);
+
+    function DeviceCollection() {
+      return DeviceCollection.__super__.constructor.apply(this, arguments);
+    }
+
+    DeviceCollection.prototype.model = Device;
+
+    DeviceCollection.prototype.url = function() {
+      return Radio.channel('application').request('apiUrl') + '/devices.json';
+    };
+
+    return DeviceCollection;
+
+  })(Backbone.Collection);
+});
+
+define('templates/dashboard/device',["handlebars"], function(Handlebars) { return Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    var helper;
+
+  return this.escapeExpression(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"id","hash":{},"data":data}) : helper)))
+    + "\nDevice\n";
 },"useData":true}); });
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-define('views/dashboard',['marionette', 'templates/dashboard'], function(Marionette, template) {
+define('views/dashboard/device',['marionette', 'templates/dashboard/device'], function(Marionette, template) {
+  var DashboardDeviceView;
+  return DashboardDeviceView = (function(superClass) {
+    extend(DashboardDeviceView, superClass);
+
+    function DashboardDeviceView() {
+      return DashboardDeviceView.__super__.constructor.apply(this, arguments);
+    }
+
+    DashboardDeviceView.prototype.tagName = 'li';
+
+    DashboardDeviceView.prototype.className = 'device';
+
+    DashboardDeviceView.prototype.template = template;
+
+    return DashboardDeviceView;
+
+  })(Marionette.ItemView);
+});
+
+define('templates/dashboard',["handlebars"], function(Handlebars) { return Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    return "Dashboard.\n\n<ul class=\"devices\">\n\n</ul>\n";
+},"useData":true}); });
+var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+define('views/dashboard',['marionette', 'collections/device_collection', 'views/dashboard/device', 'templates/dashboard'], function(Marionette, DeviceCollection, DashboardDeviceView, template) {
   var DashboardView;
   return DashboardView = (function(superClass) {
     extend(DashboardView, superClass);
@@ -24202,9 +24295,19 @@ define('views/dashboard',['marionette', 'templates/dashboard'], function(Marione
 
     DashboardView.prototype.template = template;
 
+    DashboardView.prototype.collection = new DeviceCollection();
+
+    DashboardView.prototype.childView = DashboardDeviceView;
+
+    DashboardView.prototype.childViewContainer = '.devices';
+
+    DashboardView.prototype.initialize = function() {
+      return this.collection.fetch();
+    };
+
     return DashboardView;
 
-  })(Marionette.ItemView);
+  })(Marionette.CompositeView);
 });
 
 define('templates/about',["handlebars"], function(Handlebars) { return Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -24494,19 +24597,30 @@ define('views/main',['marionette', 'views/navbar'], function(Marionette, Navbar)
   })(Marionette.LayoutView);
 });
 
-var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-define('application',['marionette', 'router', 'models/user_session', 'views/main'], function(Marionette, Router, UserSession, MainView) {
+define('application',['marionette', 'backbone.radio', 'router', 'models/user_session', 'views/main'], function(Marionette, Radio, Router, UserSession, MainView) {
   var Application;
   return Application = (function(superClass) {
     extend(Application, superClass);
 
     function Application() {
+      this.bindRadioResponses = bind(this.bindRadioResponses, this);
       return Application.__super__.constructor.apply(this, arguments);
     }
 
+    Application.prototype.apiUrl = function() {
+      if (window.location.toString().match(/localhost/)) {
+        return 'http://localhost:8000';
+      } else {
+        return 'http://api-ubervest.rhcloud.com';
+      }
+    };
+
     Application.prototype.initialize = function() {
+      this.bindRadioResponses();
       this.session = new UserSession();
       this.rootView = new MainView({
         el: 'body'
@@ -24515,6 +24629,14 @@ define('application',['marionette', 'router', 'models/user_session', 'views/main
         app: this
       });
       return Backbone.history.start();
+    };
+
+    Application.prototype.bindRadioResponses = function() {
+      return Radio.channel('application').reply('apiUrl', (function(_this) {
+        return function() {
+          return _this.apiUrl();
+        };
+      })(this));
     };
 
     return Application;

@@ -75,6 +75,14 @@ gulp.task 'html', ->
     .pipe gulp.dest 'dist'
 
 #
+# Sample Data
+#
+
+gulp.task 'sample_data', ->
+  gulp.src 'src/sample_data/*'
+    .pipe gulp.dest 'dist/sample_data'
+
+#
 # Development Server
 #
 connect = require('gulp-connect')
@@ -82,7 +90,7 @@ connect = require('gulp-connect')
 gulp.task 'connect', ->
   connect.server
     root: ['dist'],
-    port: 8000,
+    port: 9000,
 
 gulp.task 'watch', ->
   gulp.watch('src/js/**/*', ['scripts'])
@@ -95,4 +103,4 @@ gulp.task 'server', ['default', 'connect', 'watch']
 # Full Build
 #
 
-gulp.task 'default', ['styles', 'scripts', 'html']
+gulp.task 'default', ['styles', 'scripts', 'html', 'sample_data']
