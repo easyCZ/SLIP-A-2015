@@ -19,5 +19,12 @@ Taken care of by django. To update schema, run the following:
 Make sure you never merge migration merge issues.
 
 
+### Django shell
+```
+source /var/lib/openshift/56195dcb2d527167370000bc/python/virtenv/venv/bin/activate
+python app-root/repo/wsgi/src/manage.py shell
+```
+
+
 ### Deployment
 Deployment will be taken care of by Jenkins running on the openshift platform. Changes are polled every 3 minutes or so. It may take a moment to propagate. Hot deploy is currently not configured and therefore the application will be down between re-deployments.
