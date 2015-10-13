@@ -20,6 +20,7 @@ Make sure you never merge migration merge issues.
 
 
 ### Django shell
+SSH into the server, instructions in the OpenShift application space
 ```
 source /var/lib/openshift/56195dcb2d527167370000bc/python/virtenv/venv/bin/activate
 python app-root/repo/wsgi/src/manage.py shell
