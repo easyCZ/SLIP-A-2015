@@ -10,3 +10,5 @@
 1. Run `<api_root>/manage runserver`
 2. Navigate to [http://localhost:8080](http://localhost:8080)
 
+### Deployment
+Deployment will be taken care of by Jenkins running on the openshift platform. Changes are polled every 3 minutes or so. It may take a moment to propagate. Hot deploy is currently not configured and therefore the application will be down between re-deployments.
