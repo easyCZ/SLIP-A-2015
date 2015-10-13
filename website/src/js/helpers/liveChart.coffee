@@ -22,4 +22,4 @@ define [
 
     chart.streamTo canvas[0], 500
 
-    return
+    return chart

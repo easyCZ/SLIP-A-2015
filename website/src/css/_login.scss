@@ -1,0 +1,29 @@
+.form-login {
+  @media (min-width: $screen-sm-min) {
+    margin-top: 40px;
+  }
+
+  @media (min-width: $screen-md-min) {
+    margin-top: 80px;
+  }
+
+  h2, h3 {
+    text-align: center;
+  }
+
+  .form-control:focus {
+    z-index: 2;
+  }
+
+  input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  input[type="password"] {
+    margin-bottom: 10px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+  }
+}

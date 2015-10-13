@@ -6087,5 +6087,29 @@ body {
     left: 0;
     text-align: center; }
 
+@media (min-width: 768px) {
+  .form-login {
+    margin-top: 40px; } }
+
+@media (min-width: 992px) {
+  .form-login {
+    margin-top: 80px; } }
+
+.form-login h2, .form-login h3 {
+  text-align: center; }
+
+.form-login .form-control:focus {
+  z-index: 2; }
+
+.form-login input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0; }
+
+.form-login input[type="password"] {
+  margin-bottom: 10px;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0; }
+
 .navbar {
   margin-bottom: 0; }

@@ -1,4 +1,5 @@
 define [
+  'underscore',
   'marionette',
   'smoothie',
 
@@ -6,6 +7,7 @@ define [
 
   'helpers/liveChart',
 ],(
+  _,
   Marionette,
   Smoothie,
 
@@ -17,7 +19,7 @@ define [
     template: template
 
     initialize: ->
-      setInterval =>
+      @generateInterval = setInterval =>
         @generateDemoSeries()
       , 500
 
@@ -26,12 +28,23 @@ define [
       heartRate: new TimeSeries()
       resipiratory: new TimeSeries()
 
-    onAttach: ->
-      @.$('.ecg-live').liveChart(@demoSeries.ecg)
-      @.$('.heart-rate-live').liveChart(@demoSeries.heartRate)
-      @.$('.respiratory-live').liveChart(@demoSeries.resipiratory)
+    liveCharts:
+      ecg: null
+      heartRate: null
+      resipiratory: null
 
-    generateDemoSeries: ->
+    onAttach: =>
+      @liveCharts.ecg = @.$('.ecg-live').liveChart(@demoSeries.ecg)
+      @liveCharts.heartRate = @.$('.heart-rate-live').liveChart(@demoSeries.heartRate)
+      @liveCharts.resipiratory = @.$('.respiratory-live').liveChart(@demoSeries.resipiratory)
+
+    generateDemoSeries: =>
       @demoSeries.ecg.append (new Date).getTime(), Math.random() * 10000
       @demoSeries.heartRate.append (new Date).getTime(), Math.random() * 10000
       @demoSeries.resipiratory.append (new Date).getTime(), Math.random() * 10000
+
+    onDestroy: =>
+      clearInterval(@generateInterval)
+
+      _(@liveCharts).each (chart) ->
+        chart.stop()

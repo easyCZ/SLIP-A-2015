@@ -18879,6 +18879,342 @@ return jQuery;
   return Marionette;
 }));
 
+// Backbone.Radio v1.0.2
+(function (global, factory) {
+  typeof exports === "object" && typeof module !== "undefined" ? module.exports = factory(require("underscore"), require("backbone")) : typeof define === "function" && define.amd ? define('backbone.radio',["underscore", "backbone"], factory) : global.Backbone.Radio = factory(global._, global.Backbone);
+})(this, function (_, Backbone) {
+  
+
+  var previousRadio = Backbone.Radio;
+
+  var Radio = Backbone.Radio = {};
+
+  Radio.VERSION = "1.0.2";
+
+  // This allows you to run multiple instances of Radio on the same
+  // webapp. After loading the new version, call `noConflict()` to
+  // get a reference to it. At the same time the old version will be
+  // returned to Backbone.Radio.
+  Radio.noConflict = function () {
+    Backbone.Radio = previousRadio;
+    return this;
+  };
+
+  // Whether or not we're in DEBUG mode or not. DEBUG mode helps you
+  // get around the issues of lack of warnings when events are mis-typed.
+  Radio.DEBUG = false;
+
+  // Format debug text.
+  Radio._debugText = function (warning, eventName, channelName) {
+    return warning + (channelName ? " on the " + channelName + " channel" : "") + ": \"" + eventName + "\"";
+  };
+
+  // This is the method that's called when an unregistered event was called.
+  // By default, it logs warning to the console. By overriding this you could
+  // make it throw an Error, for instance. This would make firing a nonexistent event
+  // have the same consequence as firing a nonexistent method on an Object.
+  Radio.debugLog = function (warning, eventName, channelName) {
+    if (Radio.DEBUG && console && console.warn) {
+      console.warn(Radio._debugText(warning, eventName, channelName));
+    }
+  };
+
+  var eventSplitter = /\s+/;
+
+  // An internal method used to handle Radio's method overloading for Requests.
+  // It's borrowed from Backbone.Events. It differs from Backbone's overload
+  // API (which is used in Backbone.Events) in that it doesn't support space-separated
+  // event names.
+  Radio._eventsApi = function (obj, action, name, rest) {
+    if (!name) {
+      return false;
+    }
+
+    var results = {};
+
+    // Handle event maps.
+    if (typeof name === "object") {
+      for (var key in name) {
+        var result = obj[action].apply(obj, [key, name[key]].concat(rest));
+        eventSplitter.test(key) ? _.extend(results, result) : results[key] = result;
+      }
+      return results;
+    }
+
+    // Handle space separated event names.
+    if (eventSplitter.test(name)) {
+      var names = name.split(eventSplitter);
+      for (var i = 0, l = names.length; i < l; i++) {
+        results[names[i]] = obj[action].apply(obj, [names[i]].concat(rest));
+      }
+      return results;
+    }
+
+    return false;
+  };
+
+  // An optimized way to execute callbacks.
+  Radio._callHandler = function (callback, context, args) {
+    var a1 = args[0],
+        a2 = args[1],
+        a3 = args[2];
+    switch (args.length) {
+      case 0:
+        return callback.call(context);
+      case 1:
+        return callback.call(context, a1);
+      case 2:
+        return callback.call(context, a1, a2);
+      case 3:
+        return callback.call(context, a1, a2, a3);
+      default:
+        return callback.apply(context, args);
+    }
+  };
+
+  // A helper used by `off` methods to the handler from the store
+  function removeHandler(store, name, callback, context) {
+    var event = store[name];
+    if ((!callback || (callback === event.callback || callback === event.callback._callback)) && (!context || context === event.context)) {
+      delete store[name];
+      return true;
+    }
+  }
+
+  function removeHandlers(store, name, callback, context) {
+    store || (store = {});
+    var names = name ? [name] : _.keys(store);
+    var matched = false;
+
+    for (var i = 0, length = names.length; i < length; i++) {
+      name = names[i];
+
+      // If there's no event by this name, log it and continue
+      // with the loop
+      if (!store[name]) {
+        continue;
+      }
+
+      if (removeHandler(store, name, callback, context)) {
+        matched = true;
+      }
+    }
+
+    return matched;
+  }
+
+  /*
+   * tune-in
+   * -------
+   * Get console logs of a channel's activity
+   *
+   */
+
+  var _logs = {};
+
+  // This is to produce an identical function in both tuneIn and tuneOut,
+  // so that Backbone.Events unregisters it.
+  function _partial(channelName) {
+    return _logs[channelName] || (_logs[channelName] = _.partial(Radio.log, channelName));
+  }
+
+  _.extend(Radio, {
+
+    // Log information about the channel and event
+    log: function log(channelName, eventName) {
+      var args = _.rest(arguments, 2);
+      console.log("[" + channelName + "] \"" + eventName + "\"", args);
+    },
+
+    // Logs all events on this channel to the console. It sets an
+    // internal value on the channel telling it we're listening,
+    // then sets a listener on the Backbone.Events
+    tuneIn: function tuneIn(channelName) {
+      var channel = Radio.channel(channelName);
+      channel._tunedIn = true;
+      channel.on("all", _partial(channelName));
+      return this;
+    },
+
+    // Stop logging all of the activities on this channel to the console
+    tuneOut: function tuneOut(channelName) {
+      var channel = Radio.channel(channelName);
+      channel._tunedIn = false;
+      channel.off("all", _partial(channelName));
+      delete _logs[channelName];
+      return this;
+    }
+  });
+
+  /*
+   * Backbone.Radio.Requests
+   * -----------------------
+   * A messaging system for requesting data.
+   *
+   */
+
+  function makeCallback(callback) {
+    return _.isFunction(callback) ? callback : function () {
+      return callback;
+    };
+  }
+
+  Radio.Requests = {
+
+    // Make a request
+    request: function request(name) {
+      var args = _.rest(arguments);
+      var results = Radio._eventsApi(this, "request", name, args);
+      if (results) {
+        return results;
+      }
+      var channelName = this.channelName;
+      var requests = this._requests;
+
+      // Check if we should log the request, and if so, do it
+      if (channelName && this._tunedIn) {
+        Radio.log.apply(this, [channelName, name].concat(args));
+      }
+
+      // If the request isn't handled, log it in DEBUG mode and exit
+      if (requests && (requests[name] || requests["default"])) {
+        var handler = requests[name] || requests["default"];
+        args = requests[name] ? args : arguments;
+        return Radio._callHandler(handler.callback, handler.context, args);
+      } else {
+        Radio.debugLog("An unhandled request was fired", name, channelName);
+      }
+    },
+
+    // Set up a handler for a request
+    reply: function reply(name, callback, context) {
+      if (Radio._eventsApi(this, "reply", name, [callback, context])) {
+        return this;
+      }
+
+      this._requests || (this._requests = {});
+
+      if (this._requests[name]) {
+        Radio.debugLog("A request was overwritten", name, this.channelName);
+      }
+
+      this._requests[name] = {
+        callback: makeCallback(callback),
+        context: context || this
+      };
+
+      return this;
+    },
+
+    // Set up a handler that can only be requested once
+    replyOnce: function replyOnce(name, callback, context) {
+      if (Radio._eventsApi(this, "replyOnce", name, [callback, context])) {
+        return this;
+      }
+
+      var self = this;
+
+      var once = _.once(function () {
+        self.stopReplying(name);
+        return makeCallback(callback).apply(this, arguments);
+      });
+
+      return this.reply(name, once, context);
+    },
+
+    // Remove handler(s)
+    stopReplying: function stopReplying(name, callback, context) {
+      if (Radio._eventsApi(this, "stopReplying", name)) {
+        return this;
+      }
+
+      // Remove everything if there are no arguments passed
+      if (!name && !callback && !context) {
+        delete this._requests;
+      } else if (!removeHandlers(this._requests, name, callback, context)) {
+        Radio.debugLog("Attempted to remove the unregistered request", name, this.channelName);
+      }
+
+      return this;
+    }
+  };
+
+  /*
+   * Backbone.Radio.channel
+   * ----------------------
+   * Get a reference to a channel by name.
+   *
+   */
+
+  Radio._channels = {};
+
+  Radio.channel = function (channelName) {
+    if (!channelName) {
+      throw new Error("You must provide a name for the channel.");
+    }
+
+    if (Radio._channels[channelName]) {
+      return Radio._channels[channelName];
+    } else {
+      return Radio._channels[channelName] = new Radio.Channel(channelName);
+    }
+  };
+
+  /*
+   * Backbone.Radio.Channel
+   * ----------------------
+   * A Channel is an object that extends from Backbone.Events,
+   * and Radio.Requests.
+   *
+   */
+
+  Radio.Channel = function (channelName) {
+    this.channelName = channelName;
+  };
+
+  _.extend(Radio.Channel.prototype, Backbone.Events, Radio.Requests, {
+
+    // Remove all handlers from the messaging systems of this channel
+    reset: function reset() {
+      this.off();
+      this.stopListening();
+      this.stopReplying();
+      return this;
+    }
+  });
+
+  /*
+   * Top-level API
+   * -------------
+   * Supplies the 'top-level API' for working with Channels directly
+   * from Backbone.Radio.
+   *
+   */
+
+  var channel,
+      args,
+      systems = [Backbone.Events, Radio.Commands, Radio.Requests];
+
+  _.each(systems, function (system) {
+    _.each(system, function (method, methodName) {
+      Radio[methodName] = function (channelName) {
+        args = _.rest(arguments);
+        channel = this.channel(channelName);
+        return channel[methodName].apply(channel, args);
+      };
+    });
+  });
+
+  Radio.reset = function (channelName) {
+    var channels = !channelName ? this._channels : [this._channels[channelName]];
+    _.invoke(channels, "reset");
+  };
+
+  var backbone_radio = Radio;
+
+  return backbone_radio;
+});
+//# sourceMappingURL=./backbone.radio.js.map;
 // MIT License:
 //
 // Copyright (c) 2010-2013, Joe Walnes
@@ -23764,7 +24100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 });
 ;
 define('templates/index',["handlebars"], function(Handlebars) { return Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<div class=\"jumbotron\">\n  <div class=\"background\">\n    <h2>ECG</h2>\n\n    <canvas class=\"ecg-live\" height=\"100\"></canvas>\n\n    <h2>Heart Rate</h2>\n\n    <canvas class=\"heart-rate-live\" height=\"100\"></canvas>\n\n    <h2>Respiratory Data</h2>\n\n    <canvas class=\"respiratory-live\" height=\"100\"></canvas>\n  </div>\n\n  <div class=\"overlay\">\n    <h1>HealthVest</h1>\n\n    <p>\n      View Vital Signs.\n    </p>\n\n    <p>\n      Live.\n    </p>\n\n    <p>\n      Anywhere.\n    </p>\n  </div>\n</div>\n";
+    return "<div class=\"jumbotron\">\n  <div class=\"background\">\n    <h2>ECG</h2>\n\n    <canvas class=\"ecg-live\" height=\"100\"></canvas>\n\n    <h2>Heart Rate</h2>\n\n    <canvas class=\"heart-rate-live\" height=\"100\"></canvas>\n\n    <h2>Respiratory Data</h2>\n\n    <canvas class=\"respiratory-live\" height=\"100\"></canvas>\n  </div>\n\n  <div class=\"overlay\">\n    <h1>UberVest</h1>\n\n    <p>\n      View Vital Signs.\n    </p>\n\n    <p>\n      Live.\n    </p>\n\n    <p>\n      Anywhere.\n    </p>\n  </div>\n</div>\n";
 },"useData":true}); });
 define('helpers/liveChart',['jquery', 'smoothie'], function($, Smoothie) {
   return $.fn.liveChart = function(series) {
@@ -23783,25 +24119,30 @@ define('helpers/liveChart',['jquery', 'smoothie'], function($, Smoothie) {
       lineWidth: 2
     });
     chart.streamTo(canvas[0], 500);
+    return chart;
   };
 });
 
-var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-define('views/index',['marionette', 'smoothie', 'templates/index', 'helpers/liveChart'], function(Marionette, Smoothie, template, liveChart) {
+define('views/index',['underscore', 'marionette', 'smoothie', 'templates/index', 'helpers/liveChart'], function(_, Marionette, Smoothie, template, liveChart) {
   var IndexView;
   return IndexView = (function(superClass) {
     extend(IndexView, superClass);
 
     function IndexView() {
+      this.onDestroy = bind(this.onDestroy, this);
+      this.generateDemoSeries = bind(this.generateDemoSeries, this);
+      this.onAttach = bind(this.onAttach, this);
       return IndexView.__super__.constructor.apply(this, arguments);
     }
 
     IndexView.prototype.template = template;
 
     IndexView.prototype.initialize = function() {
-      return setInterval((function(_this) {
+      return this.generateInterval = setInterval((function(_this) {
         return function() {
           return _this.generateDemoSeries();
         };
@@ -23814,10 +24155,16 @@ define('views/index',['marionette', 'smoothie', 'templates/index', 'helpers/live
       resipiratory: new TimeSeries()
     };
 
+    IndexView.prototype.liveCharts = {
+      ecg: null,
+      heartRate: null,
+      resipiratory: null
+    };
+
     IndexView.prototype.onAttach = function() {
-      this.$('.ecg-live').liveChart(this.demoSeries.ecg);
-      this.$('.heart-rate-live').liveChart(this.demoSeries.heartRate);
-      return this.$('.respiratory-live').liveChart(this.demoSeries.resipiratory);
+      this.liveCharts.ecg = this.$('.ecg-live').liveChart(this.demoSeries.ecg);
+      this.liveCharts.heartRate = this.$('.heart-rate-live').liveChart(this.demoSeries.heartRate);
+      return this.liveCharts.resipiratory = this.$('.respiratory-live').liveChart(this.demoSeries.resipiratory);
     };
 
     IndexView.prototype.generateDemoSeries = function() {
@@ -23826,7 +24173,36 @@ define('views/index',['marionette', 'smoothie', 'templates/index', 'helpers/live
       return this.demoSeries.resipiratory.append((new Date).getTime(), Math.random() * 10000);
     };
 
+    IndexView.prototype.onDestroy = function() {
+      clearInterval(this.generateInterval);
+      return _(this.liveCharts).each(function(chart) {
+        return chart.stop();
+      });
+    };
+
     return IndexView;
+
+  })(Marionette.ItemView);
+});
+
+define('templates/dashboard',["handlebars"], function(Handlebars) { return Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    return "Dashboard.\n";
+},"useData":true}); });
+var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+define('views/dashboard',['marionette', 'templates/dashboard'], function(Marionette, template) {
+  var DashboardView;
+  return DashboardView = (function(superClass) {
+    extend(DashboardView, superClass);
+
+    function DashboardView() {
+      return DashboardView.__super__.constructor.apply(this, arguments);
+    }
+
+    DashboardView.prototype.template = template;
+
+    return DashboardView;
 
   })(Marionette.ItemView);
 });
@@ -23853,10 +24229,55 @@ define('views/about',['marionette', 'templates/about'], function(Marionette, tem
   })(Marionette.ItemView);
 });
 
+define('templates/login',["handlebars"], function(Handlebars) { return Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    return "<div class=\"col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4\">\n  <form class=\"form-login\">\n\n    <h2>Welcome Back</h2>\n    <h3>Please log in</h2>\n\n    <label for=\"email\" class=\"sr-only\">Email address</label>\n    <input type=\"email\" id=\"email\" name=\"email\" class=\"form-control\" placeholder=\"Email address\" required autofocus>\n\n    <label for=\"password\" class=\"sr-only\">Password</label>\n    <input type=\"password\" id=\"password\" name=\"password\" class=\"form-control\" placeholder=\"Password\" required>\n\n    <button class=\"btn btn-lg btn-primary btn-block\" type=\"submit\">Sign in</button>\n\n  </form>\n</div>\n";
+},"useData":true}); });
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-define('router',['backbone', 'views/index', 'views/about'], function(Backbone, IndexView, AboutView) {
+define('views/login',['marionette', 'backbone.radio', 'templates/login'], function(Marionette, Radio, template) {
+  var LoginView;
+  return LoginView = (function(superClass) {
+    extend(LoginView, superClass);
+
+    function LoginView() {
+      return LoginView.__super__.constructor.apply(this, arguments);
+    }
+
+    LoginView.prototype.template = template;
+
+    LoginView.prototype.events = {
+      'submit form': 'login'
+    };
+
+    LoginView.prototype.login = function(e) {
+      var formData, loginCallback;
+      e.preventDefault();
+      formData = this.$('form').serialize();
+      alert("Logging in with " + formData);
+      loginCallback = function(user) {
+        Radio.channel('authentication').trigger('login', user);
+        return Radio.channel('navigation').trigger('navigate', '/', {
+          trigger: true
+        });
+      };
+      loginCallback({
+        authToken: '123456789',
+        firstname: 'Test',
+        lastname: 'Tester'
+      });
+      return false;
+    };
+
+    return LoginView;
+
+  })(Marionette.ItemView);
+});
+
+var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+define('router',['backbone', 'backbone.radio', 'views/index', 'views/dashboard', 'views/about', 'views/login'], function(Backbone, Radio, IndexView, DashboardView, AboutView, LoginView) {
   var Router;
   return Router = (function(superClass) {
     extend(Router, superClass);
@@ -23867,19 +24288,33 @@ define('router',['backbone', 'views/index', 'views/about'], function(Backbone, I
 
     Router.prototype.routes = {
       '': 'index',
-      'about': 'about'
+      'about': 'about',
+      'login': 'login'
     };
 
     Router.prototype.initialize = function(options) {
-      return this.app = options.app;
+      this.app = options.app;
+      return this.listenTo(Radio.channel('navigation'), 'navigate', (function(_this) {
+        return function(url, options) {
+          return _this.navigate(url, options);
+        };
+      })(this));
     };
 
     Router.prototype.index = function() {
-      return this.app.rootView.main.show(new IndexView());
+      if (Radio.channel('authentication').request('currentUser')) {
+        return this.app.rootView.main.show(new DashboardView());
+      } else {
+        return this.app.rootView.main.show(new IndexView());
+      }
     };
 
     Router.prototype.about = function() {
       return this.app.rootView.main.show(new AboutView());
+    };
+
+    Router.prototype.login = function() {
+      return this.app.rootView.main.show(new LoginView());
     };
 
     return Router;
@@ -23887,10 +24322,156 @@ define('router',['backbone', 'views/index', 'views/about'], function(Backbone, I
   })(Backbone.Router);
 });
 
+var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+define('models/user_session',['backbone', 'backbone.radio'], function(Backbone, Radio) {
+  var UserSession;
+  return UserSession = (function(superClass) {
+    extend(UserSession, superClass);
+
+    function UserSession() {
+      this.getCurrentUser = bind(this.getCurrentUser, this);
+      this.setCurrentUser = bind(this.setCurrentUser, this);
+      return UserSession.__super__.constructor.apply(this, arguments);
+    }
+
+    UserSession.prototype.currentUser = null;
+
+    UserSession.prototype.initialize = function() {
+      this.bindListeners();
+      return this.bindResponders();
+    };
+
+    UserSession.prototype.bindListeners = function() {
+      this.listenTo(Radio.channel('authentication'), 'login', (function(_this) {
+        return function(user) {
+          return _this.setCurrentUser(user);
+        };
+      })(this));
+      return this.listenTo(Radio.channel('authentication'), 'logout', (function(_this) {
+        return function() {
+          return _this.setCurrentUser(null);
+        };
+      })(this));
+    };
+
+    UserSession.prototype.bindResponders = function() {
+      return Radio.channel('authentication').reply('currentUser', (function(_this) {
+        return function() {
+          return _this.getCurrentUser();
+        };
+      })(this));
+    };
+
+    UserSession.prototype.setCurrentUser = function(user) {
+      this.currentUser = user;
+      if (user) {
+        localStorage.setItem('authToken', user.authToken);
+        localStorage.setItem('firstname', user.firstname);
+        return localStorage.setItem('lastname', user.lastname);
+      } else {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('firstname');
+        return localStorage.removeItem('lastname');
+      }
+    };
+
+    UserSession.prototype.getCurrentUser = function() {
+      var authToken;
+      if (this.currentUser != null) {
+        return this.currentUser;
+      }
+      authToken = localStorage.getItem('authToken');
+      if (!authToken) {
+        return;
+      }
+      return this.currentUser = {
+        authToken: authToken,
+        firstname: localStorage.getItem('firstname'),
+        lastname: localStorage.getItem('lastname')
+      };
+    };
+
+    return UserSession;
+
+  })(Backbone.Model);
+});
+
+define('templates/navbar',["handlebars"], function(Handlebars) { return Handlebars.template({"1":function(depth0,helpers,partials,data) {
+    var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+
+  return "        <li><a data-logout>"
+    + alias3(((helper = (helper = helpers.firstname || (depth0 != null ? depth0.firstname : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"firstname","hash":{},"data":data}) : helper)))
+    + " "
+    + alias3(((helper = (helper = helpers.lastname || (depth0 != null ? depth0.lastname : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"lastname","hash":{},"data":data}) : helper)))
+    + ": Logout</a></li>\n";
+},"3":function(depth0,helpers,partials,data) {
+    return "        <li><a href=\"#/login\">Login</a></li>\n";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    var stack1;
+
+  return "<div class=\"container\">\n  <div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\n      <span class=\"sr-only\">Toggle navigation</span>\n      <span class=\"icon-bar\"></span>\n      <span class=\"icon-bar\"></span>\n      <span class=\"icon-bar\"></span>\n    </button>\n    <a class=\"navbar-brand\" href=\"#/\">SLIP Group A</a>\n  </div>\n  <div id=\"navbar\" class=\"collapse navbar-collapse\">\n    <ul class=\"nav navbar-nav\">\n"
+    + ((stack1 = helpers['if'].call(depth0,(depth0 != null ? depth0.loggedIn : depth0),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.program(3, data, 0),"data":data})) != null ? stack1 : "")
+    + "    </ul>\n\n    <ul class=\"nav navbar-nav pull-right\">\n      <li><a href=\"#/about\">About</a></li>\n    </ul>\n  </div><!--/.nav-collapse -->\n</div>\n";
+},"useData":true}); });
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-define('views/main',['marionette'], function(Marionette) {
+define('views/navbar',['marionette', 'backbone.radio', 'templates/navbar'], function(Marionette, Radio, template) {
+  var NavbarView;
+  return NavbarView = (function(superClass) {
+    extend(NavbarView, superClass);
+
+    function NavbarView() {
+      return NavbarView.__super__.constructor.apply(this, arguments);
+    }
+
+    NavbarView.prototype.template = template;
+
+    NavbarView.prototype.user = null;
+
+    NavbarView.prototype.events = {
+      'click [data-logout]': 'logout'
+    };
+
+    NavbarView.prototype.serializeData = function() {
+      var data;
+      data = this.user || {};
+      data.loggedIn = this.user != null;
+      return data;
+    };
+
+    NavbarView.prototype.initialize = function() {
+      this.user = Radio.channel('authentication').request('currentUser');
+      this.listenTo(Radio.channel('authentication'), 'login', (function(_this) {
+        return function(user) {
+          _this.user = user;
+          return _this.render();
+        };
+      })(this));
+      return this.listenTo(Radio.channel('authentication'), 'logout', (function(_this) {
+        return function(user) {
+          _this.user = null;
+          return _this.render();
+        };
+      })(this));
+    };
+
+    NavbarView.prototype.logout = function() {
+      return Radio.channel('authentication').trigger('logout');
+    };
+
+    return NavbarView;
+
+  })(Marionette.ItemView);
+});
+
+var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+define('views/main',['marionette', 'views/navbar'], function(Marionette, Navbar) {
   var MainView;
   return MainView = (function(superClass) {
     extend(MainView, superClass);
@@ -23900,7 +24481,12 @@ define('views/main',['marionette'], function(Marionette) {
     }
 
     MainView.prototype.regions = {
-      main: "#backbone-content"
+      main: "#backbone-content",
+      navbar: "nav.navbar"
+    };
+
+    MainView.prototype.initialize = function() {
+      return this.navbar.show(new Navbar());
     };
 
     return MainView;
@@ -23911,7 +24497,7 @@ define('views/main',['marionette'], function(Marionette) {
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-define('application',['marionette', 'router', 'views/main'], function(Marionette, Router, MainView) {
+define('application',['marionette', 'router', 'models/user_session', 'views/main'], function(Marionette, Router, UserSession, MainView) {
   var Application;
   return Application = (function(superClass) {
     extend(Application, superClass);
@@ -23921,6 +24507,7 @@ define('application',['marionette', 'router', 'views/main'], function(Marionette
     }
 
     Application.prototype.initialize = function() {
+      this.session = new UserSession();
       this.rootView = new MainView({
         el: 'body'
       });
