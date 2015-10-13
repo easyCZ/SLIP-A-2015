@@ -8,7 +8,7 @@
 
 ### Running
 1. Run `<api_root>/manage runserver`
-2. Navigate to [http://localhost:8080](http://localhost:8080)
+2. Navigate to [http://localhost:8000](http://localhost:8080)
 
 ### Database Management & Migrations
 Taken care of by django. To update schema, run the following:
@@ -17,6 +17,14 @@ Taken care of by django. To update schema, run the following:
 ./manage migrate
 ```
 Make sure you never merge migration merge issues.
+
+
+### Django shell
+SSH into the server, instructions in the OpenShift application space
+```
+source /var/lib/openshift/56195dcb2d527167370000bc/python/virtenv/venv/bin/activate
+python app-root/repo/wsgi/src/manage.py shell
+```
 
 
 ### Deployment
