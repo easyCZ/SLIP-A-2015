@@ -82,7 +82,7 @@ connect = require('gulp-connect')
 gulp.task 'connect', ->
   connect.server
     root: ['dist'],
-    port: 8000,
+    port: 9000,
 
 gulp.task 'watch', ->
   gulp.watch('src/js/**/*', ['scripts'])
