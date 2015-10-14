@@ -2,6 +2,7 @@ define [
   'jquery',
   'underscore',
   'marionette',
+  'backbone.radio',
   'smoothie',
 
   'templates/index',
@@ -11,6 +12,7 @@ define [
   $,
   _,
   Marionette,
+  Radio,
   Smoothie,
 
   template,
@@ -25,7 +27,7 @@ define [
         @generateDemoSeries()
       , 4
 
-      $.getJSON '/sample_data/ecg.json', (response) =>
+      $.getJSON Radio.channel('application').request('websiteBaseUrl') + '/sample_data/ecg.json', (response) =>
         @sampleData.ecg = response.data
 
     sampleData: {}
