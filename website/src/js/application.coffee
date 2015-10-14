@@ -20,6 +20,14 @@ define [
       else
         return 'http://api-ubervest.rhcloud.com'
 
+    websiteBaseUrl: ->
+      if window.location.toString().match(/localhost/)
+        return 'http://localhost:9000'
+      else if window.location.toString().match(/github.io/)
+        return 'http://easycz.github.io/SLIP-A-2015'
+      else
+        return 'http://groups.inf.ed.ac.uk/teaching/slipa15-16'
+
     initialize: ->
       @bindRadioResponses()
 
@@ -33,3 +41,6 @@ define [
     bindRadioResponses: =>
       Radio.channel('application').reply 'apiUrl', =>
         @apiUrl()
+
+      Radio.channel('application').reply 'websiteBaseUrl', =>
+        @websiteBaseUrl()

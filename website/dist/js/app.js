@@ -24127,7 +24127,7 @@ var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); 
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-define('views/index',['jquery', 'underscore', 'marionette', 'smoothie', 'templates/index', 'helpers/liveChart'], function($, _, Marionette, Smoothie, template, liveChart) {
+define('views/index',['jquery', 'underscore', 'marionette', 'backbone.radio', 'smoothie', 'templates/index', 'helpers/liveChart'], function($, _, Marionette, Radio, Smoothie, template, liveChart) {
   var IndexView;
   return IndexView = (function(superClass) {
     extend(IndexView, superClass);
@@ -24147,7 +24147,7 @@ define('views/index',['jquery', 'underscore', 'marionette', 'smoothie', 'templat
           return _this.generateDemoSeries();
         };
       })(this), 4);
-      return $.getJSON('/sample_data/ecg.json', (function(_this) {
+      return $.getJSON(Radio.channel('application').request('websiteBaseUrl') + '/sample_data/ecg.json', (function(_this) {
         return function(response) {
           return _this.sampleData.ecg = response.data;
         };
@@ -24619,6 +24619,16 @@ define('application',['marionette', 'backbone.radio', 'router', 'models/user_ses
       }
     };
 
+    Application.prototype.websiteBaseUrl = function() {
+      if (window.location.toString().match(/localhost/)) {
+        return 'http://localhost:9000';
+      } else if (window.location.toString().match(/github.io/)) {
+        return 'http://easycz.github.io/SLIP-A-2015';
+      } else {
+        return 'http://groups.inf.ed.ac.uk/teaching/slipa15-16';
+      }
+    };
+
     Application.prototype.initialize = function() {
       this.bindRadioResponses();
       this.session = new UserSession();
@@ -24632,9 +24642,14 @@ define('application',['marionette', 'backbone.radio', 'router', 'models/user_ses
     };
 
     Application.prototype.bindRadioResponses = function() {
-      return Radio.channel('application').reply('apiUrl', (function(_this) {
+      Radio.channel('application').reply('apiUrl', (function(_this) {
         return function() {
           return _this.apiUrl();
+        };
+      })(this));
+      return Radio.channel('application').reply('websiteBaseUrl', (function(_this) {
+        return function() {
+          return _this.websiteBaseUrl();
         };
       })(this));
     };
