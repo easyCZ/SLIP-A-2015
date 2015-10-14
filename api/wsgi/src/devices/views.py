@@ -8,3 +8,4 @@ from rest_framework.viewsets import ModelViewSet
 class DevicesListView(ModelViewSet):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
+
