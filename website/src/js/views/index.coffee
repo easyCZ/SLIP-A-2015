@@ -35,21 +35,21 @@ define [
     demoSeries:
       ecg: new TimeSeries()
       heartRate: new TimeSeries()
-      resipiratory: new TimeSeries()
+      respiratory: new TimeSeries()
 
     liveCharts:
       ecg: null
       heartRate: null
-      resipiratory: null
+      respiratory: null
 
     onAttach: =>
       @liveCharts.ecg = @.$('.ecg-live').liveChart(@demoSeries.ecg)
       @liveCharts.heartRate = @.$('.heart-rate-live').liveChart(@demoSeries.heartRate)
-      @liveCharts.resipiratory = @.$('.respiratory-live').liveChart(@demoSeries.resipiratory)
+      @liveCharts.respiratory = @.$('.respiratory-live').liveChart(@demoSeries.respiratory)
 
     generateDemoSeries: =>
       # @demoSeries.heartRate.append (new Date).getTime(), Math.random() * 10000
-      # @demoSeries.resipiratory.append (new Date).getTime(), Math.random() * 10000
+      # @demoSeries.respiratory.append (new Date).getTime(), Math.random() * 10000
 
       if @sampleData.ecg
         date = new Date()

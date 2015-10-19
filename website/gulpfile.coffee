@@ -89,6 +89,14 @@ gulp.task 'sample_data', ->
     .pipe gulp.dest 'dist/sample_data'
 
 #
+# Fonts
+#
+
+gulp.task 'fonts', ->
+  gulp.src 'bower_components/fontawesome/fonts/*'
+    .pipe gulp.dest 'dist/fonts'
+
+#
 # Development Server
 #
 connect = require('gulp-connect')
@@ -109,4 +117,4 @@ gulp.task 'server', ['default', 'connect', 'watch']
 # Full Build
 #
 
-gulp.task 'default', ['styles', 'scripts', 'html', 'sample_data']
+gulp.task 'default', ['styles', 'scripts', 'html', 'sample_data', 'fonts']

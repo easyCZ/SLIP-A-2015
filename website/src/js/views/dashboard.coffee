@@ -13,6 +13,7 @@ define [
 ) ->
   class DashboardView extends Marionette.CompositeView
     template: template
+    className: 'dashboard'
 
     collection: new DeviceCollection()
 

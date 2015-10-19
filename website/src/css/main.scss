@@ -1,4 +1,7 @@
+@import 'fontawesome/scss/font-awesome';
 @import 'bootstrap-sass/assets/stylesheets/bootstrap/variables';
+
+$fa-font-path: '../font';
 
 // Our variables
 $body-bg: $gray-darker;
@@ -12,6 +15,8 @@ $jumbotron-bg: $gray-dark;
 
 // Import partials from `sass_dir` (defaults to `_sass`)
 @import 'bootstrap-sass/assets/stylesheets/bootstrap';
+
+@import 'dashboard';
 @import 'footer';
 @import 'jumbotron';
 @import 'login';

@@ -10,7 +10,10 @@ define [
 
     unless canvas.attr('width')
       # SmoothieChart requires the width attribute (not style) is set correctly.
-      canvas.attr('width', canvas.parent().innerWidth())
+      leftMargin  = parseInt(canvas.css('margin-left').replace('px', ''))
+      rightMargin = parseInt(canvas.css('margin-right').replace('px', ''))
+
+      canvas.attr('width', canvas.parent().innerWidth() - leftMargin - rightMargin)
 
     chart = new SmoothieChart
       labels:
