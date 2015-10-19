@@ -1,7 +1,7 @@
 gulp = require 'gulp'
 concat = require 'gulp-concat'
 gutil = require 'gulp-util'
-merge = require('merge-stream')
+merge = require 'merge-stream'
 
 #
 # Stylesheets
@@ -25,7 +25,7 @@ gulp.task 'styles', ['sass']
 #
 coffee = require 'gulp-coffee'
 mainBowerFiles = require 'main-bower-files'
-rjs = require 'gulp-requirejs'
+requirejs = require 'requirejs'
 
 handlebars = require 'gulp-handlebars'
 defineModule = require 'gulp-define-module'
@@ -50,14 +50,20 @@ gulp.task 'handlebars', ->
     .pipe(defineModule('amd'))
     .pipe gulp.dest('.tmp/js/templates')
 
-gulp.task 'rjsBuild', ['coffee', 'bowerScripts', 'handlebars'], ->
-  rjsBuild = rjs
+gulp.task 'rjsBuild', ['coffee', 'bowerScripts', 'handlebars'], (callback) ->
+  requirejs.optimize
     baseUrl: '.tmp/js',
     mainConfigFile: '.tmp/js/main.js',
     name: 'main',
-    out: 'rjsBuild.js',
+    out: '.tmp/js/rjsBuild.js',
     wrap: true
-  .pipe gulp.dest('.tmp/js')
+  , (response) ->
+    callback()
+  , (error) ->
+    if error
+      return callback(new gutil.PluginError('RequireJS', error))
+
+    callback()
 
   return
 
