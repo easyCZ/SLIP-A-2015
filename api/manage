@@ -1,0 +1,5 @@
+#!/bin/bash
+SLIP_ENV=local
+export SLIP_ENV
+
+python3 ./wsgi/src/manage.py $@;
