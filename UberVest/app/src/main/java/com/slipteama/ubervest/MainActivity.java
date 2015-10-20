@@ -30,6 +30,7 @@ public class MainActivity extends Activity {
     Switch s1;
     private BluetoothAdapter BA;
     private Set<BluetoothDevice> pairedDevices;
+    private BluetoothThread bt;
     ListView lv;
 
     @Override
@@ -42,6 +43,16 @@ public class MainActivity extends Activity {
         s1 = (Switch)findViewById(R.id.switch1);
         lv = (ListView)findViewById(R.id.listView);
 
+        BA = BluetoothAdapter.getDefaultAdapter();
+
+        s1.setChecked(BA.isEnabled());
+
+        if(BA.isEnabled()) {
+            list(findViewById(android.R.id.content));
+            bt = new BluetoothThread(BA);
+            bt.start();
+        }
+
         s1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -53,7 +64,6 @@ public class MainActivity extends Activity {
             }
         });
 
-        BA = BluetoothAdapter.getDefaultAdapter();
     }
 
     public void on() {
@@ -61,6 +71,9 @@ public class MainActivity extends Activity {
             Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(turnOn, 0);
             Toast.makeText(getApplicationContext(), "Turned on", Toast.LENGTH_LONG).show();
+            list(findViewById(android.R.id.content));
+            bt = new BluetoothThread(BA);
+            bt.start();
         } else {
             Toast.makeText(getApplicationContext(), "Already on", Toast.LENGTH_LONG).show();
         }
@@ -69,6 +82,7 @@ public class MainActivity extends Activity {
     public void off() {
         BA.disable();
         Toast.makeText(getApplicationContext(), "Turned off", Toast.LENGTH_LONG).show();
+        bt.cancel();
     }
 
     public void visible(View v){
@@ -80,13 +94,13 @@ public class MainActivity extends Activity {
         pairedDevices = BA.getBondedDevices();
         ArrayList list = new ArrayList();
 
-        for(BluetoothDevice bt : pairedDevices) {
-            list.add(bt.getName());
+        for(BluetoothDevice bd : pairedDevices) {
+            list.add(bd.getName() + "\n" + bd.getAddress());
         }
 
         Toast.makeText(getApplicationContext(), "Showing Paired Devices", Toast.LENGTH_SHORT).show();
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
-        lv.setAdapter(adapter);
+        if(adapter != null) lv.setAdapter(adapter);
     }
 
     @Override
