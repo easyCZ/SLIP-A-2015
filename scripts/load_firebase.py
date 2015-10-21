@@ -35,7 +35,7 @@ def main(device=0, filename=DEFAULT_FILE):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Load sample data for a given device')
     parser.add_argument('--d', type=int, default=DEFAULT_DEVICE, help="The ID of the device to load with data.")
-    parser.add_argument('--f', type=str, default=DEFAULT_FILE, help="The ID of the device to load with data.")
+    parser.add_argument('--f', type=str, default=DEFAULT_FILE, help="The location of file for the data.")
 
     args = parser.parse_args()
 
