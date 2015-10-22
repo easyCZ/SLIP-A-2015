@@ -9,6 +9,7 @@
     "requirejs": "~2.1.20",
     "backbone.radio": "~1.0.2",
     "fontawesome": "~4.4.0",
-    "smoothie": "~1.27.0"
+    "smoothie": "~1.27.0",
+    "firebase": "~2.3.1"
   }
 }
