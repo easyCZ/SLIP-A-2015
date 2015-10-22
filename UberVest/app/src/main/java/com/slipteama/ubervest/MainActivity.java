@@ -22,6 +22,8 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -37,6 +39,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Firebase.setAndroidContext(this);
 
         b1 = (Button)findViewById(R.id.b1);
         b2 = (Button)findViewById(R.id.b2);
@@ -71,6 +74,8 @@ public class MainActivity extends Activity {
             Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(turnOn, 0);
             Toast.makeText(getApplicationContext(), "Turned on", Toast.LENGTH_LONG).show();
+            while(!BA.isEnabled()) {
+            }
             list(findViewById(android.R.id.content));
             bt = new BluetoothThread(BA);
             bt.start();

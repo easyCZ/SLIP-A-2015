@@ -8,8 +8,10 @@ import com.firebase.client.Firebase;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -29,7 +31,7 @@ public class BluetoothThread extends Thread {
     }
 
     public void run() {
-        BluetoothSocket socket = null;
+        BluetoothSocket socket;
         while(true) {
             try {
                 socket = serverSocket.accept();
@@ -56,25 +58,26 @@ public class BluetoothThread extends Thread {
     public void listenOnSocket(BluetoothSocket socket) {
         Firebase ref = new Firebase("https://torrid-inferno-6335.firebaseio.com/");
         InputStream inputStream = null;
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[8];
         int bytes;
 
         try {
             inputStream = socket.getInputStream();
-        } catch (IOException e) { }
+        } catch (IOException e) {
 
+        }
         while(true) {
             try {
                 bytes = inputStream.read(buffer);
                 if(bytes > 0) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                    ByteBuffer wrapped = ByteBuffer.wrap(buffer);
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss:SSS");
                     String currentDateandTime = sdf.format(new Date());
-                    ref.child(currentDateandTime).setValue(buffer.toString());
+                    ref.child(currentDateandTime).setValue(wrapped.getInt(0));
                 }
             } catch (IOException e) {
                 break;
             }
         }
-
     }
 }
