@@ -11,7 +11,6 @@ def main(device=0, filename=DEFAULT_FILE):
         index = 0
         count = 0
 
-        timestamp = int(time.time() * 1000)
         for line in f:
             line = line.strip()
             ts, value = line.split(',', 1)
@@ -21,7 +20,7 @@ def main(device=0, filename=DEFAULT_FILE):
 
             if index == 10:
                 # Dump
-                timestamp += 1
+                timestamp = int(time.time() * 1000)
                 print("Sending %s: %s" % (str(timestamp), str(count / 10)))
                 requests.put(('https://ubervest.firebaseio.com/devices/%d/raw_ecg/' % device) + str(timestamp) + '.json', data=str(count / 10))
                 count = 0
