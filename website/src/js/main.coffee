@@ -6,6 +6,10 @@ require.config
   paths:
     marionette: 'backbone.marionette'
 
+  shim:
+    firebase:
+      exports: 'Firebase'
+
 require [
   'application'
 ], (

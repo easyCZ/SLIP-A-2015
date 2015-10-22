@@ -23,12 +23,12 @@ def main(device=0, filename=DEFAULT_FILE):
                 # Dump
                 timestamp += 1
                 print("Sending %s: %s" % (str(timestamp), str(count / 10)))
-                requests.put(('https://ubervest.firebaseio.com/devices/%d/hr/' % device) + str(timestamp) + '.json', data=str(count / 10))
+                requests.put(('https://ubervest.firebaseio.com/devices/%d/raw_ecg/' % device) + str(timestamp) + '.json', data=str(count / 10))
                 count = 0
                 index = 0
 
         timestamp += 1
-        requests.put(('https://ubervest.firebaseio.com/devices/%d/hr/' % device) + str(timestamp) + '.json', data=str(count / 10))
+        requests.put(('https://ubervest.firebaseio.com/devices/%d/raw_ecg/' % device) + str(timestamp) + '.json', data=str(count / 10))
 
 
 
