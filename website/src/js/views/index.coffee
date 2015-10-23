@@ -23,6 +23,8 @@ define [
     template: template
 
     initialize: ->
+      @demoSeries.heartRate.append((new Date()).getTime(), 65)
+
       @generateInterval = setInterval =>
         @generateDemoSeries()
       , 4
@@ -48,21 +50,33 @@ define [
       @liveCharts.respiratory = @.$('.respiratory-live').liveChart(@demoSeries.respiratory)
 
     generateDemoSeries: =>
-      # @demoSeries.heartRate.append (new Date).getTime(), Math.random() * 10000
-      # @demoSeries.respiratory.append (new Date).getTime(), Math.random() * 10000
+      date = new Date()
+      time = date.getTime()
 
+      # ECG
       if @sampleData.ecg
-        date = new Date()
         # We have 2500 samples in 10 seconds
-        time = date.getTime()
         sampleTime = (time % 10000)
         sampleNo = Math.round(sampleTime / 4)
 
         sample = @sampleData.ecg[sampleNo]
 
         if sample
-          time = date.getTime()
           @demoSeries.ecg.append time, sample
+
+      # Heart Rate
+      offsetRandom = Math.random() * 100
+      current = @demoSeries.heartRate.data
+      last = current[current.length - 1][1]
+
+      if ((time % 20) < 5)
+        if offsetRandom > 99.5 && last < 80
+          newValue = last + 1
+        else if offsetRandom > 99.0 && last > 60
+          newValue = last - 1
+
+      newValue ||= last
+      @demoSeries.heartRate.append time, newValue
 
     onDestroy: =>
       clearInterval(@generateInterval)
