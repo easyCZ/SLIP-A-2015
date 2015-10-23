@@ -56,7 +56,8 @@ gulp.task 'rjsBuild', ['coffee', 'bowerScripts', 'handlebars'], (callback) ->
     mainConfigFile: '.tmp/js/main.js',
     name: 'main',
     out: '.tmp/js/rjsBuild.js',
-    wrap: true
+    wrap: true,
+    optimize: 'none',
   , (response) ->
     callback()
   , (error) ->
