@@ -7,8 +7,8 @@ include WaveFile
 data = CSV.read(ARGV[0])
 
 data.map! { |a| a[1].to_f / 1024 }
-buffer = Buffer.new(data, Format.new(:mono, :float, 10))
+buffer = Buffer.new(data, Format.new(:mono, :float, 50))
 
-Writer.new("#{ARGV[0]}.wav", Format.new(:mono, :pcm_16, 10)) do |writer|
+Writer.new("#{ARGV[0]}.wav", Format.new(:mono, :pcm_16, 50)) do |writer|
   writer.write(buffer)
 end
