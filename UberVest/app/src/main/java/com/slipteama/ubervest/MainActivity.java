@@ -75,7 +75,10 @@ public class MainActivity extends Activity {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             btDevice = result.getDevice();
-            mBluetoothLeService.connect(btDevice.getAddress());
+            mDeviceAddress = btDevice.getAddress();
+            Intent bleIntent = new Intent("BLEConnection");
+            bindService(bleIntent, mServiceConnection, BIND_AUTO_CREATE);
+            startService(bleIntent);
         }
     };
 
