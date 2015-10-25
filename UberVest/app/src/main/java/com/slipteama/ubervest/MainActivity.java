@@ -38,6 +38,8 @@ import java.util.Set;
 public class MainActivity extends Activity {
     private final static String TAG = MainActivity.class.getSimpleName();
 
+    public static Context mContext;
+
     Button b1,b2;
     Switch s1;
     private BluetoothManager btManager;
@@ -76,7 +78,7 @@ public class MainActivity extends Activity {
         public void onScanResult(int callbackType, ScanResult result) {
             btDevice = result.getDevice();
             mDeviceAddress = btDevice.getAddress();
-            Intent bleIntent = new Intent("BLEConnection");
+            Intent bleIntent = new Intent(mContext, BluetoothLeService.class);
             bindService(bleIntent, mServiceConnection, BIND_AUTO_CREATE);
             startService(bleIntent);
         }
@@ -85,6 +87,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = getApplicationContext();
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
 
