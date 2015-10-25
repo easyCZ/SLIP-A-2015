@@ -81,6 +81,7 @@ public class MainActivity extends Activity {
             Intent bleIntent = new Intent(mContext, BluetoothLeService.class);
             bindService(bleIntent, mServiceConnection, BIND_AUTO_CREATE);
             startService(bleIntent);
+            btScanner.stopScan(null);
         }
     };
 
