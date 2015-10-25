@@ -4,14 +4,22 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import android.content.ServiceConnection;
 import android.os.Bundle;
 
 
+import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,12 +36,48 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class MainActivity extends Activity {
+    private final static String TAG = MainActivity.class.getSimpleName();
+
     Button b1,b2;
     Switch s1;
-    private BluetoothAdapter BA;
-    private Set<BluetoothDevice> pairedDevices;
-    private BluetoothThread bt;
+    private BluetoothManager btManager;
+    private BluetoothAdapter btAdapter;
+    private BluetoothDevice btDevice;
+    private BluetoothLeScanner btScanner;
+
+
+    private String mDeviceName;
+    private String mDeviceAddress;
+    private BluetoothLeService mBluetoothLeService;
+    private boolean mConnected = false;
+
     ListView lv;
+
+
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            if(!mBluetoothLeService.initialize()){
+                Log.e(TAG, "Unable to initialize Bluetooth");
+                finish();
+            }
+            mBluetoothLeService.connect(mDeviceAddress);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBluetoothLeService = null;
+        }
+    };
+
+    private ScanCallback leScanCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+            btDevice = result.getDevice();
+            mBluetoothLeService.connect(btDevice.getAddress());
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +90,13 @@ public class MainActivity extends Activity {
         s1 = (Switch)findViewById(R.id.switch1);
         lv = (ListView)findViewById(R.id.listView);
 
-        BA = BluetoothAdapter.getDefaultAdapter();
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        btScanner = btAdapter.getBluetoothLeScanner();
 
-        s1.setChecked(BA.isEnabled());
+        s1.setChecked(btAdapter.isEnabled());
 
-        if(BA.isEnabled()) {
+        if(btAdapter.isEnabled()) {
             list(findViewById(android.R.id.content));
-            bt = new BluetoothThread(BA);
-            bt.start();
         }
 
         s1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -70,24 +113,17 @@ public class MainActivity extends Activity {
     }
 
     public void on() {
-        if(!BA.isEnabled()){
+        if(!btAdapter.isEnabled()){
             Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(turnOn, 0);
-            Toast.makeText(getApplicationContext(), "Turned on", Toast.LENGTH_LONG).show();
-            while(!BA.isEnabled()) {
+            while(!btAdapter.isEnabled()) {
             }
             list(findViewById(android.R.id.content));
-            bt = new BluetoothThread(BA);
-            bt.start();
-        } else {
-            Toast.makeText(getApplicationContext(), "Already on", Toast.LENGTH_LONG).show();
         }
     }
 
     public void off() {
-        BA.disable();
-        Toast.makeText(getApplicationContext(), "Turned off", Toast.LENGTH_LONG).show();
-        bt.cancel();
+        btAdapter.disable();
     }
 
     public void visible(View v){
@@ -96,16 +132,7 @@ public class MainActivity extends Activity {
     }
 
     public void list(View v) {
-        pairedDevices = BA.getBondedDevices();
-        ArrayList list = new ArrayList();
-
-        for(BluetoothDevice bd : pairedDevices) {
-            list.add(bd.getName() + "\n" + bd.getAddress());
-        }
-
-        Toast.makeText(getApplicationContext(), "Showing Paired Devices", Toast.LENGTH_SHORT).show();
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
-        if(adapter != null) lv.setAdapter(adapter);
+        btScanner.startScan(leScanCallback);
     }
 
     @Override
@@ -129,4 +156,5 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
