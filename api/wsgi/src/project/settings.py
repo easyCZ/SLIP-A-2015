@@ -132,3 +132,5 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+FIREBASE_URL = 'https://ubervest.firebaseio.com'
