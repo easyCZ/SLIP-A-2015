@@ -26,7 +26,14 @@ define [
         @dataSeries.ecg.append snapshot.key(), snapshot.val()
 
     onAttach: =>
-      @liveCharts.ecg = @.$('.ecg-live').liveChart(@dataSeries.ecg)
+      pad2 = (number) ->
+        if number < 10 then '0' + number else number
+
+      @liveCharts.ecg = @.$('.ecg-live').liveChart @dataSeries.ecg,
+        interpolation: 'linear'
+        timestampFormatter: (date) ->
+          return pad2(date.getSeconds())
+
       @liveCharts.respiratory = @.$('.respiratory-live').liveChart(@dataSeries.respiratory)
 
     onDestroy: =>
