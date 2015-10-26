@@ -39,6 +39,10 @@ public class BluetoothLeService extends Service {
 
     private String mBluetoothDeviceAddress;
 
+    private static UUID UBER_VEST_SERVICE_UUID = UUID.fromString("0000B000-0000-1000-8000-00805F9B34FB");
+
+    private static UUID ECG_CHARACTERISTIC_UUID = UUID.fromString("0000B002-0000-1000-8000-00805F9B34FB");
+
     private int mConnectionState = STATE_DISCONNECTED;
 
     private static final int STATE_DISCONNECTED = 0;
@@ -49,7 +53,7 @@ public class BluetoothLeService extends Service {
 
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
-        public void onCharacteristicRead(BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic, int status) {
+        public void onCharacteristicChanged(BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) {
             byte[] data = characteristic.getValue();
             ByteBuffer wrapper = ByteBuffer.wrap(data);
             firebase.child("devices").child("0").child("raw_ecg").setValue(wrapper.getInt(0));
@@ -70,7 +74,11 @@ public class BluetoothLeService extends Service {
         }
 
         public void onServicesDiscovered(final BluetoothGatt gatt, final int status) {
-
+            if(status == BluetoothGatt.GATT_SUCCESS) {
+                BluetoothGattService service = gatt.getService(UBER_VEST_SERVICE_UUID);
+                BluetoothGattCharacteristic chara = service.getCharacteristic(ECG_CHARACTERISTIC_UUID);
+                gatt.setCharacteristicNotification(chara, true);
+            }
         }
     };
 
