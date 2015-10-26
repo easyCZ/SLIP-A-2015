@@ -27,6 +27,6 @@ define [
       strokeStyle: 'rgba(0, 255, 0, 1)'
       lineWidth: 2
 
-    chart.streamTo canvas[0], 500
+    chart.streamTo canvas[0], options.delay || 500
 
     return chart

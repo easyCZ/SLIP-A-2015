@@ -30,6 +30,7 @@ define [
         if number < 10 then '0' + number else number
 
       @liveCharts.ecg = @.$('.ecg-live').liveChart @dataSeries.ecg,
+        delay: 1750
         interpolation: 'linear'
         timestampFormatter: (date) ->
           return pad2(date.getSeconds())
