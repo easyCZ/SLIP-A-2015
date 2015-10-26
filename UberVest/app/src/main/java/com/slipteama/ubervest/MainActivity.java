@@ -40,6 +40,7 @@ import com.firebase.client.Firebase;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -105,7 +106,8 @@ public class MainActivity extends Activity {
 
             Log.i(TAG, data.toString());
 
-            firebase.child("devices").child("0").child("raw_ecg").setValue(data);
+            long currentTime = (new Date()).getTime();
+            firebase.child("devices").child("0").child("raw_ecg").child(currentTime + "").setValue(data);
         }
 
         @Override
