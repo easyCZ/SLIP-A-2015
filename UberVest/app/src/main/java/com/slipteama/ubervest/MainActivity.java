@@ -4,7 +4,13 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
@@ -32,8 +38,10 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.UUID;
 
 public class MainActivity extends Activity {
     private final static String TAG = MainActivity.class.getSimpleName();
@@ -51,7 +59,14 @@ public class MainActivity extends Activity {
     private String mDeviceName;
     private String mDeviceAddress;
     private BluetoothLeService mBluetoothLeService;
+    private BluetoothGatt mBluetoothGatt;
     private boolean mConnected = false;
+
+    private static UUID UBER_VEST_SERVICE_UUID = UUID.fromString("0000B000-0000-1000-8000-00805F9B34FB");
+
+    private static UUID ECG_CHARACTERISTIC_UUID = UUID.fromString("0000B002-0000-1000-8000-00805F9B34FB");
+
+    private Firebase firebase;
 
     ListView lv;
 
@@ -76,12 +91,45 @@ public class MainActivity extends Activity {
     private ScanCallback leScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            btDevice = result.getDevice();
-            mDeviceAddress = btDevice.getAddress();
-            Intent bleIntent = new Intent(mContext, BluetoothLeService.class);
-            bindService(bleIntent, mServiceConnection, BIND_AUTO_CREATE);
-            startService(bleIntent);
-            btScanner.stopScan(null);
+            if(result.getDevice().getAddress().equals("DB:00:EC:05:2E:A0")) {
+                btDevice = result.getDevice();
+                mBluetoothGatt = btDevice.connectGatt(mContext, false, mGattCallback);
+            }
+        }
+    };
+
+    private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) {
+            Integer data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+
+            Log.i(TAG, data.toString());
+
+            firebase.child("devices").child("0").child("raw_ecg").setValue(data);
+        }
+
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            if (newState == BluetoothProfile.STATE_CONNECTED) {
+                mBluetoothGatt.discoverServices();
+                Log.i(TAG, "Connected to GATT server.");
+                // Attempts to discover services after successful connection.
+                Log.i(TAG, "Attempting to start service discovery:" +
+                        mBluetoothGatt.discoverServices());
+            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+            }
+        }
+
+        public void onServicesDiscovered(final BluetoothGatt gatt, final int status) {
+            if(status == BluetoothGatt.GATT_SUCCESS) {
+                BluetoothGattService service = gatt.getService(UBER_VEST_SERVICE_UUID);
+                BluetoothGattCharacteristic chara = service.getCharacteristic(ECG_CHARACTERISTIC_UUID);
+                gatt.setCharacteristicNotification(chara, true);
+                for (BluetoothGattDescriptor desc : chara.getDescriptors()) {
+                    desc.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                    gatt.writeDescriptor(desc);
+                }
+            }
         }
     };
 
@@ -91,6 +139,7 @@ public class MainActivity extends Activity {
         mContext = getApplicationContext();
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
+        firebase = new Firebase("https://ubervest.firebaseio.com/");
 
         b1 = (Button)findViewById(R.id.b1);
         b2 = (Button)findViewById(R.id.b2);
