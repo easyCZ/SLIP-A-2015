@@ -22,7 +22,7 @@ define [
       respiratory: null
 
     initialize: =>
-      @model.firebase().child('raw_ecg').on 'child_added', (snapshot) =>
+      @model.firebase().child('raw_ecg').limitToLast(300).on 'child_added', (snapshot) =>
         @dataSeries.ecg.append snapshot.key(), snapshot.val()
 
     onAttach: =>
