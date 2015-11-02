@@ -20,7 +20,7 @@ class BPMService(object):
     def get_peaks(self):
         is_beat = False
         beats = []
-        previous_points = [[] for i in xrange(self.REACH_BACK + 1)]
+        previous_points = [[] for i in range(self.REACH_BACK + 1)]
         previous_points.append([0, 0])
 
         for time, volts in self.data.iteritems():
