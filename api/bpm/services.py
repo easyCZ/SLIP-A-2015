@@ -34,7 +34,7 @@ class BPMService(object):
             else:
                 if is_beat:
                     first_point = previous_points[0]
-                    if first_point <> [] and first_point <> [0, 0]:
+                    if first_point and first_point[0] != 0 and first_point[1] != 0:
                         finish_time = time
                         predicted_voltage = self.regression(previous_points[:-1], int(start_time))
 

@@ -100,7 +100,7 @@ def peaks(data):
 			beat = True
 		else:
 			if beat == True:
-				if prev_points[0] <> [] and prev_points[0] <> [0,0]:
+				if prev_points[0] and prev_points[0] <> [0,0]:
 					finish_time = time
 					predicted_Voltage = regression(prev_points[:-1], int(start_time))
 					if prev_Volts > predicted_Voltage + extrapolation:
