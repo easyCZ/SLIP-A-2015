@@ -5,6 +5,7 @@ import json
 from collections import OrderedDict
 import random
 import math
+from services import BPMService
 
 FIREBASE_URL = 'https://ubervest.firebaseio.com'
 DEVICES_URL = '%s/devices.json' % FIREBASE_URL
@@ -41,7 +42,8 @@ class Device(threading.Thread):
                     self.window.popitem(False)  # pop in FIFO order
 
                 # TODO: Call service to calcualte current bpm
-                bpm = int(math.ceil(random.random() * 80))
+                # int(math.ceil(random.random() * 80))
+                bpm = BPMService(self.window).get_bpm()
 
                 # store to firebase
                 requests.patch(DEVICE_URL % (self.device_id), data=json.dumps({'live_bpm': bpm}))
