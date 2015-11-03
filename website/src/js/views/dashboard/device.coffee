@@ -25,6 +25,9 @@ define [
       @model.firebase().child('raw_ecg').limitToLast(300).on 'child_added', (snapshot) =>
         @dataSeries.ecg.append snapshot.key(), snapshot.val()
 
+      @model.firebase().child('live_bpm').on 'value', (snapshot) =>
+        @.$('[data-heart-rate-live-text]').text(snapshot.val())
+
     onAttach: =>
       pad2 = (number) ->
         if number < 10 then '0' + number else number
