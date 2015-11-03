@@ -110,12 +110,14 @@ def peaks(data):
 		prev_points.append([time, volts])
 	return beats # output is a list containing starting and finishing times of beats.
 
+# in '5 sec' sample, first and last beat are only 1.5 sec apart.
 def bpm(data):
 	# pairs = zip(data[:-1], data[1:])
 	# print pairs
 	print(data)
 	keys = [int(key) for (key, volts) in data]
-	avg = (max(keys) - min(keys)) / (len(data) - 1)
+	print max(keys) - min(keys)
+	avg = (max(keys) - min(keys)) / (len(data)-1)
 	print avg
 	return 60.0 * 1000 / avg
 
@@ -126,7 +128,6 @@ def main():
 	print("amount of data %d" % len(json_data))
 	beats = peaks(json_data)
 	per_minute = bpm(beats)
-
 	print("per minute", per_minute)
 	# print beats
 	print len(beats)
