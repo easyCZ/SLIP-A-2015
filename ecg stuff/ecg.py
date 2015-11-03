@@ -74,16 +74,17 @@ def get_json():
 
 # method looks for peaks and then eliminates peaks using extrapolation. Method can be improved given necessity and time. Improvement would be to change 'reach_back' depending on density of datapoints.
 def peaks(data):
-	peak = 200 		  # these values should be changed after experimentation.
-	extrapolation = 5 # these values should be changed after experimentation.
-	reach_back = 5   # these values should be changed after experimentation.
+	count = 0
+	peak = 200 		  # these values should be changed after experimentation. - hope to make changes depending on data.
+	extrapolation = 15 # these values should be changed after experimentation. - hope to make changes depending on data.
+	reach_back = 5   # these values should be changed after experimentation. - hope to make changes depending on data.
 	beat = False
 	beats = []
 	prev_points = []
 	for i in range(0,reach_back):
 		prev_points.append([])
 	prev_points.append([0,0])
-	for time, volts in sorted(data.items(), key=lambda x: x[1]): # NEEDS TO BE ORDERED. The reach_back(regression) method depends on the order to be chronological.
+	for time, volts in sorted(data.items(), key=lambda x: x[0]):
 		prev_Volts = prev_points[reach_back][1]
 		if volts > peak:
 			if beat == False:
@@ -100,7 +101,6 @@ def peaks(data):
 		prev_points.append([time, volts])
 	return beats # output is a list containing starting and finishing times of beats.
 
-# in '5 sec' sample, first and last beat are only 1.5 sec apart. We will need to tweak peaks(data).
 def bpm(data):
 	keys = [int(key) for (key, volts) in data]
 	print max(keys) - min(keys)
