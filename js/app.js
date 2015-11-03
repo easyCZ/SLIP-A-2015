@@ -2102,8 +2102,7 @@ var requirejs, require, define;
     req(cfg);
 }(this));
 
-(function () {
-//     Underscore.js 1.8.3
+(function () {//     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Underscore may be freely distributed under the MIT license.
@@ -14783,7 +14782,7 @@ return jQuery;
   }
 
 }(this, function(Backbone, _) {
-  
+  "use strict";
 
   var previousWreqr = Backbone.Wreqr;
 
@@ -14801,7 +14800,7 @@ return jQuery;
   // A registry of functions to call, given a name
   
   Wreqr.Handlers = (function(Backbone, _){
-    
+    "use strict";
     
     // Constructor
     // -----------
@@ -14888,7 +14887,7 @@ return jQuery;
   //
   // Store and retrieve commands for execution.
   Wreqr.CommandStorage = (function(){
-    
+    "use strict";
   
     // Constructor function
     var CommandStorage = function(options){
@@ -14948,7 +14947,7 @@ return jQuery;
   // A simple command pattern implementation. Register a command
   // handler and execute it.
   Wreqr.Commands = (function(Wreqr, _){
-    
+    "use strict";
   
     return Wreqr.Handlers.extend({
       // default storage type
@@ -15012,7 +15011,7 @@ return jQuery;
   // A simple request/response implementation. Register a
   // request handler, and return a response from it
   Wreqr.RequestResponse = (function(Wreqr, _){
-    
+    "use strict";
   
     return Wreqr.Handlers.extend({
       request: function(name){
@@ -15030,7 +15029,7 @@ return jQuery;
   // of an application through event-driven architecture.
   
   Wreqr.EventAggregator = (function(Backbone, _){
-    
+    "use strict";
     var EA = function(){};
   
     // Copy the `extend` function used by Backbone's classes
@@ -15048,7 +15047,7 @@ return jQuery;
   // An object that wraps the three messaging systems:
   // EventAggregator, RequestResponse, Commands
   Wreqr.Channel = (function(Wreqr){
-    
+    "use strict";
   
     var Channel = function(channelName) {
       this.vent        = new Backbone.Wreqr.EventAggregator();
@@ -15108,7 +15107,7 @@ return jQuery;
   //
   // An object that lets you communicate with many channels.
   Wreqr.radio = (function(Wreqr, _){
-    
+    "use strict";
   
     var Radio = function() {
       this._channels = {};
@@ -15218,7 +15217,7 @@ return jQuery;
   }
 
 }(this, function(Backbone, _) {
-  
+  'use strict';
 
   var previousChildViewContainer = Backbone.ChildViewContainer;
 
@@ -15411,7 +15410,7 @@ return jQuery;
   }
 
 }(this, function(root, Backbone, _) {
-  
+  'use strict';
 
   var previousMarionette = root.Marionette;
   var previousMn = root.Mn;
@@ -15710,7 +15709,7 @@ return jQuery;
   // function can be supplied instead of a string handler name.
   
   (function(Marionette) {
-    
+    'use strict';
   
     // Bind the event to handlers specified as a string of
     // handler names on the target object
@@ -18883,7 +18882,7 @@ return jQuery;
 (function (global, factory) {
   typeof exports === "object" && typeof module !== "undefined" ? module.exports = factory(require("underscore"), require("backbone")) : typeof define === "function" && define.amd ? define('backbone.radio',["underscore", "backbone"], factory) : global.Backbone.Radio = factory(global._, global.Backbone);
 })(this, function (_, Backbone) {
-  
+  "use strict";
 
   var previousRadio = Backbone.Radio;
 
@@ -20083,7 +20082,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	var _interopRequireWildcard = __webpack_require__(8)['default'];
 
@@ -20151,7 +20150,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	var _interopRequireWildcard = __webpack_require__(8)['default'];
 
@@ -20216,7 +20215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	exports.__esModule = true;
 	var AST = {
@@ -20373,7 +20372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	var _interopRequireWildcard = __webpack_require__(8)['default'];
 
@@ -20424,7 +20423,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	var _interopRequireWildcard = __webpack_require__(8)['default'];
 
@@ -20956,7 +20955,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	var _interopRequireWildcard = __webpack_require__(8)['default'];
 
@@ -22023,7 +22022,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	var _interopRequireWildcard = __webpack_require__(8)['default'];
 
@@ -22160,7 +22159,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
 	exports.__esModule = true;
 	/*global window */
@@ -22184,7 +22183,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	"use strict";
 
 	exports["default"] = function (obj) {
 	  return obj && obj.__esModule ? obj : {
@@ -22198,7 +22197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	var _interopRequireWildcard = __webpack_require__(8)['default'];
 
@@ -22476,7 +22475,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	exports.__esModule = true;
 	// Build out our basic SafeString type
@@ -22495,7 +22494,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	exports.__esModule = true;
 
@@ -22538,7 +22537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	exports.__esModule = true;
 	exports.extend = extend;
@@ -22657,7 +22656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	var _interopRequireWildcard = __webpack_require__(8)['default'];
 
@@ -22894,7 +22893,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	"use strict";
 
 	exports.__esModule = true;
 	/* istanbul ignore next */
@@ -23577,7 +23576,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	var _interopRequireWildcard = __webpack_require__(8)['default'];
 
@@ -23794,7 +23793,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	var _interopRequireWildcard = __webpack_require__(8)['default'];
 
@@ -23930,7 +23929,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
 
 	exports.__esModule = true;
 	/*global define */
@@ -24552,7 +24551,7 @@ define('templates/dashboard/device',["handlebars"], function(Handlebars) { retur
     + alias3(((helper = (helper = helpers.owner || (depth0 != null ? depth0.owner : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"owner","hash":{},"data":data}) : helper)))
     + "</h3>\n\n<p>\n  Device ID: "
     + alias3(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\n</p>\n\n<div class=\"row\">\n  <div class=\"col-md-4\">\n    <h4>ECG Trace</h4>\n\n    <canvas class=\"ecg-live\" height=\"100\"></canvas>\n  </div>\n\n  <div class=\"col-md-2\">\n    <h4>Heart Rate</h4>\n\n    <p>\n      <span data-heart-rate-live-text class=\"live-text\">\n        0\n      </span>\n\n      <span class=\"unit\">\n        Beats Per Minute\n      </span>\n    </p>\n  </div>\n\n  <div class=\"col-md-4\">\n    <h4>Respiratory Trace</h4>\n\n    <canvas class=\"respiratory-live\" height=\"100\"></canvas>\n  </div>\n\n  <div class=\"col-md-2\">\n    <h4>Respiratory Rate</h4>\n\n    <p>\n      <span data-respiratory-rate-live-text class=\"live-text\">\n        0\n      </span>\n\n      <span class=\"unit\">\n        Breaths Per Minute\n      </span>\n    </p>\n  </div>\n</div>\n";
+    + "\n</p>\n\n<div class=\"row\">\n  <div class=\"col-md-4\">\n    <h4>ECG Trace</h4>\n\n    <canvas class=\"ecg-live\" height=\"100\"></canvas>\n  </div>\n\n  <div class=\"col-md-2\">\n    <h4>Heart Rate</h4>\n\n    <p>\n      <span data-heart-rate-live-text class=\"live-text\">\n      </span>\n\n      <span class=\"unit\">\n        Beats Per Minute\n      </span>\n    </p>\n  </div>\n\n  <div class=\"col-md-4\">\n    <h4>Respiratory Trace</h4>\n\n    <canvas class=\"respiratory-live\" height=\"100\"></canvas>\n  </div>\n\n  <div class=\"col-md-2\">\n    <h4>Respiratory Rate</h4>\n\n    <p>\n      <span data-respiratory-rate-live-text class=\"live-text\">\n        0\n      </span>\n\n      <span class=\"unit\">\n        Breaths Per Minute\n      </span>\n    </p>\n  </div>\n</div>\n";
 },"useData":true}); });
 var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
@@ -24587,9 +24586,14 @@ define('views/dashboard/device',['marionette', 'templates/dashboard/device'], fu
     };
 
     DashboardDeviceView.prototype.initialize = function() {
-      return this.model.firebase().child('raw_ecg').limitToLast(300).on('child_added', (function(_this) {
+      this.model.firebase().child('raw_ecg').limitToLast(300).on('child_added', (function(_this) {
         return function(snapshot) {
           return _this.dataSeries.ecg.append(snapshot.key(), snapshot.val());
+        };
+      })(this));
+      return this.model.firebase().child('live_bpm').on('value', (function(_this) {
+        return function(snapshot) {
+          return _this.$('[data-heart-rate-live-text]').text(snapshot.val());
         };
       })(this));
     };
@@ -25025,4 +25029,5 @@ require(['application'], function(Application) {
 });
 
 define("main", function(){});
+
 }());
