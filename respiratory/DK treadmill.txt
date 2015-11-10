@@ -1,0 +1,30 @@
+I have at rest rates before and after each interval of running.
+I believe 3000 rows corresponds to 5 min.
+
+My goal is to find a worthy output of my analysis. 
+If I do, then I can use the U16/U18 basketball team to do the test.
+
+
+Respiratory capture at Pleasance
+LOOP 1
+11:35 Treadmill level 5 speed 6,2
+11:41 7.2
+11:45 stop avg HR 130bpm
+LOOP 2
+11:50 start 6,2
+11:55 start 7,2
+End 11:57:30 HR 132 Avg
+LOOP 3
+Start 12:05:30 Level 5 7.2
+RBS 12:07:06 HR 144
+
+Data start row 1613
+typical interval for unique value is 37-45 or divisible by 37-45
+rates were between 15-17
+stops recording at 2243 - should be equivalent to approx. 11:35
+starts again - 8996 - should be about 11:45.
+Realistic measurements start at 9233.
+most likely start of running is 12051 official (when it says NaN) is 12772. I believe 12051 corresponds to 11:50
+
+
+

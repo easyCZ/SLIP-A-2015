@@ -1,0 +1,23 @@
+Hi Filip,
+             Please find attached data for analysis. This data is for  
+use in SLIP only for deriving/testing your algorithms and should not  
+be shared or disseminated.
+The files have data for 10 patients, each named after the patient  
+number from 1 to 10.
+Each patient's "quiet breathing at rest" is recorded first. The  
+patient then conducts a series of 10 exercises with resting periods  
+between exercises. The data recorded is the respiratory rate during  
+the resting periods between exercises. You will find a series of "1",  
+"2", "3", ..... "10", and these are
+separators for the exercises. So all the respiratory rates after "1"  
+and before "2" is during the resting period after the first exercise  
+and so on.
+You will find a pdf file with some notes about the patients and  
+summary statistics. I have an ordering of the patients based on the  
+clinical assessment of their condition.
+Your task is to analyse the data and derive an ordering of the  
+patients. I can share the clinical assessment if you like, bu tyou  
+might wish to first start blind.
+Please do not hesitate to contact me should you have any queries.
+Best,
+DK Arvind
