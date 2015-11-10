@@ -43,7 +43,12 @@ class BPMService(object):
         if not keys:
             return 0
         avg = (max(keys) - min(keys)) / (len(peaks) - 1)
-        return 60.0 * 1000 / avg
+		Expected_BPM = 60.0 * 1000 / avg
+		bound = 60/(max(keys)-min(keys))*(len(peaks) + 1)
+        if Expected_BPM <= bound:
+			return EXPECTED_BPM
+		else:
+			return bound
 
     def get_peaks(self):
         is_beat = False
