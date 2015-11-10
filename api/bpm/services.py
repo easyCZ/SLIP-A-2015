@@ -1,14 +1,31 @@
 
-
 class BPMService(object):
 
-    PEAK = 200
-    EXTRAPOLATION = 10
+    PEAK = 200 # adding function that automatically sets PEAK
+    EXTRAPOLATION = 10 # adding function that automatically sets EXTRAPOLATION
     REACH_BACK = 5
     
     def __init__(self, data):
         self.data = data
-        
+		        
+	'''# It won't let me call this method.
+	def peak_benchmark(self):
+		sum = 0
+		count = 0
+		for time, volts in self.data.items():
+			sum += volts
+			count += 1
+		avg = float(sum)/count
+		# There are two options I'd like to test at this point. Comment out one or the other.
+		# 1) PEAK = avg*a, where a is an element of [1.01,1.3)
+		a = 1.05
+		peak_benchmark = avg*a
+		# 2) PEAK = avg + a where a is an element of [5,30]
+		a = 15
+		peak_benchmark = avg + 15
+		# In both cases I will need to derive an experiment that determines which method is the most accurate. 
+		return peak_benchmark '''
+		
     def get_bpm(self):
         peaks = self.get_peaks()
         keys = [int(key) for (key, volts) in peaks]
@@ -69,5 +86,34 @@ class BPMService(object):
         B0 = Ey - B1*Ex
         y = B1*x + B0
         return y
+		
+''' # FOR TESTING - importing data and trying the function. It won't let me call it when it's in the class.
+import json
 
-        
+def peak_benchmark(self):
+	sum = 0
+	count = 0
+	for time, volts in self.data.items():
+		sum += volts
+		count += 1
+	avg = float(sum)/count
+	# There are two options I'd like to test at this point. Comment out one or the other.
+	# 1) PEAK = avg*a, where a is an element of [1.01,1.3)
+	a = 1.05
+	peak_benchmark = avg*a
+	# 2) PEAK = avg + a where a is an element of [5,30]
+	# a = 15
+	# peak_benchmark = avg + 15
+	# In both cases I will need to derive an experiment that determines which method is the most accurate. 
+	return peak_benchmark
+
+def get_json():
+	with open('5sec.json') as f:
+		json_data = json.loads(f.read())
+		return json_data
+	return {}
+		
+json_data = get_json()
+window1 = BPMService(json_data)
+PEAK = peak_benchmark(window1)
+print PEAK '''
