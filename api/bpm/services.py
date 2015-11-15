@@ -8,7 +8,7 @@ class BPMService(object):
     def __init__(self, data):
         self.data = data
 		        
-	'''def avg_volt(self):
+	def avg_volt(self):
 		sum = 0
 		count = 0
 		for time, volts in self.data.items():
@@ -35,7 +35,7 @@ class BPMService(object):
 		PEAK = self.peak_benchmark()
 		a = 0.3 # subject to experiments
 		extrapolation_benchmark = (PEAK - avg)*a
-		return extrapolation_benchmark'''
+		return extrapolation_benchmark
 		
     def get_bpm(self):
         peaks = self.get_peaks()
@@ -43,8 +43,8 @@ class BPMService(object):
         if not keys:
             return 0
         avg = (max(keys) - min(keys)) / (len(peaks) - 1)
-		Expected_BPM = 60.0 * 1000 / avg
-		bound = 60/(max(keys)-min(keys))*(len(peaks) + 1)
+        Expected_BPM = 60.0 * 1000 / avg
+        bound = 60/(max(keys)-min(keys))*(len(peaks) + 1)
         if Expected_BPM <= bound:
 			return EXPECTED_BPM
 		else:
@@ -103,10 +103,10 @@ class BPMService(object):
         y = B1*x + B0
         return y
 		
-''' # FOR TESTING - importing data and trying the function. It won't let me call it when it's in the class.
+# FOR TESTING - importing data and trying the function. It won't let me call it when it's in the class.
 import json
 
-def avg_volt(self):
+'''def avg_volt(self):
 		sum = 0
 		count = 0
 		for time, volts in self.data.items():
@@ -133,7 +133,7 @@ def extrapolation_benchmark(self):
 	PEAK = peak_benchmark(self)
 	a = 0.3 # subject to experiments
 	extrapolation_benchmark = (PEAK - avg)*a
-	return extrapolation_benchmark
+	return extrapolation_benchmark'''
 
 def get_json():
 	with open('5sec.json') as f:
@@ -143,6 +143,6 @@ def get_json():
 		
 json_data = get_json()
 window1 = BPMService(json_data)
-PEAK = peak_benchmark(window1)
-EXTRAPOLATION = extrapolation_benchmark(window1)
-print PEAK, EXTRAPOLATION'''
+PEAK = window1.peak_benchmark()
+EXTRAPOLATION = window1.extrapolation_benchmark()
+print PEAK, EXTRAPOLATION
