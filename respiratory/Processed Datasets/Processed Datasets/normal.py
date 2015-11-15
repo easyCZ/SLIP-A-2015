@@ -26,10 +26,23 @@ def get_normalcdf_data():
 				Output[index].append(element)
 	return Output
 
-# def 
+def normalcdf(x):
+	if x > 4 or x < 0:
+		return "ERROR"
+	NormalCDF = get_normalcdf_data()
+	first2values = int(x*10)/10.0
+	row_index = int(10*first2values)
+	thirdvalue = round(x,2) - first2values
+	col_index = int(thirdvalue * 100)
+	return 0.5+NormalCDF[row_index][col_index+1]
 
 def main():
 	NormalCDF = get_normalcdf_data()
-	for row in NormalCDF:
-		print row
+	# for row in NormalCDF:
+	# 	print row
+	for x in [0.1,0.2,2.65745,3.54654,1.2543221]:
+		print normalcdf(x)
+
+	
+main()
 

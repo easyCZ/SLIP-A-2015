@@ -158,7 +158,39 @@ def score_by_span(patients_list,exercise):
 		else:
 			patient.scores[exercise_index] = 'N/A'
 	return patients_list
-	
+
+def get_normalcdf_data():
+	f = open("normalcdf.csv")
+	Input = f.read()
+	f.close
+	Output1 = Input.split("\n")
+	Output2 = []
+	for row in Output1:
+		a = row.split(" ")
+		Output2.append(a)
+	# Output = Output.split
+	for i in range(0,4):
+		Output2.pop(0)
+	Output2.pop()
+	Output = []
+	for index,row in enumerate(Output2):
+		Output.append([])
+		for element in row:
+			if element <> '' and element <> ' ' and element <> '  ':
+				element = float(element)
+				Output[index].append(element)
+	return Output
+
+def normalcdf(x):
+	if x > 4 or x < 0:
+		return "ERROR"
+	NormalCDF = get_normalcdf_data()
+	first2values = int(x*10)/10.0
+	row_index = int(10*first2values)
+	thirdvalue = round(x,2) - first2values
+	col_index = int(thirdvalue * 100)
+	return 0.5+NormalCDF[row_index][col_index+1]
+
 # not running. need normal cdf.
 def score_by_normal(patients_list, exercise):
 	exercise_index = get_exercise_index(exercise)
@@ -171,10 +203,10 @@ def score_by_normal(patients_list, exercise):
 			scores = [0,0,0,0]
 			for i in range(0,4):
 				x = (patient.stats[exercise_index][i] - mean[i])/stdev[i]
-				# if x >= 0:
-					# scores[i] = (1-Normal(x))*10
-				# else:
-					# scores[i] = Normal(-x)*10
+				if x >= 0:
+					scores[i] = (1-normalcdf(x))*10
+				else:
+					scores[i] = normalcdf(-x)*10
 			patient.scores[exercise_index] = scores
 		else:
 			patient.scores[exercise_index] = 'N/A'
@@ -197,5 +229,5 @@ data = get_data()
 patients_list = initialize_patients(exercises, patients,data)
 exercise_scores(patients_list, exercises)
 for patient in patients_list:
-	print patient.stats
-	# print patient.scores
+	# print patient.stats
+	print patient.scores
