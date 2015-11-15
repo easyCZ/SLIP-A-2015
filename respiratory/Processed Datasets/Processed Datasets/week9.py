@@ -8,7 +8,7 @@ class patients(object):
 	def __init__(self,number,scores,stats,participated,rank,actual_rank,overall):
 		self.number = number # integer from 1-10. patient number.
 		self.scores = scores # list of floats element of [0,10]. Floats are scores for a given exercise. 
-		self.stats = stats   # for n exercises this is a list containing n lists of the form [avg,min,max], where avg is the patient's avg br for a given exercise, min is the patient's min br for a given exercise... etc.
+		self.stats = stats   # for n exercises this is a list containing n lists of the form [avg,min,max,var], where avg is the patient's avg br for a given exercise, min is the patient's min br for a given exercise... etc.
 		self.participated = participated # list of booleans. True if patient participated in a gievn exercise, False if a patient did not.
 		self.rank = rank
 		self.actual_rank = actual_rank
@@ -78,7 +78,7 @@ def initialize_patients(exercises, patients, data):
 						max = tuple_br
 			if count == 0 or sum == 0:
 				patient.participated.append(False)
-				patient.stats.append(['N/A','N/A','N/A'])
+				patient.stats.append(['N/A','N/A','N/A','N/A'])
 			else:
 				patient.participated.append(True)
 				avg = sum/count
@@ -92,43 +92,43 @@ def initialize_patients(exercises, patients, data):
 				patient.stats.append([avg,min,max,var])
 	return patients_list
 
-# returns the average of avg,min,max
+# returns the average of avg,min,max,var
 def get_avg_stats(patients_list, exercise):
 	exercise_index = get_exercise_index(exercise)		
 	count = 0
-	sum = [0,0,0] # avg,min,max
+	sum = [0,0,0,0] # avg,min,max,var
 	for patient in patients_list:
 		if patient.participated[exercise_index]:
 			count += 1
-			for i in range(0,3):
+			for i in range(0,4):
 				sum[i] += patient.stats[exercise_index][i]
-	averages = [0,0,0] # avg, min, max
-	for i in range(0,3):
+	averages = [0,0,0,0] # avg, min, max,var
+	for i in range(0,4):
 		averages[i] = sum[i] / count
 	return averages
 
-# returns the variance of avg,min,max
+# returns the variance of avg,min,max,var
 def get_var_stats(patients_list, exercise):
 	exercise_index = get_exercise_index(exercise)
-	Var = [0,0,0] # AvgVar, MinVar, MaxVar
+	Var = [0,0,0,0] # AvgVar, MinVar, MaxVar, VarVar
 	Avg = get_avg_stats(patients_list, exercise)
 	count = 0
 	for patient in patients_list:
 		if patient.participated[exercise_index]:
 			count += 1
-			for i in range(0,3):
+			for i in range(0,4):
 				Var[i] += (patient.stats[exercise_index][i] - Avg[i])**2
-	for i in range(0,3):
+	for i in range(0,4):
 		Var[i] = Var[i] / count
 	return Var
 
 # returns the minimum avg,min,max	
 def get_min_stats(patients_list, exercise):
 	exercise_index = get_exercise_index(exercise)
-	min = [1000,1000,1000]
+	min = [1000,1000,1000,1000]
 	for patient in patients_list:
 		if patient.participated[exercise_index]:
-			for i in range(0,3):
+			for i in range(0,4):
 				if patient.stats[exercise_index][i] < min[i]:
 					min[i] = patient.stats[exercise_index][i]
 	return min
@@ -136,10 +136,10 @@ def get_min_stats(patients_list, exercise):
 # returns the maximum avg,min,max
 def get_max_stats(patients_list, exercise):
 	exercise_index = get_exercise_index(exercise)
-	max = [0,0,0]
+	max = [0,0,0,0]
 	for patient in patients_list:
 		if patient.participated[exercise_index]:
-			for i in range(0,3):
+			for i in range(0,4):
 				if patient.stats[exercise_index][i] > max[i]:
 					max[i] = patient.stats[exercise_index][i]
 	return max
@@ -151,8 +151,8 @@ def score_by_span(patients_list,exercise):
 	min = get_min_stats(patients_list,exercise)
 	for patient in patients_list:
 		if patient.participated[exercise_index]:
-			scores = [0,0,0]
-			for i in range(0,3):
+			scores = [0,0,0,0]
+			for i in range(0,4):
 				scores[i] = 10*(1-(patient.stats[exercise_index][i] - min[i])/(max[i]-min[i]))
 			patient.scores[exercise_index] = scores
 		else:
@@ -168,8 +168,8 @@ def score_by_normal(patients_list, exercise):
 		std = std**(1/2)
 	for patient in patients_list:
 		if patient.participated[exercise_index]:
-			scores = [0,0,0]
-			for i in range(0,3):
+			scores = [0,0,0,0]
+			for i in range(0,4):
 				x = (patient.stats[exercise_index][i] - mean[i])/stdev[i]
 				# if x >= 0:
 					# scores[i] = (1-Normal(x))*10
