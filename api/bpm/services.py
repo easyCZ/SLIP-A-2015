@@ -4,10 +4,10 @@ class BPMService(object):
     PEAK = 200 # adding function that automatically sets PEAK
     EXTRAPOLATION = 10 # adding function that automatically sets EXTRAPOLATION
     REACH_BACK = 5
-    
+
     def __init__(self, data):
         self.data = data
-		        
+
 	def avg_volt(self):
 		sum = 0
 		count = 0
@@ -16,7 +16,7 @@ class BPMService(object):
 			count += 1
 		avg = float(sum)/count
 		return avg
-				
+
 	# It won't let me call this method.
 	def peak_benchmark(self):
 		avg = self.avg_volt()
@@ -27,16 +27,16 @@ class BPMService(object):
 		# 2) PEAK = avg + a where a is an element of [5,30]
 		a = 15
 		peak_benchmark = avg + 15
-		# In both cases I will need to derive an experiment that determines which method is the most accurate. 
-		return peak_benchmark 
-		
-	def extrapolation_benchmark(self):
-		avg = self.avg_volt()
-		PEAK = self.peak_benchmark()
-		a = 0.3 # subject to experiments
-		extrapolation_benchmark = (PEAK - avg)*a
-		return extrapolation_benchmark
-		
+		# In both cases I will need to derive an experiment that determines which method is the most accurate.
+		return peak_benchmark
+
+    def extrapolation_benchmark(self):
+        avg = self.avg_volt()
+        PEAK = self.peak_benchmark()
+        a = 0.3 # subject to experiments
+		# extrapolation_benchmark = (PEAK - avg)*a
+        return extrapolation_benchmark
+
     def get_bpm(self):
         peaks = self.get_peaks()
         keys = [int(key) for (key, volts) in peaks]
@@ -46,9 +46,9 @@ class BPMService(object):
         Expected_BPM = 60.0 * 1000 / avg
         bound = 60/(max(keys)-min(keys))*(len(peaks) + 1)
         if Expected_BPM <= bound:
-			return EXPECTED_BPM
-		else:
-			return bound
+            return EXPECTED_BPM
+        else:
+            return bound
 
     def get_peaks(self):
         is_beat = False
@@ -102,7 +102,7 @@ class BPMService(object):
         B0 = Ey - B1*Ex
         y = B1*x + B0
         return y
-		
+
 # FOR TESTING - importing data and trying the function. It won't let me call it when it's in the class.
 import json
 
@@ -114,7 +114,7 @@ import json
 			count += 1
 		avg = float(sum)/count
 		return avg
-				
+
 	# It won't let me call this method.
 def peak_benchmark(self):
 	avg = avg_volt(self)
@@ -125,9 +125,9 @@ def peak_benchmark(self):
 	# 2) PEAK = avg + a where a is an element of [5,30]
 	a = 15
 	peak_benchmark = avg + 15
-	# In both cases I will need to derive an experiment that determines which method is the most accurate. 
-	return peak_benchmark 
-	
+	# In both cases I will need to derive an experiment that determines which method is the most accurate.
+	return peak_benchmark
+
 def extrapolation_benchmark(self):
 	avg = avg_volt(self)
 	PEAK = peak_benchmark(self)
@@ -140,7 +140,7 @@ def get_json():
 		json_data = json.loads(f.read())
 		return json_data
 	return {}
-		
+
 json_data = get_json()
 window1 = BPMService(json_data)
 PEAK = window1.peak_benchmark()

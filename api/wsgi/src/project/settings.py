@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'corsheaders',
 
     'devices',
+    'devices.bpm'
 )
 
 MIDDLEWARE_CLASSES = (
