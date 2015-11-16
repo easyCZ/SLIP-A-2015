@@ -15,6 +15,18 @@ class patients(object):
 		self.actual_rank = actual_rank
 		self.overall = overall # float element of [0,10]. Overall score of patient.
 
+class matrix(object):
+	def __init__(self,rows):
+		self.row_dim = len(rows)
+		self.col_dim = len(rows[0])
+		self.rows = rows
+		self.cols = []
+		for i in range(0,self.col_dim):
+			self.cols.append([])
+			for row in self.rows:
+				self.cols[i].append
+
+
 # gets data from CSVs	
 def get_data():
 	data = []
