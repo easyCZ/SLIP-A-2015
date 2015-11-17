@@ -11,6 +11,9 @@ FIREBASE_URL = 'https://ubervest.firebaseio.com'
 DEVICES_URL = '%s/devices.json' % FIREBASE_URL
 DEVICE_URL = '%s/devices/%s.json' % (FIREBASE_URL, '%s')
 
+API_URL = 'http://api-ubervest.rhcloud.com'
+API_DEVICE_BPM_URL = '%s/devices/%s/bpm' % (API_URL, '%s')
+
 WINDOW_SIZE = 25
 
 
@@ -47,7 +50,12 @@ class Device(threading.Thread):
 
                 # store to firebase
                 requests.patch(DEVICE_URL % (self.device_id), data=json.dumps({'live_bpm': bpm}))
-                print("[Device] #%s - Updated bpm to %d" % (self.device_id, bpm))
+                print("[Device] #%s - Updated firebase bpm to %d" % (self.device_id, bpm))
+
+                requests.put(API_DEVICE_BPM_URL % (self.device_id), data=json.dumps({
+                    'timestamp': timestamp,
+                    'bpm': bpm
+                }))
 
 
 def main():
