@@ -189,10 +189,20 @@ def Gaussian(A,y):
 			LHS.row_add(i,j,-LHS.element(j,i)/LHS.element(i,i))
 			RHS.row_add(i,j,-LHS.element(j,i)/LHS.element(i,i))
 	return [LHS,RHS]
+
+def backsub(T,y):
+	row_dim = T.row_dim
+	col_dim = T.col_dim
+	if row_dim <> col_dim or row_dim <> y.row_dim:
+		return "ERROR"
+	x = matrix(zeros(row_dim,1))
+	x.change_element(row_dim,1,y.element(row_dim,1)/float(T.element(row_dim,col_dim)))
+	for i in reversed(range(1,col_dim)):
+		x.change_element(i,1,float(y.element(i,1)))
+		for j in range(i+1,col_dim):
+			x.change_element(i,1,x.element(i,1)-T.element(i,j)*x.element(j,1))
+		x.change_element(i,1,x.element(i,1)/T.element(i,i))
+	return x
+
 A = matrix(Test)
 y_transpose = matrix(y)
-y = transpose(y_transpose)
-y.matrix_print()
-Gaussian = Gaussian(A,y)
-Gaussian[0].matrix_print()
-Gaussian[1].matrix_print()
