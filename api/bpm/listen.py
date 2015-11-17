@@ -54,8 +54,10 @@ class Device(threading.Thread):
 
                 requests.put(API_DEVICE_BPM_URL % (self.device_id), data=json.dumps({
                     'timestamp': timestamp,
-                    'bpm': bpm
+                    'bpm': bpm,
+                    'device': self.device
                 }))
+                print("[Device] #%s - Updated API bpm")
 
 
 def main():
