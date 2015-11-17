@@ -1,3 +1,10 @@
+Test1 = [1,2,3,4,5,6,7,8]
+Test = []
+for i in range(0,len(Test1)):
+	Test.append([0,0,0,0,0,0,0,0])
+	for j in range(0,len(Test1)):
+		Test[i][j] += j/11.0+16/9.0 + i*22/19.6
+
 # returns n by m matrix of zeros
 def zeros(n,m):
 	output = []
@@ -13,13 +20,6 @@ def identity(n):
 		I[i][i] = 1
 	I = matrix(I)
 	return I
-
-Test1 = [1,2,3,4,5,6,7,8]
-Test = []
-for i in range(0,len(Test1)):
-	Test.append([0,0,0,0,0,0,0,0])
-	for j in range(0,len(Test1)):
-		Test[i][j] += j+16/9.0
 
 class matrix(object):
 	def __init__(self,rows):
@@ -70,15 +70,27 @@ class matrix(object):
 	
 	# adding i*factor to k
 	def row_add(self,i,k,factor):
-		rowi_times_factor = scalar_multiply_list(factor, self.row(i))
+		row = self.row(i)
+		rowi_times_factor = scalar_multiply_list(factor, row)
 		new_row = add_list(rowi_times_factor,self.row(k))
 		self.change_row(k,new_row)
 		return self
 
+	def row_multiply(self,i,factor):
+		new_row = scalar_multiply_list(factor,self.row(i))
+		self.change_row(i,new_row)
+		return self
+
 	def scalar(self,scalar):
-		for i in range(1,A.row_dim+1):
-			for j in range(1,A.col_dim+1):
-				A.change_element(i,j,scalar*A.element(i,j))
+		for i in range(1,self.row_dim+1):
+			for j in range(1,self.col_dim+1):
+				self.change_element(i,j,scalar*self.element(i,j))
+		return self
+
+	def row_swap(self,i,j):
+		rowi = self.row(i)
+		self.change_row(i,self.row(j))
+		self.change_row(j,rowi)
 		return self
 
 def transpose(A):
@@ -89,7 +101,7 @@ def add(A,B):
 	row_dim = A.row_dim
 	col_dim = A.col_dim
 	A_plus_B = matrix(zeros(row_dim,col_dim))
-	if A.row_dim <> B.row_dim or A.col_dim <> B.row_dim:
+	if A.row_dim <> B.row_dim or A.col_dim <> B.col_dim:
 		return "ERROR"
 	else:
 		for i in range(1,row_dim+1):
@@ -103,20 +115,13 @@ def add_list(A,B):
 	A = matrix(A)
 	B = matrix(B)
 	A_plus_B = add(A,B)
-	return A_plus_B.rows
-
-def scalar_multiply(scalar,A):
-	scalar_A = matrix(A.rows)
-	for i in range(1,A.row_dim+1):
-		for j in range(1,A.col_dim+1):
-			scalar_A.change_element(i,j,scalar*A.element(i,j))
-	return scalar_A
+	return A_plus_B.rows[0]
 
 def scalar_multiply_list(scalar,A):
-	A = [A]
-	A = matrix(A)
-	A.scalar(scalar)
-	return A.rows
+	output = []
+	for i in range(0,len(A)):
+		output.append(A[i]*scalar)
+	return output
 
 def multiply(A,B):
 	row_dim = A.row_dim
@@ -152,7 +157,6 @@ def LU_decomp(A): # by construction
 				sum = 0
 				for k in range(1,j):
 					sum = sum + L.element(i,k)*U.element(k,j)
-				print U.element(j,j)
 				L.change_element(i,j,(A.element(i,j) - sum)/U.element(j,j))
 			for j in range(i,row_dim+1):
 				sum = 0
@@ -161,13 +165,36 @@ def LU_decomp(A): # by construction
 				U.change_element(i,j,A.element(i,j)-sum)
 	return [L,U]
 
+def GaussianLU(A):
+	row_dim = A.row_dim
+	col_dim = A.col_dim
+	if row_dim <> col_dim:
+		return "ERROR"
+	U = A
+	L = identity(row_dim)
+	for i in range(1,col_dim+1):
+		if U.element(i,i) == 0:
+			count = 0
+			while U.element(i+count,i) == 0:
+				count += 1
+				if i+count > dim:
+					return "ERROR"
+					break
+			U.row_swap(i,i+count)
+			L.row_swap(i,i+count)
+		for j in range(i+1,col_dim+1):
+			U.row_add(i,j,-U.element(j,i)/U.element(i,i))
+			L.row_add(i,j,-U.element(j,i)/U.element(i,i))
+	return [L,U]
 A = matrix(Test)
-A_transpose = transpose(A)
-I = identity(A.row_dim)
-I.row_add(5,6,8)
-I.matrix_print()
 # A.matrix_print()
-AB = multiply(A_transpose,A)
+LU = GaussianLU(A)
+L = LU[0]
+U = LU[1]
+U.matrix_print()
+# A_transpose = transpose(A)
+# A.matrix_print()
+# AB = multiply(A_transpose,A)
 # AB.matrix_print()
 # LU = LU_decomp(AB)
 # LU[0].matrix_print()
