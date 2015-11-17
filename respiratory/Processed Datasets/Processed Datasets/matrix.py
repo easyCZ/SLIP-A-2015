@@ -5,6 +5,8 @@ for i in range(0,len(Test1)):
 	for j in range(0,len(Test1)):
 		Test[i][j] += j/11.0+16/9.0 + i*22/19.6
 
+y = [[4,5,6,7,2,3,4,5]]
+
 # returns n by m matrix of zeros
 def zeros(n,m):
 	output = []
@@ -23,9 +25,9 @@ def identity(n):
 
 class matrix(object):
 	def __init__(self,rows):
+		self.rows = rows
 		self.row_dim = len(rows)
 		self.col_dim = len(rows[0])
-		self.rows = rows
 		#initializing self.cols
 		self.cols = []
 		for i in range(0,self.col_dim):
@@ -165,37 +167,32 @@ def LU_decomp(A): # by construction
 				U.change_element(i,j,A.element(i,j)-sum)
 	return [L,U]
 
-def GaussianLU(A):
+# changes A to lower triangular. makes appropriate changes to y
+def Gaussian(A,y):
 	row_dim = A.row_dim
 	col_dim = A.col_dim
 	if row_dim <> col_dim:
 		return "ERROR"
-	U = A
-	L = identity(row_dim)
+	LHS = A
+	RHS = y
 	for i in range(1,col_dim+1):
-		if U.element(i,i) == 0:
+		if LHS.element(i,i) == 0:
 			count = 0
-			while U.element(i+count,i) == 0:
+			while LHS.element(i+count,i) == 0:
 				count += 1
 				if i+count > dim:
 					return "ERROR"
 					break
-			U.row_swap(i,i+count)
-			L.row_swap(i,i+count)
+			LHS.row_swap(i,i+count)
+			RHS.row_swap(i,i+count)
 		for j in range(i+1,col_dim+1):
-			U.row_add(i,j,-U.element(j,i)/U.element(i,i))
-			L.row_add(i,j,-U.element(j,i)/U.element(i,i))
-	return [L,U]
+			LHS.row_add(i,j,-LHS.element(j,i)/LHS.element(i,i))
+			RHS.row_add(i,j,-LHS.element(j,i)/LHS.element(i,i))
+	return [LHS,RHS]
 A = matrix(Test)
-# A.matrix_print()
-LU = GaussianLU(A)
-L = LU[0]
-U = LU[1]
-U.matrix_print()
-# A_transpose = transpose(A)
-# A.matrix_print()
-# AB = multiply(A_transpose,A)
-# AB.matrix_print()
-# LU = LU_decomp(AB)
-# LU[0].matrix_print()
-# LU[1].matrix_print()
+y_transpose = matrix(y)
+y = transpose(y_transpose)
+y.matrix_print()
+Gaussian = Gaussian(A,y)
+Gaussian[0].matrix_print()
+Gaussian[1].matrix_print()

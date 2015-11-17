@@ -1,9 +1,9 @@
-# Test1 = [1,2,3,4,5,6,7,8]
-# Test = []
-# for i in range(0,len(Test1)):
-# 	Test.append([0,0,0,0,0,0,0,0])
-# 	for j in range(0,len(Test1)):
-# 		Test[i][j] += j+16/9.0
+Test1 = [1,2,3,4,5,6,7,8]
+Test = []
+for i in range(0,len(Test1)):
+	Test.append([0,0,0,0,0,0,0,0])
+	for j in range(0,len(Test1)):
+		Test[i][j] += j+16/9.0
 
 # def scalar_multiply(scalar,A):
 # 	scalar_A = matrix(A.rows)
