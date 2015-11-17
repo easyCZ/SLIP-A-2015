@@ -58,6 +58,11 @@ class matrix(object):
 		for i in range(1,self.row_dim+1):
 			print self.row(i)
 	
+	def change_row(self,i,new_row):
+		self.rows[i-1] = new_row
+		self = matrix(self.rows)
+		return self
+	
 def transpose(A):
 	A_transpose = matrix(A.cols)
 	return A_transpose
@@ -76,6 +81,11 @@ def multiply(A,B):
 				AB[i][j] = AB[i][j] + A.element(i+1,k+1)*B.element(k+1,j+1)
 	AB = matrix(AB)
 	return AB
+
+def LU_decomp(A):
+	L = identity(A.row_dim)
+	U = identity(A.row_dim)
+
 
 A = matrix(Test)
 A_transpose = transpose(A)
