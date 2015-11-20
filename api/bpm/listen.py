@@ -26,8 +26,12 @@ class Device(threading.Thread):
 
     def run(self):
         client = SSEClient(DEVICE_URL % self.device_id)
+        # client = SSEClient('https://ubervest.firebaseio.com/devices/0.json')
+
+        print(client)
 
         for message in client:
+            print('got data', message)
             data = json.loads(message.data)
 
             if not data:
@@ -55,9 +59,9 @@ class Device(threading.Thread):
                 requests.put(API_DEVICE_BPM_URL % (self.device_id), data=json.dumps({
                     'timestamp': timestamp,
                     'bpm': bpm,
-                    'device': self.device
+                    'device': self.device_id
                 }))
-                print("[Device] #%s - Updated API bpm")
+                print("[Device] #%s - Updated API bpm" % self.device_id)
 
 
 def main():
