@@ -24562,7 +24562,7 @@ define('templates/dashboard/device',["handlebars"], function(Handlebars) { retur
     + alias3(((helper = (helper = helpers.owner || (depth0 != null ? depth0.owner : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"owner","hash":{},"data":data}) : helper)))
     + "</h3>\n\n<p>\n  Device ID: "
     + alias3(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\n</p>\n\n<div class=\"row\">\n  <div class=\"col-md-4\">\n    <h4>ECG Trace</h4>\n\n    <canvas class=\"ecg-live\" height=\"100\"></canvas>\n  </div>\n\n  <div class=\"col-md-2\">\n    <h4>Heart Rate</h4>\n\n    <p>\n      <span data-heart-rate-live-text class=\"live-text\">\n      </span>\n\n      <span class=\"unit\">\n        Beats Per Minute\n      </span>\n    </p>\n  </div>\n\n  <div class=\"col-md-6\">\n    <h4>Historic</h4>\n\n    <div class=\"bpm-historic\">      \n    </div>\n  </div>\n</div>\n";
+    + "\n</p>\n\n<div class=\"row\">\n  <div class=\"col-md-4\">\n    <h4>ECG Trace</h4>\n\n    <canvas class=\"ecg-live\" height=\"100\"></canvas>\n  </div>\n\n  <div class=\"col-md-2\">\n    <h4>Heart Rate</h4>\n\n    <p>\n      <span data-heart-rate-live-text class=\"live-text\">\n      </span>\n\n      <span class=\"unit\">\n        Beats Per Minute\n      </span>\n    </p>\n  </div>\n\n  <div class=\"col-md-6\">\n    <h4>Historic</h4>\n\n    <div class=\"bpm-historic\">\n    </div>\n  </div>\n</div>\n";
 },"useData":true}); });
 /*
  Highcharts JS v4.1.9 (2015-10-07)
@@ -25081,7 +25081,6 @@ define('views/login',['marionette', 'backbone.radio', 'templates/login'], functi
       var formData, loginCallback;
       e.preventDefault();
       formData = this.$('form').serialize();
-      alert("Logging in with " + formData);
       loginCallback = function(user) {
         Radio.channel('authentication').trigger('login', user);
         return Radio.channel('navigation').trigger('navigate', '/', {
