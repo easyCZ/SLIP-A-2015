@@ -2,6 +2,8 @@ var Firebase = require("firebase");
 
 var UberVest = new Firebase('https://ubervest.firebaseio.com/');
 
+var START_DATE = Date.now();
+
 
 UberVest.child('devices').once('value', function (snapshot) {
 
@@ -10,9 +12,9 @@ UberVest.child('devices').once('value', function (snapshot) {
 
   devices.forEach(function (device_id) {
 
-    // console.log('Registering for device #' + device_id);
-
-    UberVest.child('devices/' + device_id + '/raw_ecg').on('child_added', function (data) {
+    UberVest
+      .child('devices/' + device_id + '/raw_ecg')
+      .on('child_added', function (data) {
 
       var key = data.key();
       var value = data.val();

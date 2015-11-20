@@ -20,8 +20,6 @@ define [
 
       formData = @.$('form').serialize()
 
-      alert("Logging in with #{formData}")
-
       # Fire off an event after login
       loginCallback = (user) ->
         Radio.channel('authentication').trigger 'login', user

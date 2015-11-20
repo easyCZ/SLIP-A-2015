@@ -2,6 +2,9 @@ define [
   'marionette',
 
   'templates/dashboard/device',
+
+  'highcharts',
+  'helpers/liveChart',
 ], (
   Marionette,
 
@@ -19,7 +22,6 @@ define [
 
     liveCharts:
       ecg: null
-      respiratory: null
 
     initialize: =>
       @model.firebase().child('raw_ecg').limitToLast(300).on 'child_added', (snapshot) =>
@@ -27,6 +29,27 @@ define [
 
       @model.firebase().child('live_bpm').on 'value', (snapshot) =>
         @.$('[data-heart-rate-live-text]').text(snapshot.val())
+
+      @model.getHistoricHeartRate()
+        .then (data) =>
+          @.$('.bpm-historic').highcharts
+            chart:
+              backgroundColor: '#000'
+              height: 200
+              zoomType: 'x'
+            title: false
+            xAxis:
+              type: 'datetime'
+            yAxis:
+              title:
+                text: 'BPM'
+            legend:
+              enabled: false
+
+            series: [
+              name: 'Heart Rate',
+              data: data
+            ]
 
     onAttach: =>
       pad2 = (number) ->
@@ -37,8 +60,6 @@ define [
         interpolation: 'linear'
         timestampFormatter: (date) ->
           return pad2(date.getSeconds())
-
-      @liveCharts.respiratory = @.$('.respiratory-live').liveChart(@dataSeries.respiratory)
 
     onDestroy: =>
       _(@liveCharts).each (chart) ->
