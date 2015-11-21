@@ -1,14 +1,16 @@
 from services import BPMService
 import json
 
-# Hey Milan,
-# the code works when I define the benchmark functions outside of the BPMService class (see the functions and code i commented out below).
-# When I define the functions inside the class i keep getting a obbjecct has no attribute error. Please check it out.
-# Best,
-# Fil
 
+class Services(object):
 
-'''def avg_volt(self):
+    def __init__(self, data, actual_beats, start_time,finish_time):
+        self.data = data
+        self.actual_beats = actual_beats
+        self.start_time = start_time
+        self.finish_time = finish_time
+
+    def avg_volt(self):
         sum = 0
         count = 0
         for time, volts in self.data.items():
@@ -17,61 +19,129 @@ import json
         avg = float(sum)/count
         return avg
 
-    # It won't let me call this method.
-def peak_benchmark(self):
-    avg = avg_volt(self)
-    # There are two options I'd like to test at this point. Comment out one or the other.
-    # 1) PEAK = avg*a, where a is an element of [1.01,1.3)
-    a = 1.05
-    peak_benchmark = avg*a
-    # 2) PEAK = avg + a where a is an element of [5,30]
-    a = 15
-    peak_benchmark = avg + 15
-    # In both cases I will need to derive an experiment that determines which method is the most accurate.
-    return peak_benchmark
+    def peak_benchmark(self,a,b):
+        avg = self.avg_volt()
+        peak_benchmark = avg*a + b
+        return peak_benchmark
 
-def extrapolation_benchmark(self):
-    avg = avg_volt(self)
-    PEAK = peak_benchmark(self)
-    a = 0.3 # subject to experiments
-    extrapolation_benchmark = (PEAK - avg)*a
-    return extrapolation_benchmark'''
-# def avg_volt(self):
-#       sum = 0
-#       count = 0
-#       for time, volts in self.data.items():
-#           sum += volts
-#           count += 1
-#       avg = float(sum)/count
-#       return avg
+    def extrapolation_benchmark(self,a,b):
+        avg = self.avg_volt()
+        PEAK = self.peak_benchmark(1.05,10)
+        extrapolation_benchmark = (PEAK - avg)*a + b
+        return extrapolation_benchmark
 
-#   # It won't let me call this method.
-# def peak_benchmark(self):
-#   avg = avg_volt(self)
-#   # There are two options I'd like to test at this point. Comment out one or the other.
-#   # 1) PEAK = avg*a, where a is an element of [1.01,1.3)
-#   a = 1.05
-#   peak_benchmark = avg*a
-#   # 2) PEAK = avg + a where a is an element of [5,30]
-#   a = 15
-#   peak_benchmark = avg + 15
-#   # In both cases I will need to derive an experiment that determines which method is the most accurate.
-#   return peak_benchmark
+    def get_bpm(self):
+        peaks = self.get_peaks()
+        keys = [int(key) for (key, volts) in peaks]
+        if not keys:
+            return 0
+        avg = (max(keys) - min(keys)) / (len(peaks) - 1)
+        Expected_BPM = 60.0 * 1000 / avg
+        bound = 60/(max(keys)-min(keys))*(len(peaks) + 1)
+        if Expected_BPM <= bound:
+            return EXPECTED_BPM
+        else:
+            return bound
 
-# def extrapolation_benchmark(self):
-#   avg = avg_volt(self)
-#   PEAK = peak_benchmark(self)
-#   a = 0.333 # subject to experiments
-#   extrapolation_benchmark = (PEAK - avg)*a
-#   return extrapolation_benchmark
+    def get_peaks(self,reach_back,peak_a,peak_b,extr_a,extr_b):
+        self.REACH_BACK = reach_back
+        self.PEAK = self.peak_benchmark(peak_a,peak_b)
+        self.EXTRAPOLATION = self.extrapolation_benchmark(extr_a,extr_b)
+        is_beat = False
+        beats = []
+        previous_points = [[] for i in range(self.REACH_BACK + 1)]
+        previous_points.append([0, 0])
 
+        for time, volts in self.data.items():
+            previous_volts = previous_points[self.REACH_BACK + 1][1]
 
+            if volts > self.PEAK:
+                if not is_beat:
+                    start_time = time
+                is_beat = True
 
-def get_json():
-    with open('5sec.json') as f:
+            else:
+                if is_beat:
+                    first_point = previous_points[0]
+                    if first_point and first_point[0] != 0 and first_point[1] != 0:
+                        finish_time = time
+                        predicted_voltage = self.regression(previous_points[:-1], int(start_time))
+
+                        if (previous_volts > predicted_voltage + self.EXTRAPOLATION):
+                            beats.append([start_time, previous_volts])
+
+                is_beat = False
+            previous_points.pop(0)
+            previous_points.append([time, volts])
+
+        return beats
+
+    def regression(self, values, x):
+        length = len(values)
+        Ey = 0    # Expectation of y
+        Ex = 0    # Expectatio of x
+        for element in values:
+            timestamp, voltage = element
+            timestamp = float(timestamp)
+            Ey += voltage
+            Ex += timestamp
+        Ey = Ey/length
+        Ex = Ex/length
+        Sxy = 0 # sum of squares xy
+        Sxx = 0 # sum of squares x
+        for element in values:
+            timestamp, voltage = element
+            timestamp = float(timestamp)
+            Sxy += (timestamp - Ex)*(voltage - Ey)
+            Sxx =+ (timestamp - Ex)**2
+        B1 = Sxy/Sxx
+        B0 = Ey - B1*Ex
+        y = B1*x + B0
+        return y
+
+def get_json(file_name):
+    with open(file_name) as f:
         json_data = json.loads(f.read())
         return json_data
     return {}
+
+class Setting(object):
+    def __init__(self,reach_back,peak_a,peak_b,extr_a,extr_b):
+        self.reach_back = reach_back
+        self.peak_a = peak_a
+        self.peak_b = peak_b
+        self.extr_a = extr_a
+        self.extr_b = extr_b
+        self.diff = 1000
+
+    def print_setting(self):
+        print self.reach_back, self.peak_a, self.peak_b, self.extr_a, self.extr_b
+
+def experiment(Subjects):
+    settings = []
+    for reach_back in range(2,8):
+        for i in range(0,6):
+            peak_a = 1+ i*0.05
+            for peak_b in range(0,6):
+                for j in range(0,6):
+                    extr_a = 0.05*j
+                    for extr_b in range(0,6):
+                        settings.append(Setting(reach_back,peak_a,peak_b,extr_a,extr_b))
+    for setting in settings:
+        for subject in Subjects:
+            beats = len(subject.get_peaks(setting.reach_back,setting.peak_a,setting.peak_b,setting.extr_a,setting.extr_b))
+            setting.diff = setting.diff + abs(beats - subject.actual_beats)
+     
+
+
+
+
+    #         get difference in beats
+    #     sum difference in beats
+    # add setting with difference in beats to list
+    # order list
+    # return list or part of list
+
 
 def main():
     # json_data = get_json()
@@ -80,12 +150,21 @@ def main():
     # EXTRAPOLATION = extrapolation_benchmark(window1)
     # print PEAK, EXTRAPOLATION
 
-    json_data = get_json()
-    window1 = BPMService(json_data)
-    PEAK = window1.peak_benchmark()
-    EXTRAPOLATION = window1.extrapolation_benchmark()
-    print PEAK, EXTRAPOLATION
-
+    Subjects = []
+    Filip_data = get_json('Filip_raw_ecg.json')
+    Hayden_data = get_json('Hayden_raw_ecg.json')
+    Hayden = Services(Hayden_data,68,1447759200000,1447759260000)
+    Filip = Services(Filip_data,58,1447758840000,1447758900000)
+    Subjects.append(Hayden)
+    Subjects.append(Filip)
+    # peaks = Filip.get_peaks()
+    # relevant_peaks = []
+    # for peak in peaks:
+    #     if int(peak[0]) > 1447758840000 and int(peak[0]) < 1447758900000:
+    #         relevant_peaks.append(peak)
+    # print relevant_peaks, len(relevant_peaks)
+    # print PEAK, EXTRAPOLATION
+    experiment(Subjects)
 
 
 if __name__ == "__main__":
