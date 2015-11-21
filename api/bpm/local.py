@@ -117,38 +117,47 @@ class Setting(object):
     def print_setting(self):
         print self.reach_back, self.peak_a, self.peak_b, self.extr_a, self.extr_b, self.diff
 
+    def get_relevant_beats(self,subject):
+        peaks = subject.get_peaks(self.reach_back,self.peak_a,self.peak_b,self.extr_a,self.extr_b)
+        relevant_peaks = []
+        for peak in peaks:
+            if int(peak[0]) > subject.start_time and int(peak[0]) < subject.finish_time:
+                relevant_peaks.append(peak)
+        beats = len(relevant_peaks)
+        self.diff = self.diff + abs(beats - subject.actual_beats)
+        return beats
+
+            # peaks = subject.get_peaks(setting.reach_back,setting.peak_a,setting.peak_b,setting.extr_a,setting.extr_b)
+            # relevant_peaks = []
+            # for peak in peaks:
+            #     if int(peak[0]) > subject.start_time and int(peak[0]) < subject.finish_time:
+            #         relevant_peaks.append(peak)
+            # beats = len(relevant_peaks)
+            # setting.diff = setting.diff + abs(beats - subject.actual_beats)
+
 def experiment(Subjects):
     settings = []
-    for reach_back in range(5,6):
+    for reach_back in range(10,11):
         for i in range(1,2):
             peak_a = 1+ i*0.05
-            for peak_b in range(10,11):
-                for j in range(6,7):
+            for peak_b in range(5,10):
+                for j in range(5,25):
                     extr_a = 0.05*j
-                    for extr_b in range(0,1):
+                    for extr_b in range(5,15):
                         settings.append(Setting(reach_back,peak_a,peak_b,extr_a,extr_b))
     for setting in settings:
         for subject in Subjects:
-            peaks = subject.get_peaks(setting.reach_back,setting.peak_a,setting.peak_b,setting.extr_a,setting.extr_b)
-            relevant_peaks = []
-            for peak in peaks:
-                if int(peak[0]) > subject.start_time and int(peak[0]) < subject.finish_time:
-                    relevant_peaks.append(peak)
-            beats = len(relevant_peaks)
-            setting.diff = setting.diff + abs(beats - subject.actual_beats)
-            print beats, subject.actual_beats
-    settings.sort(key = lambda x: x.diff, reverse=False)
+            beats = setting.get_relevant_beats(subject)
+    settings.sort(key = lambda x: x.diff, reverse=True)
     for i in range(0,len(settings)):
-        settings[i].print_setting()
-
-
-
-    #         get difference in beats
-    #     sum difference in beats
-    # add setting with difference in beats to list
-    # order list
-    # return list or part of list
-
+        if i > len(settings)-5:
+            settings[i].diff = 0
+            for subject in Subjects:
+                beats = settings[i].get_relevant_beats(subject)
+                print beats, subject.actual_beats
+            settings[i].print_setting()
+        else:
+            settings[i].print_setting()
 
 def main():
     # json_data = get_json()
