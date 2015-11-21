@@ -26,7 +26,7 @@ class Services(object):
 
     def extrapolation_benchmark(self,a,b):
         avg = self.avg_volt()
-        PEAK = self.peak_benchmark(1.05,10)
+        PEAK = self.peak_benchmark(a,b)
         extrapolation_benchmark = (PEAK - avg)*a + b
         return extrapolation_benchmark
 
@@ -112,27 +112,34 @@ class Setting(object):
         self.peak_b = peak_b
         self.extr_a = extr_a
         self.extr_b = extr_b
-        self.diff = 1000
+        self.diff = 0
 
     def print_setting(self):
-        print self.reach_back, self.peak_a, self.peak_b, self.extr_a, self.extr_b
+        print self.reach_back, self.peak_a, self.peak_b, self.extr_a, self.extr_b, self.diff
 
 def experiment(Subjects):
     settings = []
-    for reach_back in range(2,8):
-        for i in range(0,6):
+    for reach_back in range(5,6):
+        for i in range(1,2):
             peak_a = 1+ i*0.05
-            for peak_b in range(0,6):
-                for j in range(0,6):
+            for peak_b in range(10,11):
+                for j in range(6,7):
                     extr_a = 0.05*j
-                    for extr_b in range(0,6):
+                    for extr_b in range(0,1):
                         settings.append(Setting(reach_back,peak_a,peak_b,extr_a,extr_b))
     for setting in settings:
         for subject in Subjects:
-            beats = len(subject.get_peaks(setting.reach_back,setting.peak_a,setting.peak_b,setting.extr_a,setting.extr_b))
+            peaks = subject.get_peaks(setting.reach_back,setting.peak_a,setting.peak_b,setting.extr_a,setting.extr_b)
+            relevant_peaks = []
+            for peak in peaks:
+                if int(peak[0]) > subject.start_time and int(peak[0]) < subject.finish_time:
+                    relevant_peaks.append(peak)
+            beats = len(relevant_peaks)
             setting.diff = setting.diff + abs(beats - subject.actual_beats)
-     
-
+            print beats, subject.actual_beats
+    settings.sort(key = lambda x: x.diff, reverse=False)
+    for i in range(0,len(settings)):
+        settings[i].print_setting()
 
 
 
@@ -157,15 +164,7 @@ def main():
     Filip = Services(Filip_data,58,1447758840000,1447758900000)
     Subjects.append(Hayden)
     Subjects.append(Filip)
-    # peaks = Filip.get_peaks()
-    # relevant_peaks = []
-    # for peak in peaks:
-    #     if int(peak[0]) > 1447758840000 and int(peak[0]) < 1447758900000:
-    #         relevant_peaks.append(peak)
-    # print relevant_peaks, len(relevant_peaks)
-    # print PEAK, EXTRAPOLATION
     experiment(Subjects)
-
 
 if __name__ == "__main__":
     main()
