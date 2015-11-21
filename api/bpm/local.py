@@ -24,10 +24,10 @@ class Services(object):
         peak_benchmark = avg*a + b
         return peak_benchmark
 
-    def extrapolation_benchmark(self,a,b):
+    def extrapolation_benchmark(self,peak_a, peak_b, extr_a,extr_b):
         avg = self.avg_volt()
-        PEAK = self.peak_benchmark(a,b)
-        extrapolation_benchmark = (PEAK - avg)*a + b
+        PEAK = self.peak_benchmark(peak_a,peak_b)
+        extrapolation_benchmark = (PEAK - avg)*extr_a + extr_b
         return extrapolation_benchmark
 
     def get_bpm(self):
@@ -46,14 +46,14 @@ class Services(object):
     def get_peaks(self,reach_back,peak_a,peak_b,extr_a,extr_b):
         self.REACH_BACK = reach_back
         self.PEAK = self.peak_benchmark(peak_a,peak_b)
-        self.EXTRAPOLATION = self.extrapolation_benchmark(extr_a,extr_b)
+        self.EXTRAPOLATION = self.extrapolation_benchmark(peak_a,peak_b,extr_a,extr_b)
         is_beat = False
         beats = []
-        previous_points = [[] for i in range(self.REACH_BACK + 1)]
+        previous_points = [[] for i in range(self.REACH_BACK)]
         previous_points.append([0, 0])
+        for time, volts in sorted(self.data.items()):
 
-        for time, volts in self.data.items():
-            previous_volts = previous_points[self.REACH_BACK + 1][1]
+            previous_volts = previous_points[-1][1]
 
             if volts > self.PEAK:
                 if not is_beat:
@@ -73,7 +73,6 @@ class Services(object):
                 is_beat = False
             previous_points.pop(0)
             previous_points.append([time, volts])
-
         return beats
 
     def regression(self, values, x):
@@ -92,8 +91,8 @@ class Services(object):
         for element in values:
             timestamp, voltage = element
             timestamp = float(timestamp)
-            Sxy += (timestamp - Ex)*(voltage - Ey)
-            Sxx =+ (timestamp - Ex)**2
+            Sxy = Sxy + (timestamp - Ex)*(voltage - Ey)
+            Sxx = Sxx + (timestamp - Ex)**2
         B1 = Sxy/Sxx
         B0 = Ey - B1*Ex
         y = B1*x + B0
@@ -125,7 +124,7 @@ class Setting(object):
                 relevant_peaks.append(peak)
         beats = len(relevant_peaks)
         self.diff = self.diff + abs(beats - subject.actual_beats)
-        return beats
+        return relevant_peaks
 
             # peaks = subject.get_peaks(setting.reach_back,setting.peak_a,setting.peak_b,setting.extr_a,setting.extr_b)
             # relevant_peaks = []
@@ -137,27 +136,30 @@ class Setting(object):
 
 def experiment(Subjects):
     settings = []
-    for reach_back in range(10,11):
+    for reach_back in range(5,6):
         for i in range(1,2):
             peak_a = 1+ i*0.05
-            for peak_b in range(5,10):
-                for j in range(5,25):
+            for peak_b in range(6,7):
+                for j in range(1,2):
                     extr_a = 0.05*j
-                    for extr_b in range(5,15):
+                    for extr_b in range(5,6):
                         settings.append(Setting(reach_back,peak_a,peak_b,extr_a,extr_b))
     for setting in settings:
-        for subject in Subjects:
+        for subject in [Subjects[0]]:
             beats = setting.get_relevant_beats(subject)
     settings.sort(key = lambda x: x.diff, reverse=True)
-    for i in range(0,len(settings)):
-        if i > len(settings)-5:
-            settings[i].diff = 0
+    length = len(settings)
+    for i in reversed(range(1,length+1)):
+        if i <5:
+            settings[length-i].diff = 0
             for subject in Subjects:
-                beats = settings[i].get_relevant_beats(subject)
+                beats = settings[length-i].get_relevant_beats(subject)
                 print beats, subject.actual_beats
-            settings[i].print_setting()
+            settings[length-i].print_setting()
         else:
-            settings[i].print_setting()
+            settings[length - i].print_setting()
+    for subject in Subjects:
+        print subject.avg_volt()
 
 def main():
     # json_data = get_json()
@@ -170,10 +172,39 @@ def main():
     Filip_data = get_json('Filip_raw_ecg.json')
     Hayden_data = get_json('Hayden_raw_ecg.json')
     Hayden = Services(Hayden_data,68,1447759200000,1447759260000)
-    Filip = Services(Filip_data,58,1447758840000,1447758900000)
+    Filip = Services(Filip_data,23,1447758840000,1447758900000)
     Subjects.append(Hayden)
     Subjects.append(Filip)
-    experiment(Subjects)
+    '''peak_a = 1.0
+    peak_b = 0
+    extr_a = 0.0
+    extr_b = 0
+    # for subject in Subjects:
+        # print subject.avg_volt(), subject.peak_benchmark(peak_a, peak_b), subject.extrapolation_benchmark(peak_a,peak_b,extr_a,extr_b)
+
+    for reach_back in range(2,10):
+        for i in range(0,30):
+            for j in range(0,20):
+                extr_a = 0.05*j
+                peak_a = 1+ i*0.005
+                setting1 = Setting(reach_back,peak_a,peak_b,extr_a,extr_b)
+                peaks = setting1.get_relevant_beats(Hayden)
+                peaks1 = setting1.get_relevant_beats(Filip)
+                fil_diff = abs(len(peaks1)-Filip.actual_beats)
+                hay_diff = abs(len(peaks)-Hayden.actual_beats)
+                total_diff = hay_diff + fil_diff
+                # if total_diff < 10:
+                #     if i%2 == 0:
+                #         print reach_back, peak_a,"", hay_diff, fil_diff, total_diff
+                #     else:
+                #         print reach_back, peak_a, hay_diff, fil_diff, total_diff
+                if total_diff == 0:
+                    print reach_back, peak_a, peak_b, extr_a, extr_b, total_diff'''
+
+    setting1 = Setting(3,1.04,0,0.5,0)
+    peaks = setting1.get_relevant_beats(Hayden)
+    peaks1 = setting1.get_relevant_beats(Filip)
+    print peaks, peaks1, len(peaks), len(peaks1)
 
 if __name__ == "__main__":
     main()
