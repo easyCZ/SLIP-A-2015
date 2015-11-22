@@ -292,25 +292,29 @@ def EXPERIMENT(Subjects):
 		finish_time = Hayden.start_time + i*1000*window_length
 		intervals.append([start_time,finish_time])
 
-	for peak in range(190,205):
-		for extrapolation in range(0,20):
-			for i in range(0,20):
+	for peak in range(185,209):
+		for extrapolation in range(0,25):
+			for i in range(0,10):
 				reach_back = 0.12+i*0.01
 
 				total_difference = 0
 
 				beats = Hayden.peaks(reach_back,extrapolation,peak)
 
+				count = 0
+
 				for interval in intervals:
 					interval_beats = []
 					for beat in beats:
 						if beat[0] > interval[0] and beat[0] < interval[1]:
 							interval_beats.append(beat)
-					interval_bpm = Hayden.BPM(interval_beats)
-					interval_diff = abs(interval_bpm - Hayden.actual_beats)
-					total_difference += interval_diff
+					if len(interval_beats) > 1:
+						interval_bpm = Hayden.BPM(interval_beats)
+						interval_diff = abs(interval_bpm - Hayden.actual_beats)
+						total_difference += interval_diff
+						count += 1
 							
-				avg_diff = float(total_difference)/no_of_intervals
+				avg_diff = float(total_difference)/count
 				results.append([reach_back, extrapolation, peak, avg_diff, len(beats), Hayden.actual_beats])
 
 	results.sort(key = lambda x: x[3], reverse=True)
