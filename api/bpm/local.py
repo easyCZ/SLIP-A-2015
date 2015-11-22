@@ -30,8 +30,8 @@ class Services(object):
         extrapolation_benchmark = (PEAK - avg)*extr_a + extr_b
         return extrapolation_benchmark
 
-    def get_bpm(self):
-        peaks = self.get_peaks()
+    def get_bpm(self,setting):
+        peaks = self.get_peaks(setting.reach_back,setting.peak_a,setting.peak_b,setting.extr_a,setting.extr_b)
         keys = [int(key) for (key, volts) in peaks]
         if not keys:
             return 0
@@ -134,7 +134,8 @@ class Setting(object):
             # beats = len(relevant_peaks)
             # setting.diff = setting.diff + abs(beats - subject.actual_beats)
 
-def experiment(Subjects):
+# this experiment was a mess
+'''def experiment(Subjects):
     settings = []
     for reach_back in range(5,6):
         for i in range(1,2):
@@ -159,7 +160,59 @@ def experiment(Subjects):
         else:
             settings[length - i].print_setting()
     for subject in Subjects:
-        print subject.avg_volt()
+        print subject.avg_volt()'''
+
+def BPM(peaks):
+    keys = [int(key) for (key, volts) in peaks]
+    if not keys:
+        return 0
+    avg = (max(keys) - min(keys)) / (len(peaks) - 1)
+    Expected_BPM = 60.0 * 1000 / avg
+    # bound = 60/(max(keys)-min(keys))*(len(peaks) + 1)
+    # if Expected_BPM <= bound:
+    return Expected_BPM
+    # else:
+    #     return bound
+
+def BPM_experiment(Hayden,n):
+    outputs = []
+    setting1 = Setting(3,1.05,0,0.4,0)
+    peaks = setting1.get_relevant_beats(Hayden)
+    actual_bpm = len(peaks) 
+    for i in range(2,n+1):
+        outputs.append([i,0])
+        # print output[i-2]
+    for output in outputs:
+        window_length = output[0]
+        times = []
+        for i in range(0,60/window_length + 1):
+            times.append(Hayden.start_time + i*window_length*1000)
+        trials = []
+        for i in range(0,len(times)-1):
+            trials.append([])
+            for beat in peaks:
+                if int(beat[0]) > times[i] and int(beat[0]) < times[i+1]:
+                    trials[i].append(beat)
+            if len(trials[i])>1:
+                trial_bpm = BPM(trials[i])
+            # if window_length == 2:
+            #     print trial_bpm
+            # output[1] = output[1] + abs(trial_bpm - actual_bpm)
+            
+                # print output[1]
+        # output[1] = output[1]/
+        bpm = BPM(peaks)
+        # print bpm
+        # trial_times = []
+
+    
+    
+
+    
+    # peaks = setting1.get_relevant_beats(Hayden)
+    print peaks,len(peaks),Hayden.get_bpm(setting1)
+    
+
 
 def main():
     # json_data = get_json()
@@ -182,6 +235,7 @@ def main():
     # for subject in Subjects:
         # print subject.avg_volt(), subject.peak_benchmark(peak_a, peak_b), subject.extrapolation_benchmark(peak_a,peak_b,extr_a,extr_b)
 
+    # this experiment worked ok
     for reach_back in range(2,10):
         for i in range(0,30):
             for j in range(0,20):
@@ -200,11 +254,7 @@ def main():
                 #         print reach_back, peak_a, hay_diff, fil_diff, total_diff
                 if total_diff == 0:
                     print reach_back, peak_a, peak_b, extr_a, extr_b, total_diff'''
-
-    setting1 = Setting(3,1.04,0,0.5,0)
-    peaks = setting1.get_relevant_beats(Hayden)
-    peaks1 = setting1.get_relevant_beats(Filip)
-    print peaks, peaks1, len(peaks), len(peaks1)
+    BPM_experiment(Hayden,30)
 
 if __name__ == "__main__":
     main()
