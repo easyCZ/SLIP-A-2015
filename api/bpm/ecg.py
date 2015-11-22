@@ -141,25 +141,41 @@ class ecg_services(object):
 		
 		beats = []
 		for pair in beat_pairs:
+			
 			item1_start = pair[0][0]
 			item1_finish = pair[0][1]
 			item1_volts = pair[0][2]
-			item2_start = pair[1][0]
-			item2_finish = pair[1][1]
-			item2_volts = pair[1][2]
-			item1_time = item1_finish-item1_start
-			item2_time = item2_finish-item2_start
-			if item1_time > item2_time:
-				beats.append([item2_start,item2_volts])
-			elif item2_time > item1_time:
+			
+			if pair[1] == []:
 				beats.append([item1_start,item1_volts])
 			else:
-				if item1_volts >= item2_volts:
+				item2_start = pair[1][0]
+				item2_finish = pair[1][1]
+				item2_volts = pair[1][2]
+				item1_time = item1_finish-item1_start
+				item2_time = item2_finish-item2_start
+				if item1_time > item2_time:
+					beats.append([item2_start,item2_volts])
+				elif item2_time > item1_time:
 					beats.append([item1_start,item1_volts])
 				else:
-					beats.append([item2_start,item2_volts])
+					if item1_volts >= item2_volts:
+						beats.append([item1_start,item1_volts])
+					else:
+						beats.append([item2_start,item2_volts])
 		return beats
 
+	def BPM(self,peaks):
+		keys = [int(key) for (key, volts) in peaks]
+		if not keys:
+			return 0
+		avg = (max(keys) - min(keys))/(len(peaks) - 1)
+		Expected_BPM = round(60.0 * 1000/avg,0)
+		bound = round(60000/float((max(keys)-min(keys)))*(len(peaks) + 1),0)
+		if Expected_BPM <= bound:
+		    return Expected_BPM
+		else:
+			return bound
 
 def get_json(file_name):
     with open(file_name) as f:
@@ -172,7 +188,7 @@ def initialize_subjects():
 	hayden_data = get_json('Hayden_raw_ecg.json')
 	filip_data = get_json('Filip_raw_ecg.json')
 	Filip = ecg_services(filip_data,23,1447758840000, 1447758900000)
-	Hayden = ecg_services(hayden_data,67, 1447759200000,1447759260000)
+	Hayden = ecg_services(hayden_data,68, 1447759200000,1447759260000)
 	Subjects.append(Hayden)
 	Subjects.append(Filip)
 	return Subjects
@@ -185,7 +201,7 @@ def print_result(Subjects):
 		for beat in beats:
 			print beat
 
-def experiment(Subjects):
+def peaks_experiment(Subjects):
 	reach_back = 0.13
 	extrapolation = 10
 	peak = 198
@@ -207,8 +223,75 @@ def experiment(Subjects):
 	for setting in settings:
 		print setting
 
+def double_peaks_experiment(Subjects):
+	peak = 198
+	settings = []
+	
+	for peak in range(180,210):
+
+		beat_diff = 0
+		for subject in Subjects:
+			beats = subject.double_peaks(peak)
+			subject_beat_diff = abs(len(beats)-subject.actual_beats)
+			beat_diff += subject_beat_diff
+		settings.append([peak, beat_diff])
+
+	settings.sort(key = lambda x: x[1], reverse=True)
+	for setting in settings:
+		print setting
+
+def BPM_experiment(Subjects):
+	
+	for subject in Subjects:
+		subject.beats = subject.peaks(0.12,11,194)
+
+	results = []
+	
+	for window_length in range(4,61):
+
+		total_difference = 0
+		subject_count = 0
+		no_of_intervals = int(60/window_length)
+
+		for subject in Subjects:
+			
+			if subject == Subjects[0]:
+
+				subject_count += 1
+
+				beats = subject.beats
+
+				intervals = []
+				for i in range(1,no_of_intervals+1):
+					start_time = subject.start_time + (i-1)*1000*window_length
+					finish_time = subject.start_time + i*1000*window_length
+					intervals.append([start_time,finish_time])
+
+				for interval in intervals:
+					interval_beats = []
+					for beat in beats:
+						if beat[0] > interval[0] and beat[0] < interval[1]:
+							interval_beats.append(beat)
+					interval_bpm = subject.BPM(interval_beats)
+					interval_diff = abs(interval_bpm - subject.actual_beats)
+					total_difference += interval_diff
+				
+		avg_diff = float(total_difference)/no_of_intervals/subject_count
+		results.append([window_length, avg_diff])
+
+	for result in results:
+		print result
+
+			# print BPM # ,beats, len(beats)
+
+def EXPERIMENT(Subjects):
+	Hayden = Subjects[0]
+	
+
 def main():
 	Subjects = initialize_subjects()
-	experiment(Subjects)
+	EXPERIMENT(Subjects)
+	# Subjects[0].beats = Subjects[0].peaks(0.12,11,194)
+	# print Subjects[0].beats
 
 main()
