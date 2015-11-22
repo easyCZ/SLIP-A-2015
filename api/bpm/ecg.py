@@ -63,10 +63,6 @@ class ecg_services(object):
 				
 	def peaks(self, reach_back, extrapolation, peak):
 		
-		reach_back = reach_back
-		extrapolation = extrapolation
-		peak = peak
-		
 		was_beat = False  # this boolean was implemented to prevent double counting beats that occur over two timestamps.
 		beats = [] # list that will contain all beats in the format [timestamp, volts]
 		previous_points = [[0,0] for i in range(30)] # list of the last 10 data points (from oldest to newest). List is also in the format [timestamp,volts]
@@ -282,11 +278,46 @@ def BPM_experiment(Subjects):
 	for result in results:
 		print result
 
-			# print BPM # ,beats, len(beats)
-
 def EXPERIMENT(Subjects):
 	Hayden = Subjects[0]
-	
+	results = [] # [reach_back, extrapolation, peak, avg_BPM_diff(at 5 sec window length), len(beats), Hayden.actual_beats]
+
+	window_length = 5
+	total_difference = 0
+	no_of_intervals = int(60/window_length)
+
+	intervals = []
+	for i in range(1,no_of_intervals+1):
+		start_time = Hayden.start_time + (i-1)*1000*window_length
+		finish_time = Hayden.start_time + i*1000*window_length
+		intervals.append([start_time,finish_time])
+
+	for peak in range(190,205):
+		for extrapolation in range(0,20):
+			for i in range(0,20):
+				reach_back = 0.12+i*0.01
+
+				total_difference = 0
+
+				beats = Hayden.peaks(reach_back,extrapolation,peak)
+
+				for interval in intervals:
+					interval_beats = []
+					for beat in beats:
+						if beat[0] > interval[0] and beat[0] < interval[1]:
+							interval_beats.append(beat)
+					interval_bpm = Hayden.BPM(interval_beats)
+					interval_diff = abs(interval_bpm - Hayden.actual_beats)
+					total_difference += interval_diff
+							
+				avg_diff = float(total_difference)/no_of_intervals
+				results.append([reach_back, extrapolation, peak, avg_diff, len(beats), Hayden.actual_beats])
+
+	results.sort(key = lambda x: x[3], reverse=True)
+	for result in results:
+		print result
+
+
 
 def main():
 	Subjects = initialize_subjects()
