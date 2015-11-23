@@ -2,7 +2,7 @@ class BPMServices(object):
 
     PEAK =  205
     EXTRAPOLATION = 2
-    REACH_BACK = 0.13
+    REACH_BACK = 0.15
 
     def __init__(self, data):
         self.data = data

@@ -1,8 +1,10 @@
+import json
+
 class BPMServices(object):
 
     PEAK =  205
     EXTRAPOLATION = 2
-    REACH_BACK = 0.13
+    REACH_BACK = 0.15
 
     def __init__(self, data):
         self.data = data
@@ -127,3 +129,19 @@ class BPMServices(object):
         B0 = Ey - B1*Ex
         y = B1*x + B0
         return y
+
+
+def get_json(file_name):
+    with open(file_name) as f:
+        json_data = json.loads(f.read())
+        return json_data
+    return {}
+
+
+def main():
+    data = get_json('test_data.JSON')
+    TEST = BPMServices(data)
+    beats = TEST.get_peaks()
+    print beats, len(beats)
+
+main()
