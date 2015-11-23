@@ -41,7 +41,7 @@ class BPMServices(object):
         if not keys:
             return 0
         avg = (max(keys) - min(keys)) / (len(peaks) - 1)
-        Expected_BPM = 60.0 * 1000 / avg
+        Expected_BPM = 60.0 * 1000.0 / avg
         return Expected_BPM
 
 
