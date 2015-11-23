@@ -24947,6 +24947,9 @@ define('views/dashboard/device',['marionette', 'templates/dashboard/device', 'hi
       })(this));
       return this.model.getHistoricHeartRate().then((function(_this) {
         return function(data) {
+          data = $.map(data, function(point) {
+            return [new Date(point.timestamp), point.bpm];
+          });
           return _this.$('.bpm-historic').highcharts({
             chart: {
               backgroundColor: '#000',
