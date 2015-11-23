@@ -43,7 +43,7 @@ class BPMServices(object):
         avg = (max(keys) - min(keys)) / (len(peaks) - 1)
         Expected_BPM = 60.0 * 1000 / avg
         return Expected_BPM
-        
+
 
     def get_peaks(self):
 
@@ -53,12 +53,12 @@ class BPMServices(object):
 
         for time,volts in sorted(self.data.iteritems()):
             is_beat = False
-            time = int(time)                
+            time = int(time)
 
             if previous_points[0] <> [0,0]:
 
                 if volts > self.PEAK:   # discards data that does not exceed peak benchmark
-                    
+
                     regression_data = []  # preparing regression
                     for point in previous_points:
                         if int(point[0]) > time-1000*self.REACH_BACK:
@@ -68,7 +68,7 @@ class BPMServices(object):
                         if was_beat == False:
                             beats.append([time,volts])
                         is_beat = True
-                
+
             # setting up next key-value pair evaluation
             previous_points.append([time,volts])
             previous_points.pop(0)
@@ -112,8 +112,8 @@ class BPMServices(object):
         for element in values:
             timestamp, voltage = element
             timestamp = float(timestamp)
-            Ey += voltage
-            Ex += timestamp
+            Ey += int(voltage)
+            Ex += int(timestamp)
         Ey = Ey/length
         Ex = Ex/length
         Sxy = 0 # sum of squares xy

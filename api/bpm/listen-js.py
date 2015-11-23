@@ -1,7 +1,7 @@
 import sys
 import requests
 from collections import OrderedDict
-from services import BPMService
+from services import BPMServices
 import json
 
 FIREBASE_URL = 'https://ubervest.firebaseio.com'
@@ -17,13 +17,16 @@ window = OrderedDict()
 
 for line in sys.stdin:
     device_id, timestamp, voltage = line.strip().split('\t')
+    voltage = int(voltage)
+    timestamp = int(timestamp)
+    device_id = int(device_id)
 
     window[timestamp] = voltage
 
     if len(window) > WINDOW_SIZE:
         window.popitem(False)  # pop in FIFO order
 
-    bpm = BPMService(window).get_bpm()
+    bpm = BPMServices(window).get_bpm()
 
     requests.patch(DEVICE_URL % (device_id), data=json.dumps({'live_bpm': bpm}))
     print("[Device] #%s - Updated firebase bpm to %d" % (device_id, bpm))
