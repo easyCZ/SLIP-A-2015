@@ -35,6 +35,8 @@ define [
 
       @model.getHistoricHeartRate()
         .then (data) =>
+          data = $.map(data, (point) -> [new Date(point.timestamp), point.bpm])
+
           @.$('.bpm-historic').highcharts
             chart:
               backgroundColor: '#000'
