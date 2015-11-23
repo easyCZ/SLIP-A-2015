@@ -139,10 +139,15 @@ def get_json(file_name):
 
 
 def main():
-    data = get_json('test_data.JSON')
-    TEST = BPMServices(data)
-    beats = TEST.get_peaks()
-    BPM = TEST.get_bpm()
-    print beats, len(beats), BPM
+    Hayden_data = get_json('Hayden_raw_ecg.JSON')
+    Hayden = BPMServices(Hayden_data)
+    hayden_beats = Hayden.get_peaks()
+    Hayden_BPM = Hayden.get_bpm()
+    window_beats =[]
+    a = 1
+    b = 1
+    # for beat in Hayden_beats:
+    #     if beat[0] > a
+    print Hayden_BPM
 
 main()
