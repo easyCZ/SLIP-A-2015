@@ -27,17 +27,16 @@ for line in sys.stdin:
         window.popitem(False)  # pop in FIFO order
 
     bpm = BPMServices(window).get_bpm()
-    print(bpm)
 
-    # requests.patch(DEVICE_URL % (device_id), data=json.dumps({'live_bpm': bpm}))
-    # print("[Device] #%s - Updated firebase bpm to %d" % (device_id, bpm))
+    requests.patch(DEVICE_URL % (device_id), data=json.dumps({'live_bpm': bpm}))
+    print("[Device] #%s - Updated firebase bpm to %d" % (device_id, bpm))
 
-    # requests.put(API_DEVICE_BPM_URL % (device_id), data=json.dumps({
-    #     'timestamp': timestamp,
-    #     'bpm': bpm,
-    #     'device': device_id
-    # }))
-    # print("[Device] #%s - Updated API bpm" % device_id)
+    requests.put(API_DEVICE_BPM_URL % (device_id), data=json.dumps({
+        'timestamp': timestamp,
+        'bpm': bpm,
+        'device': device_id
+    }))
+    print("[Device] #%s - Updated API bpm" % device_id)
 
 
 
