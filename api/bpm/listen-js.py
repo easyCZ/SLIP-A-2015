@@ -11,9 +11,11 @@ DEVICE_URL = '%s/devices/%s.json' % (FIREBASE_URL, '%s')
 API_URL = 'http://api-ubervest.rhcloud.com'
 API_DEVICE_BPM_URL = '%s/devices/%s/bpm' % (API_URL, '%s')
 
-WINDOW_SIZE = 1000
+WINDOW_SIZE = 2000
 
 window = OrderedDict()
+
+last_bpm = 0
 
 for line in sys.stdin:
     device_id, timestamp, voltage = line.strip().split('\t')
@@ -27,16 +29,19 @@ for line in sys.stdin:
         window.popitem(False)  # pop in FIFO order
 
     bpm = BPMServices(window).get_bpm()
+    if bpm != last_bpm:
 
-    requests.patch(DEVICE_URL % (device_id), data=json.dumps({'live_bpm': bpm}))
-    print("[Device] #%s - Updated firebase bpm to %d" % (device_id, bpm))
+        requests.patch(DEVICE_URL % (device_id), data=json.dumps({'live_bpm': bpm}))
+        print("[Device] #%s - Updated firebase bpm to %d" % (device_id, bpm))
 
-    requests.put(API_DEVICE_BPM_URL % (device_id), data=json.dumps({
-        'timestamp': timestamp,
-        'bpm': bpm,
-        'device': device_id
-    }))
-    print("[Device] #%s - Updated API bpm" % device_id)
+        requests.put(API_DEVICE_BPM_URL % (device_id), data=json.dumps({
+            'timestamp': timestamp,
+            'bpm': bpm,
+            'device': device_id
+        }))
+        print("[Device] #%s - Updated API bpm" % device_id)
+
+    last_bpm = bpm
 
 
 

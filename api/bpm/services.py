@@ -2,7 +2,7 @@ class BPMServices(object):
 
     PEAK =  205
     EXTRAPOLATION = 2
-    REACH_BACK = 0.15
+    REACH_BACK = 0.2
 
     def __init__(self, data):
         self.data = data
@@ -125,6 +125,8 @@ class BPMServices(object):
             timestamp = float(timestamp)
             Sxy += (timestamp - Ex)*(voltage - Ey)
             Sxx =+ (timestamp - Ex)**2
+        if Sxx == 0:
+            return 0
         B1 = Sxy/Sxx
         B0 = Ey - B1*Ex
         y = B1*x + B0
