@@ -40,6 +40,8 @@ class BPMServices(object):
         keys = [int(key) for (key, volts) in peaks]
         if not keys:
             return 0
+        if len(peaks) - 1 == 0:
+            return 0
         avg = (max(keys) - min(keys)) / (len(peaks) - 1)
         Expected_BPM = 60.0 * 1000.0 / avg
         return Expected_BPM
