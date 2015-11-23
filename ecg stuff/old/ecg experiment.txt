@@ -1,0 +1,14 @@
+ECG Experiment - This is just a reminder for me (Filip)
+
+PART 1:
+Ideally take 5 x 30 sec of ecg data from each team member.
+Make sure to record photos/videos of the analogue ecg. I should then be able to count the difference in beats counted by the python code and me. 
+The expectation here is that there will be 100% accuracy.
+
+PART 2:
+I would also like to measure the impact that noise would have on results.
+Talk to Roy about what noise would look like. I would then emulate noise by manipulating the input data and observe the impact on results.
+
+PART 3:
+Finally, I'd like to graph out the accuracy of the bpm method with window size as an independent variable. 
+While the scope of work clearly calls for a short window, I think it would be useful information to provide. 

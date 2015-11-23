@@ -5,7 +5,7 @@ define [
   $,
   Smoothie,
 ) ->
-  $.fn.liveChart = (series) ->
+  $.fn.liveChart = (series, options) ->
     canvas = this
 
     unless canvas.attr('width')
@@ -15,14 +15,18 @@ define [
 
       canvas.attr('width', canvas.parent().innerWidth() - leftMargin - rightMargin)
 
-    chart = new SmoothieChart
+    defaults =
       labels:
         disabled: true
+
+    options = $.extend({}, defaults, options)
+
+    chart = new SmoothieChart(options)
 
     chart.addTimeSeries series,
       strokeStyle: 'rgba(0, 255, 0, 1)'
       lineWidth: 2
 
-    chart.streamTo canvas[0], 500
+    chart.streamTo canvas[0], options.delay || 500
 
     return chart

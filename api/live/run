@@ -1,0 +1,6 @@
+#!/bin/bash
+npm install
+
+source /var/lib/openshift/56195dcb2d527167370000bc/python/virtenv/venv/bin/activate
+
+nohup node ./listen.js | python ../bpm/listen-js.py &

@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'corsheaders',
 
     'devices',
+    'devices.bpm'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -129,6 +130,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
+
 }
 
 CORS_ORIGIN_ALLOW_ALL = True

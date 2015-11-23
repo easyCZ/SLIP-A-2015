@@ -1,3 +1,5 @@
+import json
+
 # ECG data processing
 
 #method converts string into float(seconds).
@@ -16,34 +18,38 @@ def convert_time(float_time):
 	minutes = (remainder - remainder1)/60
 	seconds = remainder1 + round(after_decimal,3)
 	return '%i:%i:%s' %(hours, minutes, seconds)
-	
+
 # NOT USED. Takes in two data points and returns voltage resulting from linear extrapolation of those two datapoints.
 def predictVOLT(x1,x2,y1,y2,x):
 	m = (y2-y1)/(x2-x1)
 	b = y1 - m*x1
 	y = m*x + b
 	return y
-	
+
 # finds line of best fit by minimizing residual - used in peaks.
-def regression(list, x):
-	length = len(list)
+def regression(values, x):
+	length = len(values)
 	Ey = 0    # Expectation of y
 	Ex = 0    # Expectatio of x
-	for element in list:
-		Ey += element[1]
-		Ex += element[0]
+	for element in values:
+		timestamp, voltage = element
+		timestamp = float(timestamp)
+		Ey += voltage
+		Ex += timestamp
 	Ey = Ey/length
 	Ex = Ex/length
 	Sxy = 0 # sum of squares xy
 	Sxx = 0 # sum of squares x
-	for element in list:
-		Sxy += (element[0] - Ex)*(element[1] - Ey)
-		Sxx =+ (element[0] - Ex)**2
+	for element in values:
+		timestamp, voltage = element
+		timestamp = float(timestamp)
+		Sxy = Sxy + (timestamp - Ex)*(voltage - Ey)
+		Sxx = Sxx + (timestamp - Ex)**2
 	B1 = Sxy/Sxx
 	B0 = Ey - B1*Ex
 	y = B1*x + B0
 	return y
-	
+
 # getting data
 def get_data():
 	f = open("ecg.csv")
@@ -60,21 +66,26 @@ def get_data():
 			data.append([timestamp,voltsignal])
 	return data
 
+def get_json():
+	with open('5sec.json') as f:
+		json_data = json.loads(f.read())
+		return json_data
+	return {}
+
 # method looks for peaks and then eliminates peaks using extrapolation. Method can be improved given necessity and time. Improvement would be to change 'reach_back' depending on density of datapoints.
 def peaks(data):
-	peak = 200 		  # these values should be changed after experimentation.
-	extrapolation = 10 # these values should be changed after experimentation.
-	reach_back = 5   # these values should be changed after experimentation.
+	count = 0
+	peak = 200 		  # these values should be changed after experimentation. - hope to make changes depending on data.
+	extrapolation = 15 # these values should be changed after experimentation. - hope to make changes depending on data.
+	reach_back = 5   # these values should be changed after experimentation. - hope to make changes depending on data.
 	beat = False
 	beats = []
 	prev_points = []
-	for i in range(0,reach_back+1):
+	for i in range(0,reach_back):
 		prev_points.append([])
 	prev_points.append([0,0])
-	for tuple in data:
-		time = tuple[0]
-		volts = tuple[1]
-		prev_Volts = prev_points[reach_back+1][1]
+	for time, volts in sorted(data.items(), key=lambda x: x[0]):
+		prev_Volts = prev_points[reach_back][1]
 		if volts > peak:
 			if beat == False:
 				start_time = time
@@ -82,20 +93,29 @@ def peaks(data):
 		else:
 			if beat == True:
 				if prev_points[0] <> [] and prev_points[0] <> [0,0]:
-					finish_time = time
-					predicted_Voltage = regression(prev_points[:-1], start_time)
+					predicted_Voltage = regression(prev_points[:-1], int(start_time))
 					if prev_Volts > predicted_Voltage + extrapolation:
-						beats.append([convert_time(start_time), prev_Volts]) # only appends start time because datapoints are too far apart.
+						beats.append([start_time, prev_Volts])
 			beat = False
 		prev_points.pop(0)
 		prev_points.append([time, volts])
 	return beats # output is a list containing starting and finishing times of beats.
 
+def bpm(data):
+	keys = [int(key) for (key, volts) in data]
+	print max(keys) - min(keys)
+	avg = (max(keys) - min(keys)) / (len(data)-1)
+	print avg
+	return 60.0 * 1000 / avg
+
+
 def main():
-	data = get_data()
-	# print data
-	beats = peaks(get_data())	
-	print beats
+	json_data = get_json()
+	print("amount of data %d" % len(json_data))
+	beats = peaks(json_data)
+	print (beats)
+	per_minute = bpm(beats)
+	print("per minute", per_minute)
 	print len(beats)
-	
+
 main()

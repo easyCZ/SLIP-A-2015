@@ -1,0 +1,36 @@
+'Health ranking' of 10 patients
+
+	Notes:
+
+		1) What are the exercises? Some breathing rates are lower than rest breathing rates.
+			a) Exercise 8
+			b) Exercise 6
+			c) Exercise 10
+			d) 
+
+		4) Getting different values for the same exercises. 
+			a) Where they recorded at different times? 
+			b) They do not increase or decrease monotonely.
+
+		5) Is 'exercise' 12 breathing at rest?
+
+		6) Does a breathing rate of 0 imply that the patient did not complete the exercise?
+			a) There are multiple exercises without data. I am assuming that patients did not carry out this exercise. 
+
+		7) How are there integers as breathing rates?
+			a) incorrect processing of data?
+
+		8) Are breathing rates given in breaths per minute?
+			a) 5-7 breaths per minute seems unlikely (especially for COPD patients).
+
+		9) What time differences are associated with br measurements?
+
+		10) There are different amounts of datapoints for each patient.
+
+	Patient Specific Notes:
+		Patient 1
+			1) Many different values for 12. 
+			2) 0 br for exercise 1. RESOLVED
+			3) 0 for exercise 4. RESOLVED
+			4) Good cooldown reactions exercises 7 and 9.
+
