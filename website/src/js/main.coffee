@@ -11,7 +11,8 @@ require.config
       exports: 'Firebase'
 
 require [
-  'application'
+  'application',
+  'bootstrap',
 ], (
   Application
 ) ->
