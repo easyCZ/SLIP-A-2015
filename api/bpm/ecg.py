@@ -203,9 +203,9 @@ def peaks_experiment(Subjects):
 	peak = 198
 	settings = []
 	
-	for peak in range(190,200):
-		for extrapolation in range(0,12):
-			for i in range(0,10):
+	for peak in range(190,205):
+		for extrapolation in range(0,21):
+			for i in range(0,20):
 				reach_back = 0.12 + i*0.01	
 
 				beat_diff = 0
@@ -325,6 +325,7 @@ def EXPERIMENT(Subjects):
 
 def main():
 	Subjects = initialize_subjects()
+	# Subjects[0].print_data()
 	EXPERIMENT(Subjects)
 	# Subjects[0].beats = Subjects[0].peaks(0.12,11,194)
 	# print Subjects[0].beats
