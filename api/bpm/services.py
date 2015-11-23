@@ -109,6 +109,8 @@ class BPMServices(object):
 
     def regression(self, values, x):
         length = len(values)
+        if length == 0:
+            return 0
         Ey = 0    # Expectation of y
         Ex = 0    # Expectatio of x
         for element in values:
