@@ -13,23 +13,23 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-
-import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 
-
-import android.os.IBinder;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -38,10 +38,9 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 public class MainActivity extends Activity {
@@ -49,19 +48,14 @@ public class MainActivity extends Activity {
 
     public static Context mContext;
 
-    Button b1,b2;
+    WebView wv;
     Switch s1;
-    private BluetoothManager btManager;
+
     private BluetoothAdapter btAdapter;
     private BluetoothDevice btDevice;
     private BluetoothLeScanner btScanner;
 
-
-    private String mDeviceName;
-    private String mDeviceAddress;
-    private BluetoothLeService mBluetoothLeService;
     private BluetoothGatt mBluetoothGatt;
-    private boolean mConnected = false;
 
     private static UUID UBER_VEST_SERVICE_UUID = UUID.fromString("0000B000-0000-1000-8000-00805F9B34FB");
 
@@ -69,23 +63,10 @@ public class MainActivity extends Activity {
 
     private Firebase firebase;
 
-    ListView lv;
-
-
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+    Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
-            if(!mBluetoothLeService.initialize()){
-                Log.e(TAG, "Unable to initialize Bluetooth");
-                finish();
-            }
-            mBluetoothLeService.connect(mDeviceAddress);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBluetoothLeService = null;
+        public void handleMessage(Message message) {
+            Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -113,6 +94,7 @@ public class MainActivity extends Activity {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
+                mHandler.obtainMessage().sendToTarget();
                 mBluetoothGatt.discoverServices();
                 Log.i(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
@@ -143,18 +125,18 @@ public class MainActivity extends Activity {
         Firebase.setAndroidContext(this);
         firebase = new Firebase("https://ubervest.firebaseio.com/");
 
-        b1 = (Button)findViewById(R.id.b1);
-        b2 = (Button)findViewById(R.id.b2);
         s1 = (Switch)findViewById(R.id.switch1);
-        lv = (ListView)findViewById(R.id.listView);
+        wv = (WebView)findViewById(R.id.webView);
+        wv.getSettings().setJavaScriptEnabled(true);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         btScanner = btAdapter.getBluetoothLeScanner();
 
+
         s1.setChecked(btAdapter.isEnabled());
 
         if(btAdapter.isEnabled()) {
-            list(findViewById(android.R.id.content));
+            connect();
         }
 
         s1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -176,7 +158,9 @@ public class MainActivity extends Activity {
             startActivityForResult(turnOn, 0);
             while(!btAdapter.isEnabled()) {
             }
-            list(findViewById(android.R.id.content));
+            btAdapter = BluetoothAdapter.getDefaultAdapter();
+            btScanner = btAdapter.getBluetoothLeScanner();
+            connect();
         }
     }
 
@@ -184,13 +168,21 @@ public class MainActivity extends Activity {
         btAdapter.disable();
     }
 
-    public void visible(View v){
-        Intent getVisible = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        startActivityForResult(getVisible, 0);
-    }
-
-    public void list(View v) {
-        btScanner.startScan(leScanCallback);
+    public void connect() {
+        ScanFilter.Builder filterBuilder = new ScanFilter.Builder();
+        filterBuilder.setDeviceAddress("DB:00:EC:05:2E:A0");
+        filterBuilder.setServiceUuid(new ParcelUuid(UBER_VEST_SERVICE_UUID));
+        ScanFilter filter = filterBuilder.build();
+        List<ScanFilter> filterList = new ArrayList<ScanFilter>();
+        filterList.add(filter);
+        ScanSettings.Builder settingsBuilder = new ScanSettings.Builder();
+        //settingsBuilder.setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE);
+        settingsBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
+        ScanSettings settings = settingsBuilder.build();
+        btScanner.startScan(filterList, settings, leScanCallback);
+        Uri uri = Uri.parse("http://groups.inf.ed.ac.uk/teaching/slipa15-16/#/login");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 
     @Override
