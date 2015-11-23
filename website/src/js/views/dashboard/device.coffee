@@ -27,6 +27,9 @@ define [
       @model.firebase().child('raw_ecg').limitToLast(300).on 'child_added', (snapshot) =>
         @dataSeries.ecg.append snapshot.key(), snapshot.val()
 
+      @model.firebase().child('temp').limitToLast(1).on 'child_added', (snapshot) =>
+        @.$('[data-temp-live-text]').text(snapshot.val())
+
       @model.firebase().child('live_bpm').on 'value', (snapshot) =>
         @.$('[data-heart-rate-live-text]').text(snapshot.val())
 
