@@ -52,8 +52,8 @@ class BPMServices(object):
         return Expected_BPM
 
     def get_beats(self):
-        avg = self.avg_volt() + 3
-        beat_length = 0.15
+        avg = self.avg_volt() + 2
+        beat_length = 0.10
 
         previous_points = [[0,0] for i in range(20)] # list of the last 20 data points (from oldest to newest). List is also in the format [timestamp,volts]        
         initial_beats = []
