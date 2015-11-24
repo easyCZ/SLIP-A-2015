@@ -16,16 +16,26 @@ def get_json(file_name):
 # Hayden_BPM = Hayden.get_bpm()
 
 def emulator(data):
-    window_length = 2000
+    window_length = 1000
     window = {}
+    count = 0
     for time,voltage in data.items():
+    
         window[time] = voltage
         if len(window) > window_length:
             min_time = min(window, key = window.get)
-        # del window
-    print window
+            del window[min_time]
 
+        service_object = BPMServices(window)
+        BPM = service_object.get_bpm()
+        
+        #IMPOSE RESTRICTIONS HERE
+        if count > window_length:
+            print BPM
+            
+        count += 1
 
+Hayden_data = get_json('Hayden_raw_ecg.JSON')
 
 def main():
     Hayden_data = get_json('Hayden_raw_ecg.JSON')
