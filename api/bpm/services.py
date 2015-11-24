@@ -260,6 +260,42 @@ class BPMServices(object):
                 beats2.append(beat)
         return beats2
 
+    def step31(self,beats2):
+        beats3 = []
+        for beat in beats2:
+            beat.sort()
+            beats3.append(beat[-1])
+        return beats3
+
+    def step32(self,beats2):
+        beats3 = []
+        for beat in beats2:
+            beat.sort()
+            beats3.append(beat[0])
+        return beats3
+
+    def step33(self,beats2):
+        beats3 = []
+        for beat in beats2:
+            beat.sort()
+            length = len(beat)
+            index = int(length/2)
+            beats3.append(beat[index])
+        return beats3
+
+    def step34(self,beats2):
+        beats3 = []
+        for beat in beats2:
+            beats3.append(beat[0])
+        return beats3
+
+    def step35(self,beats2):
+        beats3 = []
+        for beat in beats2:
+            beats3.append(beat[-1])
+        return beats3
+
+
     def get_beats(self):
         avg = self.avg_volt()
         all_above = avg + 2
@@ -316,10 +352,15 @@ class BPMServices(object):
         # beats2 = self.step24(beats15,min_spacing)
         beats2 = self.step25(beats15,min_spacing)
         # beats2 = self.step26(beats15,min_spacing)
-        
-        
-        
-        return beats2
+
+        # CHOOSE 1 - step 3
+        # beats3 = self.step31(beats2)
+        # beats3 = self.step32(beats2)
+        # beats3 = self.step33(beats2)
+        # beats3 = self.step34(beats2)
+        beats3 = self.step35(beats2)
+
+        return beats3
 
     def get_peaks(self):
 
