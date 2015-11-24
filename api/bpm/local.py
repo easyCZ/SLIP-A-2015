@@ -1,4 +1,6 @@
 # are you sure the first one gets popped from window?
+# tweak extrapolation and peak values
+
 
 import json
 import csv
@@ -32,13 +34,39 @@ def emulator(data):
         #IMPOSE RESTRICTIONS HERE
         if count > window_length:
             print BPM
-            
+
         count += 1
 
-Hayden_data = get_json('Hayden_raw_ecg.JSON')
+def return_beats(data):
+    Hayden = BPMServices(data)
+
+    # CHOOSE METHOD
+    # beats = Hayden.get_peaks()
+    beats = Hayden.get_beats()
+    c = csv.writer(open('hayden_beats.csv', 'wb'))
+    for beat in beats:
+        c.writerow(beat)
+
+    print beats, len(beats)
+
+def choose_data():
+    data = get_json('Hayden_raw_ecg.JSON')
+    # data = get_json('raw_ecg.JSON')
+    # data = get_json('test_data.JSON')
+    # data = get_json('Filip_raw_ecg.JSON')
+    return data
+
+def print_data(data):
+    # c = csv.writer(open('FILIP.csv', 'wb'))
+    for time,voltage in sorted(data.iteritems()):
+        print time, voltage
+        # c.writerow([time,voltage])
 
 def main():
-    Hayden_data = get_json('Hayden_raw_ecg.JSON')
-    emulator(Hayden_data)
+    data = choose_data()
+    # emulator(data)
+    return_beats(data)
+    # print_data(data)
+
 
 main()
