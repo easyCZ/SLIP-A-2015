@@ -120,6 +120,33 @@ class BPMServices(object):
                 beats15.append(beat)
         return beats15
 
+    def step152(self,beats1):
+        beats15 = []
+        for beat in beats1:
+            if beats15 == []:
+                beats15.append(beat)
+            elif beat[0][0] > beats15[-1][-1][0]:
+                beats15.append(beat)
+            else:
+                for element in beat:
+                    if element not in beats15[-1]:
+                        beats15[-1].append(element)
+                beats15[-1].sort(key = lambda x: x[0])
+        
+        return beats15
+
+    def step154(self,beats1):
+        beats15 = []
+        for beat in beats1:
+            if beats15 == []:
+                beats15.append(beat)
+            elif beat[0][0] > beats15[-1][-1][0]:
+                beats15.append(beat)
+            else:
+                beats15.pop()
+                beats15.append(beat)
+        return beats15
+
     def step155(self,beats1):
         beats15 = []
         for beat in beats1:
@@ -129,6 +156,110 @@ class BPMServices(object):
                 beats15.append(beat)
         return beats15
 
+    def step21(self,beats15,min_spacing):
+        beats2 = []
+        min_spacing = 1000*min_spacing
+        for beat in beats15:
+            if beats2 == []:
+                beats2.append(beat)
+            elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
+                beat.sort(key = lambda x: x[1], reverse = True)
+                beat_max_volt = beat[0][1]
+                beat.sort(key = lambda x: x[0], reverse = False)
+                beats2[-1].sort(key = lambda x: x[1], reverse = True)
+                prev_beat_max_volt =  beats2[-1][0][1]
+                beats2[-1].sort(key = lambda x: x[0], reverse = False)
+                if beat_max_volt > prev_beat_max_volt:
+                    beats2.pop()
+                    beats2.append(beat)
+            else:
+                beats2.append(beat)
+        return beats2
+
+    def step22(self,beats15,min_spacing):
+        beats2 = []
+        min_spacing = 1000*min_spacing
+        for beat in beats15:
+            if beats2 == []:
+                beats2.append(beat)
+            elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
+                beat.sort(key = lambda x: x[1], reverse = False)
+                beat_min_volt = beat[0][1]
+                beat.sort(key = lambda x: x[0], reverse = False)
+                beats2[-1].sort(key = lambda x: x[1], reverse = False)
+                prev_beat_min_volt =  beats2[-1][0][1]
+                beats2[-1].sort(key = lambda x: x[0], reverse = False)
+                if beat_min_volt < prev_beat_min_volt:
+                    beats2.pop()
+                    beats2.append(beat)
+            else:
+                beats2.append(beat)
+        return beats2
+
+    def step23(self,beats15,min_spacing):
+        beats2 = []
+        min_spacing = 1000*min_spacing
+        for beat in beats15:
+            if beats2 == []:
+                beats2.append(beat)
+            elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
+                beat_avg = self.beat_avg_volt(beat)
+                prev_beat_avg = self.beat_avg_volt(beats2[-1])
+                if beat_avg > prev_beat_avg:
+                    beats2.pop()
+                    beats2.append(beat)
+            else:
+                beats2.append(beat)
+        return beats2
+
+    def step24(self,beats15,min_spacing):
+        beats2 = []
+        min_spacing = 1000*min_spacing
+        for beat in beats15:
+            if beats2 == []:
+                beats2.append(beat)
+            elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
+                beat_var = self.beat_var(beat)
+                prev_beat_var = self.beat_var(beats2[-1])
+                if beat_var < prev_beat_var:
+                    beats2.pop()
+                    beats2.append(beat)
+            else:
+                beats2.append(beat)
+        return beats2
+
+    def step25(self,beats15,min_spacing):
+        beats2 = []
+        min_spacing = 1000*min_spacing
+        for beat in beats15:
+            if beats2 == []:
+                beats2.append(beat)
+            elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
+                beat_LSS = self.LSS(beat)
+                prev_beat_LSS = self.LSS(beats2[-1])
+                if beat_LSS < prev_beat_LSS:
+                    beats2.pop()
+                    beats2.append(beat)
+            else:
+                beats2.append(beat)
+        return beats2
+
+    def step26(self,beats15,min_spacing):
+        beats2 = []
+        min_spacing = 1000*min_spacing
+        for beat in beats15:
+            if beats2 == []:
+                beats2.append(beat)
+            elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
+                beat_duration = beat[-1][0] - beat[0][0]
+                prev_beat_duration = beats15[-1][-1][0] - beats15[-1][0][0]
+                if beat_duration > prev_beat_duration:
+                    beats2.pop()
+                    beats2.append(beat)
+            else:
+                beats2.append(beat)
+        return beats2
+
     def get_beats(self):
         avg = self.avg_volt()
         all_above = avg + 2
@@ -137,6 +268,7 @@ class BPMServices(object):
         min_above = avg
         slope_below = 3
         slope_above = 1
+        min_spacing = 0.33
         window_length = 0.1
         
 
@@ -155,7 +287,7 @@ class BPMServices(object):
                         if int(point[0]) > time-1000*window_length:
                             window.append(point)
 
-                # CHOOSE 1
+                # CHOOSE 1 - step 1
                 # window = self.step11(window,all_above)
                 window = self.step12(window,avg_above)
                 # window = self.step13(window,max_above)
@@ -170,14 +302,24 @@ class BPMServices(object):
             previous_points.append([time,volts])
             previous_points.pop(0)
 
-        # CHOOSE 1
-        beats15 = self.step151(beats1)
-        beats15 = self.step152(beats1)
-        beats15 = self.step153(beats1)
+        # CHOOSE 1 - step 1.5
+        # beats15 = self.step151(beats1)
+        # beats15 = self.step152(beats1)
+        # beats15 = self.step153(beats1)
         beats15 = self.step154(beats1)
         # beats15 = self.step155(beats1)
+
+        # CHOOSE 1 - step 2
+        # beats2 = self.step21(beats15,min_spacing)
+        # beats2 = self.step22(beats15,min_spacing)
+        # beats2 = self.step23(beats15,min_spacing)
+        # beats2 = self.step24(beats15,min_spacing)
+        beats2 = self.step25(beats15,min_spacing)
+        # beats2 = self.step26(beats15,min_spacing)
         
-        return beats15
+        
+        
+        return beats2
 
     def get_peaks(self):
 
@@ -293,3 +435,47 @@ class BPMServices(object):
             return 0
         B1 = Sxy/Sxx
         return B1
+
+    def beat_avg_volt(self,beat):
+        sum = 0
+        for element in beat:
+            sum =+ element[1]
+        if len(beat) == 0:
+            return 0
+        else:
+            avg = sum/len(beat)
+            return avg
+
+    def beat_avg_time(self,beat):
+        sum = 0
+        for element in beat:
+            sum =+ element[0]
+        if len(beat) == 0:
+            return 0
+        else:
+            avg = sum/len(beat)
+            return avg
+
+    def beat_var(self,beat):
+        avg = self.beat_avg_volt(beat)
+        var = 0
+        for element in beat:
+            var += (avg - element[1])**2
+        if len(beat) == 0:
+            return 1000
+        else:
+            return var/len(beat)
+
+    def LSS(self,beat):
+        B1 = self.get_slope(beat)
+        Ey = self.beat_avg_volt(beat)
+        Ex = self.beat_avg_time(beat)
+        B0 = Ey - B1*Ex
+        LSS = 0
+        for element in beat:
+            predicted_volt = element[0]*B1 + B0
+            actual_volt =element[1]
+            LSS += (predicted_volt - actual_volt)**2
+        return LSS
+
+

@@ -47,7 +47,8 @@ def return_beats(data):
     # for beat in beats:
     #     c.writerow(beat)
 
-    print beats, len(beats)
+    for beat in beats:
+        print beat, len(beats)
 
 def choose_data():
     data = get_json('Hayden_raw_ecg.JSON')
