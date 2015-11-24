@@ -51,12 +51,97 @@ class BPMServices(object):
         Expected_BPM = 60.0 * 1000.0 / avg
         return Expected_BPM
 
+    def step11(self,window,all_above):
+        beat = True
+        for pair in window:
+            if pair[1] < all_above:
+                beat = False
+        if beat:
+            return window
+        else:
+            return 0
+
+    def step12(self,window,avg_above):
+        length = len(window)
+        if length == 0:
+            return 0
+        sum = 0
+        for point in window:
+            sum += point[1]
+        avg = sum/float(length)
+        if avg > avg_above:
+            return window
+        else:
+            return 0
+    
+    def step13(self,window,max_above):
+        window.sort(key=lambda x: x[1],reverse = True)
+        max = window[0][1]
+        if max > max_above:
+            window.sort(key = lambda x: x[0])
+            return window
+        else:
+            return 0
+
+    def step14(self,window,min_above):
+        window.sort(key=lambda x: x[1],reverse = False)
+        max = window[0][1]
+        if max > min_above:
+            window.sort(key = lambda x: x[0])
+            return window
+        else:
+            return 0
+
+    def step15(self,window,slope_below):
+        slope = self.get_slope(window)
+        if abs(slope) <= slope_below:
+            return window
+        else:
+            return 0
+
+    def step16(self,window,slope_above):
+        slope = self.get_slope(window)
+        if abs(slope) > slope_above:
+            return window
+        else:
+            return 0
+    
+    def step151(self,beats1):
+        beats15 = []
+        for beat in beats1:
+            beat_duration = beat[-1][0] - beat[0][0]
+            prev_beat_duration = beats1[-1][-1][0] - beats1[-1][0][0]
+            if beats15 == []:
+                beats15.append(beat)
+            elif beat[0][0] > beats15[-1][-1][0]:
+                beats15.append(beat)
+            elif prev_beat_duration < beat_duration:
+                beats15.pop()
+                beats15.append(beat)
+        return beats15
+
+    def step155(self,beats1):
+        beats15 = []
+        for beat in beats1:
+            if beats15 == []:
+                beats15.append(beat)
+            elif beat[0][0] > beats15[-1][-1][0]:
+                beats15.append(beat)
+        return beats15
+
     def get_beats(self):
-        avg = self.avg_volt() + 2
-        beat_length = 0.10
+        avg = self.avg_volt()
+        all_above = avg + 2
+        avg_above = avg + 5
+        max_above = avg + 10
+        min_above = avg
+        slope_below = 3
+        slope_above = 1
+        window_length = 0.1
+        
 
         previous_points = [[0,0] for i in range(20)] # list of the last 20 data points (from oldest to newest). List is also in the format [timestamp,volts]        
-        initial_beats = []
+        beats1 = []
 
         for time,volts in sorted(self.data.iteritems()):
 
@@ -67,27 +152,32 @@ class BPMServices(object):
 
                 window = []
                 for point in previous_points:
-                        if int(point[0]) > time-1000*beat_length:
+                        if int(point[0]) > time-1000*window_length:
                             window.append(point)
 
-                beat = True
-                for pair in window:
-                    if pair[1] < avg:
-                        beat = False
-                if beat:
-                    initial_beats.append(window)
+                # CHOOSE 1
+                # window = self.step11(window,all_above)
+                window = self.step12(window,avg_above)
+                # window = self.step13(window,max_above)
+                # window = self.step14(window,min_above)
+                # window = self.step15(window,slope_below)
+                # window = self.step16(window,slope_above)
+
+
+                if window <> 0:
+                    beats1.append(window)
 
             previous_points.append([time,volts])
             previous_points.pop(0)
 
-        beats = []
-        for beat in initial_beats:
-            if beats == []:
-                beats.append(beat)
-            elif beat[0][0] > beats[-1][-1][0]:
-                beats.append(beat)
-
-        return beats
+        # CHOOSE 1
+        beats15 = self.step151(beats1)
+        beats15 = self.step152(beats1)
+        beats15 = self.step153(beats1)
+        beats15 = self.step154(beats1)
+        # beats15 = self.step155(beats1)
+        
+        return beats15
 
     def get_peaks(self):
 
@@ -178,3 +268,28 @@ class BPMServices(object):
         B0 = Ey - B1*Ex
         y = B1*x + B0
         return y
+
+    def get_slope(self,values):
+        length = len(values)
+        if length == 0:
+            return 0
+        Ey = 0    # Expectation of y
+        Ex = 0    # Expectatio of x
+        for element in values:
+            timestamp, voltage = element
+            timestamp = float(timestamp)
+            Ey += int(voltage)
+            Ex += int(timestamp)
+        Ey = Ey/length
+        Ex = Ex/length
+        Sxy = 0.0 # sum of squares xy
+        Sxx = 0.0 # sum of squares x
+        for element in values:
+            timestamp, voltage = element
+            timestamp = float(timestamp)
+            Sxy += (timestamp - Ex)*(voltage - Ey)
+            Sxx =+ (timestamp - Ex)**2
+        if Sxx == 0:
+            return 0
+        B1 = Sxy/Sxx
+        return B1

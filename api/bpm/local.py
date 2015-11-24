@@ -43,9 +43,9 @@ def return_beats(data):
     # CHOOSE METHOD
     # beats = Hayden.get_peaks()
     beats = Hayden.get_beats()
-    c = csv.writer(open('hayden_beats.csv', 'wb'))
-    for beat in beats:
-        c.writerow(beat)
+    # c = csv.writer(open('hayden_beats.csv', 'wb'))
+    # for beat in beats:
+    #     c.writerow(beat)
 
     print beats, len(beats)
 
