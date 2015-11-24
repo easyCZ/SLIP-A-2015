@@ -18,10 +18,11 @@ def get_json(file_name):
 # Hayden_BPM = Hayden.get_bpm()
 
 def emulator(data):
-    window_length = 1000
+    window_length = 800
     window = {}
     count = 0
-    for time,voltage in data.items():
+    # c = csv.writer(open('test1.csv', 'wb'))
+    for time,voltage in sorted(data.iteritems()):
     
         window[time] = voltage
         if len(window) > window_length:
@@ -34,6 +35,7 @@ def emulator(data):
         #IMPOSE RESTRICTIONS HERE
         if count > window_length:
             print BPM
+            # c.writerow(BPM)
 
         count += 1
 
@@ -51,9 +53,9 @@ def return_beats(data):
         print beat, len(beats)
 
 def choose_data():
-    data = get_json('Hayden_raw_ecg.JSON')
+    # data = get_json('Hayden_raw_ecg.JSON')
     # data = get_json('raw_ecg.JSON')
-    # data = get_json('test_data.JSON')
+    data = get_json('test_data.JSON')
     # data = get_json('Filip_raw_ecg.JSON')
     return data
 
@@ -63,11 +65,13 @@ def print_data(data):
         print time, voltage
         # c.writerow([time,voltage])
 
+def test(data):
+    
+
 def main():
     data = choose_data()
     emulator(data)
     # return_beats(data)
     # print_data(data)
-
 
 main()

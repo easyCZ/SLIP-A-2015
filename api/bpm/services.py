@@ -7,6 +7,10 @@ class BPMServices(object):
     def __init__(self, data):
         self.data = data
 
+    def avg_benchmark(self,avg,a,b):
+        benchmark = a*avg + b
+        return benchmark
+
     def avg_volt(self):
         sum = 0
         count = 0
@@ -40,12 +44,14 @@ class BPMServices(object):
     def get_bpm(self):
         # peaks = self.get_peaks()
         peaks = self.get_beats()
+        if type(peaks) is str:
+            return 0
         keys = [int(key) for (key, volts) in peaks]
         if not keys:
             return 0
         if len(peaks) - 1 == 0:
             return 0
-        avg = (max(keys) - min(keys)) / (len(peaks) - 1)
+        avg = (max(keys) - min(keys)) / (len(peaks)-1)
         if avg == 0:
             return 0
         Expected_BPM = 60.0 * 1000.0 / avg
@@ -105,6 +111,29 @@ class BPMServices(object):
             return window
         else:
             return 0
+
+    def step111(self,power_set,step11,beats11,step12,beats12,step13,beats13,step14,beats14,step15,beats15,step16,beats16):
+        initial_methods = [[step11,beats11],[step12,beats12],[step13,beats13],[step14,beats14],[step15,beats15],[step16,beats16]]
+        methods = []
+        initial_beats1 = power_set
+        beats1 = []
+        for method in initial_methods:
+            if method[0] <> 0:
+                methods.append(method)
+        if methods == []:
+            return "ERROR", "PLEASE ENTER VALID COMBINATION"
+        for beat in initial_beats1:
+            append = True
+            for method in methods:
+                if method[0] == 1:
+                    if beat not in method[1]:
+                        append = False
+                if method[0] == 2:
+                    if beat in method[1]:
+                        append = False
+            if append == True:
+                beats1.append(beat)
+        return beats1
     
     def step151(self,beats1):
         beats15 = []
@@ -298,23 +327,26 @@ class BPMServices(object):
 
     def get_beats(self):
         # step 1 - moves through data window by window and selects potential beats. returns list of windows that are/contain a beat
+        # step 1.1 - combination of methods from 1
         # step 1.5 - moves through beat windows from step 1 and merges or chooses onw window if windows overlap
         # step 2 - goes through beats and eliminates if beats that are less than min_spacing apart
         # step 3 - selects one datapoint from each beat window
 
-        avg = self.avg_volt()
-        all_above = avg + 2
-        avg_above = avg + 5
-        max_above = avg + 10
-        min_above = avg
-        slope_below = 3
-        slope_above = 1
-        min_spacing = 0.33
         window_length = 0.1
+        avg = self.avg_volt()
+        Max = avg + 30
+        Min = avg - 15
+        all_above = self.avg_benchmark(avg,1,2)
+        avg_above = self.avg_benchmark(avg,1,5)
+        max_above = self.avg_benchmark(avg,1,10)
+        min_above = self.avg_benchmark(avg,1,2)
+        slope_below = 3
+        slope_above = (Max-Min)/(window_length*1000)
+        min_spacing = 0.33
         
-
         previous_points = [[0,0] for i in range(20)] # list of the last 20 data points (from oldest to newest). List is also in the format [timestamp,volts]        
-        beats1 = []
+        beats1 = [[],[],[],[],[],[]]
+        power_set = []
 
         for time,volts in sorted(self.data.iteritems()):
 
@@ -327,27 +359,39 @@ class BPMServices(object):
                 for point in previous_points:
                         if int(point[0]) > time-1000*window_length:
                             window.append(point)
+                
+                power_set.append(window)
 
-                # CHOOSE 1 - step 1
-                # window = self.step11(window,all_above)   # all values in window must be above all_above
-                # window = self.step12(window,avg_above)   # avg of window must be above avg_above
-                # window = self.step13(window,max_above)   # max of winodw must be above max_above (can be changed to max below)
-                # window = self.step14(window,min_above)   # min of window must be above min_above (can be changed to min below)
-                # window = self.step15(window,slope_below) # fit regression to window. slop must be below slope_below
-                # window = self.step16(window,slope_above) # fit regression to window. slop must be above slope_above
+                windows = [[],[],[],[],[],[]]
 
+                if window <> []:
 
-                if window <> 0:
-                    beats1.append(window)
+                    # CHOOSE 1 - step 1 or alter the arguments for step111 below.
+                    window_1 = self.step11(window,all_above)   # all values in window must be above all_above
+                    window_2 = self.step12(window,avg_above)   # avg of window must be above avg_above
+                    window_3 = self.step13(window,max_above)   # max of winodw must be above max_above (can be changed to max below)
+                    window_4 = self.step14(window,min_above)   # min of window must be above min_above (can be changed to min below)
+                    window_5 = self.step15(window,slope_below) # fit regression to window. slop must be below slope_below
+                    window_6 = self.step16(window,slope_above) # fit regression to window. slop must be above slope_above
+                    windows = [window_1,window_2,window_3,window_4,window_5,window_6]
+
+                for indx,window in enumerate(windows):
+                    if window <> 0 and window <> []:
+                        beats1[indx].append(window)
 
             previous_points.append([time,volts])
             previous_points.pop(0)
+
+        # 0 => method doesn't matter
+        # 1 => window must be selected by this method
+        # 2 => window must NOT be selected by this method
+        beats11 = self.step111(power_set,0,beats1[0],1,beats1[1],0,beats1[2],0,beats1[3],0,beats1[4],0,beats1[5])
 
         # CHOOSE 1 - step 1.5
         # beats15 = self.step151(beats1) # keeps beat with longer duration
         # beats15 = self.step152(beats1) # sticks together beats
         # beats15 = self.step153(beats1) # no function here
-        beats15 = self.step154(beats1)   # keeps last beat
+        beats15 = self.step154(beats11)   # keeps last beat
         # beats15 = self.step155(beats1) # keeps first beat
 
         # CHOOSE 1 - step 2
