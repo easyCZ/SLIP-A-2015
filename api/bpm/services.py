@@ -38,8 +38,8 @@ class BPMServices(object):
         return extrapolation_benchmark
 
     def get_bpm(self):
-        peaks = self.get_peaks()
-        # peaks = self.get_beats()
+        # peaks = self.get_peaks()
+        peaks = self.get_beats()
         keys = [int(key) for (key, volts) in peaks]
         if not keys:
             return 0
@@ -85,8 +85,8 @@ class BPMServices(object):
 
     def step14(self,window,min_above):
         window.sort(key=lambda x: x[1],reverse = False)
-        max = window[0][1]
-        if max > min_above:
+        min = window[0][1]
+        if min > min_above:
             window.sort(key = lambda x: x[0])
             return window
         else:
@@ -297,6 +297,11 @@ class BPMServices(object):
 
 
     def get_beats(self):
+        # step 1 - moves through data window by window and selects potential beats. returns list of windows that are/contain a beat
+        # step 1.5 - moves through beat windows from step 1 and merges or chooses onw window if windows overlap
+        # step 2 - goes through beats and eliminates if beats that are less than min_spacing apart
+        # step 3 - selects one datapoint from each beat window
+
         avg = self.avg_volt()
         all_above = avg + 2
         avg_above = avg + 5
@@ -324,12 +329,12 @@ class BPMServices(object):
                             window.append(point)
 
                 # CHOOSE 1 - step 1
-                # window = self.step11(window,all_above)
-                window = self.step12(window,avg_above)
-                # window = self.step13(window,max_above)
-                # window = self.step14(window,min_above)
-                # window = self.step15(window,slope_below)
-                # window = self.step16(window,slope_above)
+                # window = self.step11(window,all_above)   # all values in window must be above all_above
+                # window = self.step12(window,avg_above)   # avg of window must be above avg_above
+                # window = self.step13(window,max_above)   # max of winodw must be above max_above (can be changed to max below)
+                # window = self.step14(window,min_above)   # min of window must be above min_above (can be changed to min below)
+                # window = self.step15(window,slope_below) # fit regression to window. slop must be below slope_below
+                # window = self.step16(window,slope_above) # fit regression to window. slop must be above slope_above
 
 
                 if window <> 0:
@@ -339,26 +344,26 @@ class BPMServices(object):
             previous_points.pop(0)
 
         # CHOOSE 1 - step 1.5
-        # beats15 = self.step151(beats1)
-        # beats15 = self.step152(beats1)
-        # beats15 = self.step153(beats1)
-        beats15 = self.step154(beats1)
-        # beats15 = self.step155(beats1)
+        # beats15 = self.step151(beats1) # keeps beat with longer duration
+        # beats15 = self.step152(beats1) # sticks together beats
+        # beats15 = self.step153(beats1) # no function here
+        beats15 = self.step154(beats1)   # keeps last beat
+        # beats15 = self.step155(beats1) # keeps first beat
 
         # CHOOSE 1 - step 2
-        # beats2 = self.step21(beats15,min_spacing)
-        # beats2 = self.step22(beats15,min_spacing)
-        # beats2 = self.step23(beats15,min_spacing)
-        # beats2 = self.step24(beats15,min_spacing)
-        beats2 = self.step25(beats15,min_spacing)
-        # beats2 = self.step26(beats15,min_spacing)
+        # beats2 = self.step21(beats15,min_spacing)  # keeps higher or lower max voltage
+        # beats2 = self.step22(beats15,min_spacing)  # keeps higher or lower min voltage
+        # beats2 = self.step23(beats15,min_spacing)  # keeps higher or lower avg voltage
+        # beats2 = self.step24(beats15,min_spacing)  # keeps lower variance
+        beats2 = self.step25(beats15,min_spacing)  # keeps lower sum of squares
+        # beats2 = self.step26(beats15,min_spacing)  # keeps higher or lower duration
 
         # CHOOSE 1 - step 3
-        # beats3 = self.step31(beats2)
-        # beats3 = self.step32(beats2)
-        # beats3 = self.step33(beats2)
-        # beats3 = self.step34(beats2)
-        beats3 = self.step35(beats2)
+        beats3 = self.step31(beats2)  # takes max voltage
+        # beats3 = self.step32(beats2)  # takes min voltage
+        # beats3 = self.step33(beats2)  # takes median voltage
+        # beats3 = self.step34(beats2)  # takes first point
+        # beats3 = self.step35(beats2)    # takes last point
 
         return beats3
 
@@ -518,5 +523,3 @@ class BPMServices(object):
             actual_volt =element[1]
             LSS += (predicted_volt - actual_volt)**2
         return LSS
-
-
