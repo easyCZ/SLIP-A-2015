@@ -65,13 +65,11 @@ def print_data(data):
         print time, voltage
         # c.writerow([time,voltage])
 
-def test(data):
-    
-
 def main():
     data = choose_data()
     emulator(data)
     # return_beats(data)
     # print_data(data)
+    # test(data)
 
 main()

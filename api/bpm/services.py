@@ -112,8 +112,14 @@ class BPMServices(object):
         else:
             return 0
 
-    def step111(self,power_set,step11,beats11,step12,beats12,step13,beats13,step14,beats14,step15,beats15,step16,beats16):
-        initial_methods = [[step11,beats11],[step12,beats12],[step13,beats13],[step14,beats14],[step15,beats15],[step16,beats16]]
+    def step17(self,window,var_below):
+        var = self.beat_var(window)
+        if var < var_below:
+            return window
+        else:
+            return 0
+
+    def step111(self,power_set,initial_methods):
         methods = []
         initial_beats1 = power_set
         beats1 = []
@@ -266,7 +272,7 @@ class BPMServices(object):
             elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
                 beat_LSS = self.LSS(beat)
                 prev_beat_LSS = self.LSS(beats2[-1])
-                if beat_LSS < prev_beat_LSS:
+                if beat_LSS > prev_beat_LSS:
                     beats2.pop()
                     beats2.append(beat)
             else:
@@ -340,12 +346,13 @@ class BPMServices(object):
         avg_above = self.avg_benchmark(avg,1,5)
         max_above = self.avg_benchmark(avg,1,10)
         min_above = self.avg_benchmark(avg,1,2)
-        slope_below = 3
+        var_below = 5
+        slope_below = 5
         slope_above = (Max-Min)/(window_length*1000)
         min_spacing = 0.33
         
         previous_points = [[0,0] for i in range(20)] # list of the last 20 data points (from oldest to newest). List is also in the format [timestamp,volts]        
-        beats1 = [[],[],[],[],[],[]]
+        beats1 = [[],[],[],[],[],[],[]]
         power_set = []
 
         for time,volts in sorted(self.data.iteritems()):
@@ -359,8 +366,6 @@ class BPMServices(object):
                 for point in previous_points:
                         if int(point[0]) > time-1000*window_length:
                             window.append(point)
-                
-                power_set.append(window)
 
                 windows = [[],[],[],[],[],[]]
 
@@ -373,11 +378,13 @@ class BPMServices(object):
                     window_4 = self.step14(window,min_above)   # min of window must be above min_above (can be changed to min below)
                     window_5 = self.step15(window,slope_below) # fit regression to window. slop must be below slope_below
                     window_6 = self.step16(window,slope_above) # fit regression to window. slop must be above slope_above
-                    windows = [window_1,window_2,window_3,window_4,window_5,window_6]
+                    window_7 = self.step17(window,var_below)
+                    windows = [window_1,window_2,window_3,window_4,window_5,window_6,window_7]
+                    power_set.append(window)
 
-                for indx,window in enumerate(windows):
-                    if window <> 0 and window <> []:
-                        beats1[indx].append(window)
+                for indx,pass_window in enumerate(windows):
+                    if pass_window <> 0 and pass_window <> []:
+                        beats1[indx].append(pass_window)
 
             previous_points.append([time,volts])
             previous_points.pop(0)
@@ -385,13 +392,14 @@ class BPMServices(object):
         # 0 => method doesn't matter
         # 1 => window must be selected by this method
         # 2 => window must NOT be selected by this method
-        beats11 = self.step111(power_set,0,beats1[0],1,beats1[1],0,beats1[2],0,beats1[3],0,beats1[4],0,beats1[5])
+        methods = [[0,beats1[0]],[0,beats1[1]],[0,beats1[2]],[0,beats1[3]],[0,beats1[4]],[2,beats1[5]],[2,beats1[6]]]
+        beats11 = self.step111(power_set,methods)
 
         # CHOOSE 1 - step 1.5
         # beats15 = self.step151(beats1) # keeps beat with longer duration
-        # beats15 = self.step152(beats1) # sticks together beats
+        beats15 = self.step152(beats11) # sticks together beats
         # beats15 = self.step153(beats1) # no function here
-        beats15 = self.step154(beats11)   # keeps last beat
+        # beats15 = self.step154(beats11)   # keeps last beat
         # beats15 = self.step155(beats1) # keeps first beat
 
         # CHOOSE 1 - step 2
@@ -399,13 +407,13 @@ class BPMServices(object):
         # beats2 = self.step22(beats15,min_spacing)  # keeps higher or lower min voltage
         # beats2 = self.step23(beats15,min_spacing)  # keeps higher or lower avg voltage
         # beats2 = self.step24(beats15,min_spacing)  # keeps lower variance
-        beats2 = self.step25(beats15,min_spacing)  # keeps lower sum of squares
+        beats2 = self.step25(beats15,min_spacing)  # keeps higher sum of squares
         # beats2 = self.step26(beats15,min_spacing)  # keeps higher or lower duration
 
         # CHOOSE 1 - step 3
-        beats3 = self.step31(beats2)  # takes max voltage
+        # beats3 = self.step31(beats2)  # takes max voltage
         # beats3 = self.step32(beats2)  # takes min voltage
-        # beats3 = self.step33(beats2)  # takes median voltage
+        beats3 = self.step33(beats2)  # takes median voltage
         # beats3 = self.step34(beats2)  # takes first point
         # beats3 = self.step35(beats2)    # takes last point
 
@@ -443,36 +451,6 @@ class BPMServices(object):
             previous_points.pop(0)
             was_beat = is_beat
         return beats
-
-    # def get_peaks(self):
-    #     is_beat = False
-    #     beats = []
-    #     previous_points = [[] for i in range(self.REACH_BACK + 1)]
-    #     previous_points.append([0, 0])
-
-    #     for time, volts in self.data.items():
-    #         previous_volts = previous_points[self.REACH_BACK + 1][1]
-
-    #         if volts > self.PEAK:
-    #             if not is_beat:
-    #                 start_time = time
-    #             is_beat = True
-
-    #         else:
-    #             if is_beat:
-    #                 first_point = previous_points[0]
-    #                 if first_point and first_point[0] != 0 and first_point[1] != 0:
-    #                     finish_time = time
-    #                     predicted_voltage = self.regression(previous_points[:-1], int(start_time))
-
-    #                     if (previous_volts > predicted_voltage + self.EXTRAPOLATION):
-    #                         beats.append([start_time, previous_volts])
-
-    #             is_beat = False
-    #         previous_points.pop(0)
-    #         previous_points.append([time, volts])
-
-    #     return beats
 
     def regression(self, values, x):
         length = len(values)
