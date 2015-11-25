@@ -28,7 +28,7 @@ for line in sys.stdin:
     if len(window) > WINDOW_SIZE:
         window.popitem(False)  # pop in FIFO order
 
-    bpm = BPMServices(window).get_bpm()
+    bpm = int(BPMServices(window).get_bpm())
     if bpm != last_bpm:
 
         requests.patch(DEVICE_URL % (device_id), data=json.dumps({'live_bpm': bpm}))
