@@ -17,13 +17,15 @@ def get_json(file_name):
 # hayden_beats = Hayden.get_peaks()
 # Hayden_BPM = Hayden.get_bpm()
 
-def emulator(data):
+def emulator(data, actual, return_average = True, export = False, filename = "no export"):
     window_length = 600
     window = {}
     count = 0
-    # count1 = 0
-    # sum = 0
-    # c = csv.writer(open('800_roy_accuracy_47_2_5_1.csv', 'wb'))
+    if return_average:
+        count1 = 0
+        sum = 0
+    if export:
+        c = csv.writer(open(filename, 'wb'))
     for time,voltage in sorted(data.iteritems()):
     
         window[time] = voltage
@@ -36,41 +38,47 @@ def emulator(data):
         
         #IMPOSE RESTRICTIONS HERE
         if count > window_length:
-            print BPM
-            # sum += abs(BPM - arg1)
-            # count1 += 1
-            # c.writerow([BPM, abs(74-BPM)])
+            if export:
+                c.writerow([BPM, abs(actual-BPM)])
+            if return_average:
+                sum += abs(BPM - actual)
+                count1 += 1
+            if actual <> 'unknown':
+                print BPM, actual - BPM
+            else:
+                print BPM
 
         count += 1
 
     # return sum/float(count1)
 
-def return_beats(data):
-    Hayden = BPMServices(data)
+def print_beats(data, export = False):
+    subject = BPMServices(data)
 
     # CHOOSE METHOD
-    # beats = Hayden.get_peaks()
-    beats = Hayden.get_beats()
-    # c = csv.writer(open('hayden_beats.csv', 'wb'))
-    # for beat in beats:
-    #     c.writerow(beat)
+    # beats = subject.get_peaks()
+    beats = subject.get_beats()
+    if export:
+        c = csv.writer(open('subject_beats.csv', 'wb'))
 
     for beat in beats:
         print beat, len(beats)
+        if export:
+            c.writerow(beat)
 
-def choose_data():
-    # data = get_json('Hayden_raw_ecg.JSON')
-    # data = get_json('raw_ecg.JSON')
-    # data = get_json('test_data.JSON')
-    data = get_json('Roy_raw_ecg.JSON')
-    # data = get_json('Filip_raw_ecg.JSON')
-    return data
+def choose_data(name):
+    actuals = {'hayden1':68, 'hayden2':84, 'test1':'unknown', 'test2':'unknown','roy1':74,'filip1':60,'filip2':66}
+    data = get_json(name + '_ecg.JSON')
+    actual = actuals[name]
+    return data, actual
 
-def print_data(data):
-    # c = csv.writer(open('FILIP.csv', 'wb'))
+def print_data(data, export = False):
+    if export:
+        c = csv.writer(open('FILIP.csv', 'wb'))
     for time,voltage in sorted(data.iteritems()):
         print time, voltage
-        # c.writerow([time,voltage])
+        if export:
+            c.writerow([time,voltage])
 
 def test():
     c = csv.writer(open('experiment.csv', 'wb'))
@@ -82,9 +90,9 @@ def test():
             c.writerow([window_length,person[0],diff])
 
 def main():
-    data = choose_data()
-    emulator(data)
-    # return_beats(data)
+    data, actual = choose_data('filip1')
+    emulator(data,actual)
+    # print_beats(data)
     # print_data(data)
     # test() 
 

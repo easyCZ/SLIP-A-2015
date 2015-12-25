@@ -1,0 +1,10 @@
+1) implement 'bad data' detection
+2) reduce window size to minimum
+3) test data
+	a) BPM to actual
+	b) compare what distance should be and what it is
+4) implement moving window within moving window or growing window
+5) justify why it's ok for this method to have troubles with high heart rates
+	a) wouldn't detect peaks anyways because data is not dense enough. Give bound for BPM with current data density.
+6) Clean-up
+7) graph how window length affects results
