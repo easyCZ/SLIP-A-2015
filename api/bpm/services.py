@@ -7,9 +7,7 @@ class BPMServices(object):
     def __init__(self, data):
         self.data = data
 
-    def avg_benchmark(self,avg,a,b):
-        benchmark = a*avg + b
-        return benchmark
+    # DATA INFO FUNCITONS - should arguably be in utility
 
     def avg_volt(self):
         sum = 0
@@ -21,6 +19,12 @@ class BPMServices(object):
             return 220
         avg = float(sum)/count
         return avg
+
+    # BENCHMARK FUNCTIONS
+
+    def avg_benchmark(self,avg,a,b):
+        benchmark = a*avg + b
+        return benchmark
 
     def peak_benchmark(self):
         avg = self.avg_volt()
@@ -41,6 +45,8 @@ class BPMServices(object):
         extrapolation_benchmark = (PEAK - avg)*a
         return extrapolation_benchmark
 
+    # BPM
+
     def get_bpm(self):
         # peaks = self.get_peaks()
         peaks = self.get_beats()
@@ -56,6 +62,8 @@ class BPMServices(object):
             return 0
         Expected_BPM = 60.0 * 1000.0 / avg
         return Expected_BPM
+
+    # STEPS OPTIONS
 
     def step11(self,window,all_above):
         beat = True
@@ -451,6 +459,9 @@ class BPMServices(object):
             previous_points.pop(0)
             was_beat = is_beat
         return beats
+
+
+    # UTILITY FUNCTIONS
 
     def regression(self, values, x):
         length = len(values)

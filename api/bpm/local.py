@@ -37,16 +37,17 @@ def emulator(data, actual, return_average = True, export = False, filename = "no
         BPM = service_object.get_bpm()
         
         #IMPOSE RESTRICTIONS HERE
-        if count > window_length:
-            if export:
-                c.writerow([BPM, abs(actual-BPM)])
-            if return_average:
-                sum += abs(BPM - actual)
-                count1 += 1
-            if actual <> 'unknown':
-                print BPM, actual - BPM
-            else:
-                print BPM
+
+        # PRINT AND EXPORT
+        if export:
+                    c.writerow([BPM, abs(actual-BPM)])
+        if return_average:
+            sum += abs(BPM - actual)
+            count1 += 1
+        if actual <> 'unknown':
+            print BPM, actual - BPM
+        else:
+            print BPM
 
         count += 1
 

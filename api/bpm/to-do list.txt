@@ -1,4 +1,8 @@
-1) implement 'bad data' detection
+1) implement 'bad data' detection. where?
+	a) before steps
+	b) in between steps
+	c) after beats
+	d) after bpm
 2) reduce window size to minimum
 3) test data
 	a) BPM to actual
