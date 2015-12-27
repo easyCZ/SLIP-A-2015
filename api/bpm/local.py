@@ -5,7 +5,7 @@
 import json
 import csv
 from services import BPMServices
-from services import BPMinfo
+from services import BPMmethod
 
 
 class Setting(object):
@@ -105,6 +105,7 @@ def test(sets):
 def initialize_setting():
     setting = Setting(1)
     setting.step1_usage = [1,0,0,0,0,2,2,0]
+    return setting
 
 def main():
     sets = ['hayden1','hayden2','test1','test2','roy1','filip1','filip2']

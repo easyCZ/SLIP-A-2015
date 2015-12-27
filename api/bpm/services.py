@@ -8,7 +8,7 @@ class BPMmethod(object):
     # description NO NEED
 
     def __init__(self,step,step_index,setting):
-        name = 'step' + 'd%' %i
+        name = 'step' + '%d' %step_index
         self.usage = setting.step1_usage[step_index]
 
     # MAKE FUNCTION HERE THAT CALLS THE RESPECTIVE METHOD USING getattr
@@ -66,15 +66,15 @@ class BPMServices(object):
         else:
             self.avg_volt = float(sum)/count
         ##################### maybe make into funciton later
-        self.methods = initialize_method_objects(setting)
+        self.methods = self.initialize_method_objects(setting)
 
     # DEFINE FUNCTION TO get METHOD USAGE EASILY
 
-    def initialize_method_objects(setting):
+    def initialize_method_objects(self,setting):
         methods = []
         for i in range(0,8):
             methods.append([])
-            methods[i] = BPMmethod(1,i)
+            methods[i] = BPMmethod(1,i,setting)
         return methods
 
     # BENCHMARK FUNCTIONS
