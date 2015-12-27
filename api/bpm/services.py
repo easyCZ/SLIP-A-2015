@@ -9,7 +9,13 @@ class BPMmethod(object):
 
     def __init__(self,step,step_index,setting):
         name = 'step' + '%d' %step_index
-        self.usage = setting.step1_usage[step_index]
+        if step == 1:
+            self.usage = setting.step1_usage[step_index]
+        # NEED SETTING a and b and then change avg_benchmark to take less args
+
+    def avg_benchmark(self,avg,a,b):
+        benchmark = a*avg + b
+        return benchmark
 
     # MAKE FUNCTION HERE THAT CALLS THE RESPECTIVE METHOD USING getattr
 
@@ -76,31 +82,6 @@ class BPMServices(object):
             methods.append([])
             methods[i] = BPMmethod(1,i,setting)
         return methods
-
-    # BENCHMARK FUNCTIONS
-
-    def avg_benchmark(self,avg,a,b):
-        benchmark = a*avg + b
-        return benchmark
-
-    def peak_benchmark(self):
-        avg = self.avg_volt()
-        # There are two options I'd like to test at this point. Comment out one or the other.
-        # 1) PEAK = avg*a, where a is an element of [1.01,1.3)
-        # a = 1.05
-        # peak_benchmark = avg*a
-        # 2) PEAK = avg + a where a is an element of [5,30]
-        a = 5
-        peak_benchmark = avg + a
-        # In both cases I will need to derive an experiment that determines which method is the most accurate.
-        return peak_benchmark
-
-    def extrapolation_benchmark(self):
-        avg = self.avg_volt()
-        PEAK = self.peak_benchmark()
-        a = 3 # subject to experiments
-        extrapolation_benchmark = (PEAK - avg)*a
-        return extrapolation_benchmark
 
     # BPM
 
@@ -640,3 +621,24 @@ class BPMServices(object):
     PEAK =  191
     EXTRAPOLATION = 19
     REACH_BACK = 0.19
+
+
+
+    def peak_benchmark(self):
+        avg = self.avg_volt()
+        # There are two options I'd like to test at this point. Comment out one or the other.
+        # 1) PEAK = avg*a, where a is an element of [1.01,1.3)
+        # a = 1.05
+        # peak_benchmark = avg*a
+        # 2) PEAK = avg + a where a is an element of [5,30]
+        a = 5
+        peak_benchmark = avg + a
+        # In both cases I will need to derive an experiment that determines which method is the most accurate.
+        return peak_benchmark
+
+    def extrapolation_benchmark(self):
+        avg = self.avg_volt()
+        PEAK = self.peak_benchmark()
+        a = 3 # subject to experiments
+        extrapolation_benchmark = (PEAK - avg)*a
+        return extrapolation_benchmark
