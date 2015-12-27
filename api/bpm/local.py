@@ -5,6 +5,13 @@
 import json
 import csv
 from services import BPMServices
+from services import BPMinfo
+
+
+class Setting(object):
+
+    def __init__(self,ID):
+        self.ID = ID
 
 def get_json(file_name):
     with open(file_name) as f:
@@ -17,8 +24,9 @@ def get_json(file_name):
 # hayden_beats = Hayden.get_peaks()
 # Hayden_BPM = Hayden.get_bpm()
 
-def emulator(data, actual, return_average = True, export = False, filename = "no export"):
-    window_length = 600
+def emulator(data, actual, settings, return_average = True, export = False, filename = "no export"):
+
+    window_length = 200
     window = {}
     count = 0
     if return_average:
@@ -27,27 +35,31 @@ def emulator(data, actual, return_average = True, export = False, filename = "no
     if export:
         c = csv.writer(open(filename, 'wb'))
     for time,voltage in sorted(data.iteritems()):
+
+        time = int(time)
     
         window[time] = voltage
         if len(window) > window_length:
-            min_time = min(window, key = window.get)
+            min_time = min(window)
             del window[min_time]
 
-        service_object = BPMServices(window)
-        BPM = service_object.get_bpm()
+        service_object = BPMServices(window,settings)
+        BPM, text_back = service_object.get_bpm()
         
         #IMPOSE RESTRICTIONS HERE
 
         # PRINT AND EXPORT
         if export:
                     c.writerow([BPM, abs(actual-BPM)])
-        if return_average:
+        if return_average and actual <> 'unknown':
             sum += abs(BPM - actual)
             count1 += 1
-        if actual <> 'unknown':
-            print BPM, actual - BPM
+        if actual <> 'unknown' and text_back <> 'empty':
+            print BPM, actual - BPM, text_back + ' BS'
+        elif text_back <> 'empty':
+            print BPM, text_back + ' BS'
         else:
-            print BPM
+            print 'insufficient data'
 
         count += 1
 
@@ -58,7 +70,7 @@ def print_beats(data, export = False):
 
     # CHOOSE METHOD
     # beats = subject.get_peaks()
-    beats = subject.get_beats()
+    beats, text_back = subject.get_beats()
     if export:
         c = csv.writer(open('subject_beats.csv', 'wb'))
 
@@ -81,7 +93,7 @@ def print_data(data, export = False):
         if export:
             c.writerow([time,voltage])
 
-def test():
+def test(sets):
     c = csv.writer(open('experiment.csv', 'wb'))
     for i in range(1,21):
         window_length = i*100
@@ -90,11 +102,17 @@ def test():
             diff = emulator(data,person[1],window_length)
             c.writerow([window_length,person[0],diff])
 
+def initialize_setting():
+    setting = Setting(1)
+    setting.step1_usage = [1,0,0,0,0,2,2,0]
+
 def main():
-    data, actual = choose_data('filip1')
-    emulator(data,actual)
+    sets = ['hayden1','hayden2','test1','test2','roy1','filip1','filip2']
+    data, actual = choose_data('filip1') 
+    setting = initialize_setting()
+    emulator(data,actual, setting)
     # print_beats(data)
     # print_data(data)
-    # test() 
+    # test(sets) 
 
 main()

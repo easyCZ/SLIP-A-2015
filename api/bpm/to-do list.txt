@@ -1,14 +1,49 @@
 1) implement 'bad data' detection. where?
-	a) before steps
-	b) in between steps
+	a) before steps - loop through windows in second intervals. if variance greater than benchmark, discard second.
+	b) in between steps - if there is a zero in beat window i want it gone.
 	c) after beats
 	d) after bpm
 2) reduce window size to minimum
 3) test data
 	a) BPM to actual
 	b) compare what distance should be and what it is
-4) implement moving window within moving window or growing window
-5) justify why it's ok for this method to have troubles with high heart rates
+4) implement moving window within moving window or growing window. Probably growing window.
+5) R - justify why it's ok for this method to have troubles with high heart rates
 	a) wouldn't detect peaks anyways because data is not dense enough. Give bound for BPM with current data density.
 6) Clean-up
+	a) local.py
+	b) services.py
+
 7) graph how window length affects results
+8) crop computational effort.
+	a) might not be necessary if we are only using small windows
+9) Test emulator start and finish times
+10) justify not doing regression
+11) why does it take warm-up time
+12) compare fluctuations in bpm to fluctuations in actual heart_beat
+13) need to check previous points part. 
+14) improve text_back system
+	a) objectify output from get_beats()
+
+1) fix benchmarks - CHECK
+2) create bullshit detection - grrrrr
+3) change to growing window - create window size indicator - CHECK
+3.5) clean-up
+3.6) ripple through BS
+4) begin testing
+5) improve step 1 method to contain beat shape or something
+
+
+text_back
+'empty' = power set empty
+number = percentage BS
+
+which methods 0,1,2
+what were the benchmarks?
+I want to iterate over methods
+
+object CHOSEN
+object of all methods or object per method?
+
+
+window_length
