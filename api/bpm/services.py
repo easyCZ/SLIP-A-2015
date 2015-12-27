@@ -13,42 +13,6 @@ class BPMmethod(object):
 
     # MAKE FUNCTION HERE THAT CALLS THE RESPECTIVE METHOD USING getattr
 
-
-class BPMinfo(object):
-
-
-    def __init__(self,data):
-        self.data = data
-        self.start_time = min(data)
-        self.finish_time = max(data)
-        self.length = self.finish_time - self.start_time
-        self.size = len(self.data)
-        self.empty = False
-        #####################
-        # getting density and empty
-        if self.length == 0:
-            self.empty = True
-            self.density = 0
-        else:
-            self.density = self.size/(float(self.length)/1000)
-        #####################
-        self.max_volt = max(self.data.itervalues())
-        self.min_volt = min(self.data.itervalues())
-        #####################
-        # getting avg_volt
-        sum = 0
-        count = 0
-        for time, volts in self.data.items():
-            sum += volts
-            count += 1
-        if count == 0:
-            self.avg = 195
-        else:
-            self.avg_volt = float(sum)/count
-        #####################
-
-    # DEFINE FUNCTION TO PRINT METHOD USAGE EASILY
-        
 class BPMServices(object):
     # objects of this class are used to neatly store information about one instance of the BPM data processing.
     # BPMServices objects should hold:
@@ -71,17 +35,47 @@ class BPMServices(object):
     # iter_window_length := lenght of the moving window inside the previously mentioned window. Unit = seconds
     # methods := list of BPMmethod objects
     # TO BE ADDED:
-    #   1)More booleans, giving info
+    #   1)More booleans, giving info about this particular instance of the BPM
 
-
-    # FPR get_peaks method. will almost certainly  be discarded.
-    PEAK =  191
-    EXTRAPOLATION = 19
-    REACH_BACK = 0.19
-
-    def __init__(self, data, settings):
+    def __init__(self, data,setting):
         self.data = data
-        self.setting = settings
+        self.start_time = min(data)
+        self.finish_time = max(data)
+        self.length = self.finish_time - self.start_time
+        self.size = len(self.data)
+        self.empty = False
+        ##################### maybe make into function later
+        # getting density and empty
+        if self.length == 0:
+            self.empty = True
+            self.density = 0
+        else:
+            self.density = self.size/(float(self.length)/1000)
+        ##################### maybe make into funciton later
+        self.max_volt = max(self.data.itervalues())
+        self.min_volt = min(self.data.itervalues())
+        ##################### maybe make into funciton later
+        # getting avg_volt
+        sum = 0
+        count = 0
+        for time, volts in self.data.items():
+            sum += volts
+            count += 1
+        if count == 0:
+            self.avg = 195
+        else:
+            self.avg_volt = float(sum)/count
+        ##################### maybe make into funciton later
+        self.methods = initialize_method_objects(setting)
+
+    # DEFINE FUNCTION TO get METHOD USAGE EASILY
+
+    def initialize_method_objects(setting):
+        methods = []
+        for i in range(0,8):
+            methods.append([])
+            methods[i] = BPMmethod(1,i)
+        return methods
 
     # BENCHMARK FUNCTIONS
 
@@ -414,12 +408,7 @@ class BPMServices(object):
             beats3.append(beat[-1])
         return beats3
 
-    def initialize_method_objects(setting):
-        methods = []
-        for i in range(0,8):
-            methods.append([])
-            methods[i] = BPMmethod(1,i)
-        return methods
+
 
     def get_beats(self):
         # INCOMPLETE - step 0 - moves through data 50 datapoints at a time and discards parts with crazy variances.
@@ -429,10 +418,8 @@ class BPMServices(object):
         # step 2 - goes through beats and eliminates if beats that are less than min_spacing apart
         # step 3 - selects one datapoint from each beat window
 
-        Info = BPMinfo(self.data)
-
-        Info.iter_window_len = 0.1
-        avg = Info.avg_volt
+        self.iter_window_len = 0.1
+        avg = self.avg_volt
                 
         all_above = self.avg_benchmark(avg,1,2)
         avg_above = self.avg_benchmark(avg,1,5)
@@ -453,7 +440,7 @@ class BPMServices(object):
             
             window = []
             for point in previous_points:
-                if int(point[0]) > time-1000*Info.iter_window_len:
+                if int(point[0]) > time-1000*self.iter_window_len:
                     window.append(point)
 
             windows = [[],[],[],[],[],[],[],[]]
@@ -648,3 +635,8 @@ class BPMServices(object):
             previous_points.pop(0)
             was_beat = is_beat
         return beats
+
+    # FPR get_peaks method. will almost certainly  be discarded.
+    PEAK =  191
+    EXTRAPOLATION = 19
+    REACH_BACK = 0.19
