@@ -85,7 +85,6 @@ class BPMServices(object):
             methods.append([])
             methods[i] = BPMmethod(1,i,setting,avg)
         return methods
-
     # BPM
 
     def get_bpm(self):
@@ -118,50 +117,35 @@ class BPMServices(object):
         min_spacing = 0.33 # will be feeling changes,
         
         previous_points = [[0,0] for i in range(20)] # list of the last 20 data points (from oldest to newest). Data points are in the format [timestamp,volts]        
-        beats1 = [[],[],[],[],[],[],[],[]]
+        beats11 = []
         power_set = []
 
         for time,volts in sorted(self.data.iteritems()):
 
             time = int(time)
             
-            window = []
+            iter_window = []
             for point in previous_points:
                 if int(point[0]) > time-1000*self.iter_window_len:
-                    window.append(point)
+                    iter_window.append(point)
 
-            windows = [[],[],[],[],[],[],[],[]]
+            if iter_window <> []:
 
-            if window <> []:
-
-                windows = []
-                for method in self.methods:
-                    iter_window_i = method.call_method(self,window)
-                    windows.append(iter_window_i)
-
-                power_set.append(window)
-
-            
-            for indx,pass_window in enumerate(windows):
-                if pass_window <> 0 and pass_window <> []:
-                    beats1[indx].append(pass_window)
+                if self.step111(iter_window) == True: # NEEDS CLEAN UP
+                    beats11.append(iter_window)
+                power_set.append(iter_window)
 
             previous_points.append([time,volts])
             previous_points.pop(0)
 
+        # CHANGE LATER!!!!       
         total = len(power_set)
-        BS = len(beats1[0])
+        BS = 5 # len(beats1[0])
         if total <> 0:
             per_BS = 1 -  BS/float(total)
             text_back = '{:.1%}'.format(per_BS)
         else:
             text_back = 'empty'
-
-        # 0 => method doesn't matter
-        # 1 => window must be selected by this method
-        # 2 => window must NOT be selected by this method
-        methods = [[1,beats1[0]],[0,beats1[1]],[0,beats1[2]],[0,beats1[3]],[0,beats1[4]],[2,beats1[5]],[2,beats1[6]],[0,beats1[7]]] # 5 and 6 2
-        beats11 = self.step111(power_set,methods)
 
         # CHOOSE 1 - step 1.5
         # beats15 = self.step151(beats1) # keeps beat with longer duration
@@ -182,6 +166,7 @@ class BPMServices(object):
         # beats3 = self.step31(beats2)  # takes max voltage
         # beats3 = self.step32(beats2)  # takes min voltage
         beats3 = self.step33(beats2)  # takes median voltage
+
         # beats3 = self.step34(beats2)  # takes first point
         # beats3 = self.step35(beats2)    # takes last point
 
@@ -351,11 +336,10 @@ class BPMServices(object):
         for element in window:
             if 0 in element:
                 switch = False
-        
         if switch:
-            return window
+            return True
         else:
-            return 0
+            return False
 
     def step11(self,window,all_above):
         beat = True
@@ -363,84 +347,80 @@ class BPMServices(object):
             if pair[1] < all_above:
                 beat = False
         if beat:
-            return window
+            return True
         else:
-            return 0
+            return False
 
     def step12(self,window,avg_above):
         length = len(window)
         if length == 0:
-            return 0
+            return False
         sum = 0
         for point in window:
             sum += point[1]
         avg = sum/float(length)
         if avg > avg_above:
-            return window
+            return True
         else:
-            return 0
+            return False
     
     def step13(self,window,max_above):
         window.sort(key=lambda x: x[1],reverse = True)
         max = window[0][1]
         if max > max_above:
             window.sort(key = lambda x: x[0])
-            return window
+            return True
         else:
-            return 0
+            return False
 
     def step14(self,window,min_above):
         window.sort(key=lambda x: x[1],reverse = False)
         min = window[0][1]
         if min > min_above:
             window.sort(key = lambda x: x[0])
-            return window
+            return True
         else:
-            return 0
+            return False
 
     def step15(self,window,slope_below):
         slope = self.get_slope(window)
-        if abs(slope) <= slope_below:
-            return window
+        if slope <= slope_below:
+            return True
         else:
-            return 0
+            return False
 
+    # unnecessary
     def step16(self,window,slope_above):
         slope = self.get_slope(window)
         if abs(slope) > slope_above:
-            return window
+            return True
         else:
-            return 0
+            return False
 
     def step17(self,window,var_below):
         var = self.beat_var(window)
         if var < var_below:
-            return window
+            return True
         else:
-            return 0
+            return False
 
-
-    def step111(self,power_set,initial_methods):
-        methods = []
-        initial_beats1 = power_set
-        beats1 = []
-        for method in initial_methods:
-            if method[0] <> 0:
-                methods.append(method)
-        if methods == []:
-            return "ERROR", "PLEASE ENTER VALID COMBINATION"
-        for beat in initial_beats1:
-            append = True
-            for method in methods:
-                if method[0] == 1:
-                    if beat not in method[1]:
-                        append = False
-                if method[0] == 2:
-                    if beat in method[1]:
-                        append = False
-            if append == True:
-                beats1.append(beat)
-        return beats1
+    # CLEAN-UP NEEDED
+    def step111(self,window):
+        stamp = [False, False, False, False, False, False, False, False] # CLEAN UP
+        for method in self.methods:
+            state = method.call_method(self,window) 
+            if method.usage == 0:
+                stamp[method.step_index] = True
+            elif method.usage == 1:
+                stamp[method.step_index] = state
+            elif method.usage == 2:
+                if state == False:
+                    stamp[method.step_index] = True
+                
+        if stamp == [True,True,True,True,True,True,True,True]:
+            return True
+        else:
+            return False
     
     def step151(self,beats1):
         beats15 = []
