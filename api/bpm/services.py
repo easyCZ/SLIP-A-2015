@@ -53,6 +53,8 @@ class BPMServices(object):
         self.length = self.finish_time - self.start_time
         self.size = len(self.data)
         self.empty = False
+        self.min_spacing = setting.min_spacing
+        self.iter_window_len = setting.iter_window_len
         ##################### maybe make into function later
         # getting density and empty
         if self.length == 0:
@@ -89,19 +91,19 @@ class BPMServices(object):
 
     def get_bpm(self):
         # peaks = self.get_peaks()
-        peaks,text_back = self.get_beats()
+        peaks = self.get_beats()
         if type(peaks) is str:
             return 0, text_back
         keys = [int(key) for (key, volts) in peaks]
         if not keys:
-            return 0, text_back
+            return 0
         if len(peaks) - 1 == 0:
-            return 0, text_back
+            return 0
         avg = (max(keys) - min(keys)) / (len(peaks)-1)
         if avg == 0:
             return 0, text_back
         Expected_BPM = 60.0 * 1000.0 / avg
-        return Expected_BPM, text_back
+        return Expected_BPM
 
     def get_beats(self):
         # INCOMPLETE - step 0 - moves through data 50 datapoints at a time and discards parts with crazy variances.
@@ -110,15 +112,9 @@ class BPMServices(object):
         # step 1.5 - moves through beat windows from step 1 and merges or chooses onw window if windows overlap
         # step 2 - goes through beats and eliminates if beats that are less than min_spacing apart
         # step 3 - selects one datapoint from each beat window
-
-        self.iter_window_len = 0.1
-        avg = self.avg_volt
-                
-        min_spacing = 0.33 # will be feeling changes,
         
-        previous_points = [[0,0] for i in range(20)] # list of the last 20 data points (from oldest to newest). Data points are in the format [timestamp,volts]        
+        previous_points = [[0,0] for i in range(20)] # COULD PROBABLY BE REDUCED. list of the last 20 data points (from oldest to newest). Data points are in the format [timestamp,volts]        
         beats11 = []
-        power_set = []
 
         for time,volts in sorted(self.data.iteritems()):
 
@@ -133,19 +129,9 @@ class BPMServices(object):
 
                 if self.step111(iter_window) == True: # NEEDS CLEAN UP
                     beats11.append(iter_window)
-                power_set.append(iter_window)
 
             previous_points.append([time,volts])
             previous_points.pop(0)
-
-        # CHANGE LATER!!!!       
-        total = len(power_set)
-        BS = 5 # len(beats1[0])
-        if total <> 0:
-            per_BS = 1 -  BS/float(total)
-            text_back = '{:.1%}'.format(per_BS)
-        else:
-            text_back = 'empty'
 
         # CHOOSE 1 - step 1.5
         # beats15 = self.step151(beats1) # keeps beat with longer duration
@@ -155,12 +141,12 @@ class BPMServices(object):
         # beats15 = self.step155(beats1) # keeps first beat
 
         # CHOOSE 1 - step 2
-        # beats2 = self.step21(beats15,min_spacing)  # keeps higher or lower max voltage
-        # beats2 = self.step22(beats15,min_spacing)  # keeps higher or lower min voltage
-        # beats2 = self.step23(beats15,min_spacing)  # keeps higher or lower avg voltage
-        # beats2 = self.step24(beats15,min_spacing)  # keeps lower variance
-        beats2 = self.step25(beats15,min_spacing)  # keeps higher sum of squares
-        # beats2 = self.step26(beats15,min_spacing)  # keeps higher or lower duration
+        # beats2 = self.step21(beats15,self.min_spacing)  # keeps higher or lower max voltage
+        # beats2 = self.step22(beats15,self.min_spacing)  # keeps higher or lower min voltage
+        # beats2 = self.step23(beats15,self.min_spacing)  # keeps higher or lower avg voltage
+        # beats2 = self.step24(beats15,self.min_spacing)  # keeps lower variance
+        beats2 = self.step25(beats15,self.min_spacing)  # keeps higher sum of squares
+        # beats2 = self.step26(beats15,self.min_spacing)  # keeps higher or lower duration
 
         # CHOOSE 1 - step 3
         # beats3 = self.step31(beats2)  # takes max voltage
@@ -170,7 +156,7 @@ class BPMServices(object):
         # beats3 = self.step34(beats2)  # takes first point
         # beats3 = self.step35(beats2)    # takes last point
 
-        return beats3, text_back
+        return beats3
 
     # UTILITY FUNCTIONS
 

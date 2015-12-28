@@ -44,7 +44,7 @@ def emulator(data, actual, settings, return_average = True, export = False, file
             del window[min_time]
 
         service_object = BPMServices(window,settings)
-        BPM, text_back = service_object.get_bpm()
+        BPM = service_object.get_bpm()
         
         #IMPOSE RESTRICTIONS HERE
 
@@ -54,10 +54,8 @@ def emulator(data, actual, settings, return_average = True, export = False, file
         if return_average and actual <> 'unknown':
             sum += abs(BPM - actual)
             count1 += 1
-        if actual <> 'unknown' and text_back <> 'empty':
-            print BPM, actual - BPM, text_back + ' BS'
-        elif text_back <> 'empty':
-            print BPM, text_back + ' BS'
+        if actual <> 'unknown':
+            print BPM, actual - BPM
         else:
             print 'insufficient data'
 
@@ -70,7 +68,7 @@ def print_beats(data, export = False):
 
     # CHOOSE METHOD
     # beats = subject.get_peaks()
-    beats, text_back = subject.get_beats()
+    beats = subject.get_beats()
     if export:
         c = csv.writer(open('subject_beats.csv', 'wb'))
 
@@ -106,6 +104,8 @@ def initialize_setting():
     setting = Setting(1)
     setting.step1_usage = [1,0,0,0,0,1,2,0]
     setting.step1_benchmarks = [[0,0],[1,2],[1,5],[1,10],[1,2],[-0.0125,0],[0.025,0],[0.25,0]]
+    setting.min_spacing = 0.33
+    setting.iter_window_len = 0.1
     return setting
 
 def main():
