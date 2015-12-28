@@ -130,6 +130,7 @@ class BPMServices(object):
                 if self.step111(iter_window) == True: # NEEDS CLEAN UP
                     beats11.append(iter_window)
 
+
             previous_points.append([time,volts])
             previous_points.pop(0)
 
@@ -457,6 +458,8 @@ class BPMServices(object):
             elif beat[0][0] > beats15[-1][-1][0]:
                 beats15.append(beat)
         return beats15
+
+    # ADD METHOD THAT MAKES SPACING AS EVEN AS POSSIBLE
 
     def step21(self,beats15,min_spacing):
         beats2 = []
