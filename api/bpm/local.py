@@ -105,7 +105,7 @@ def test(sets):
 def initialize_setting():
     setting = Setting(1)
     setting.step1_usage = [1,0,0,0,0,2,2,0]
-    setting.step1_benchmarks = [[],[1,2],[1,5],[1,10],[1,2],[-0.0125,0],[0.05,0],[0.25,0]]
+    setting.step1_benchmarks = [[0,0],[1,2],[1,5],[1,10],[1,2],[-0.0125,0],[0.05,0],[0.25,0]]
     return setting
 
 def main():

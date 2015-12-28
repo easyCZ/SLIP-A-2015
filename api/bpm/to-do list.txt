@@ -24,6 +24,7 @@
 13) need to check previous points part. 
 14) improve text_back system
 	a) objectify output from get_beats()
+15) change setting to be more user friendly and easy to follow
 
 1) fix benchmarks - CHECK
 2) create bullshit detection - grrrrr

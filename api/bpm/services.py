@@ -1,23 +1,26 @@
 class BPMmethod(object):
-    # benchmark RECEIVE WELL NEED
-    # usage RECEIVE WELL NEED
-    # name NEED
+    # benchmark
+    # usage
+    # name
 
-    # step NO NEED
     # beats LATER
     # description NO NEED
 
-    def __init__(self,step,step_index,setting):
-        name = 'step' + '%d' %step_index
-        if step == 1:
+    def __init__(self,step,step_index,setting,avg):
+        self.name = 'step{}{}'.format(step,step_index)
+        self.step = step
+        self.step_index = step_index
+        if self.step == 1:
             self.usage = setting.step1_usage[step_index]
-        # NEED SETTING a and b and then change avg_benchmark to take less args
+            # if self.usage <> 0:
+            self.a = setting.step1_benchmarks[step_index][0]
+            self.b = setting.step1_benchmarks[step_index][1]
+            self.benchmark = self.a*avg + self.b
+        
+    def call_method(self, BPMServicesObject, iter_window):
+        output = getattr(BPMServicesObject,self.name)(iter_window,self.benchmark)
+        return output
 
-    def avg_benchmark(self,avg,a,b):
-        benchmark = a*avg + b
-        return benchmark
-
-    # MAKE FUNCTION HERE THAT CALLS THE RESPECTIVE METHOD USING getattr
 
 class BPMServices(object):
     # objects of this class are used to neatly store information about one instance of the BPM data processing.
@@ -68,19 +71,19 @@ class BPMServices(object):
             sum += volts
             count += 1
         if count == 0:
-            self.avg = 195
+            self.avg_volt = 195
         else:
             self.avg_volt = float(sum)/count
         ##################### maybe make into funciton later
-        self.methods = self.initialize_method_objects(setting)
+        self.methods = self.initialize_method_objects(setting,self.avg_volt)
 
     # DEFINE FUNCTION TO get METHOD USAGE EASILY
 
-    def initialize_method_objects(self,setting):
+    def initialize_method_objects(self,setting,avg):
         methods = []
         for i in range(0,8):
             methods.append([])
-            methods[i] = BPMmethod(1,i,setting)
+            methods[i] = BPMmethod(1,i,setting,avg)
         return methods
 
     # BPM
@@ -101,10 +104,249 @@ class BPMServices(object):
         Expected_BPM = 60.0 * 1000.0 / avg
         return Expected_BPM, text_back
 
-    # STEPS OPTIONS
+    def get_beats(self):
+        # INCOMPLETE - step 0 - moves through data 50 datapoints at a time and discards parts with crazy variances.
+        # step 1 - moves through data window by window and selects potential beats. returns list of windows that are/contain a beat
+        # step 1.1 - combination of methods from 1
+        # step 1.5 - moves through beat windows from step 1 and merges or chooses onw window if windows overlap
+        # step 2 - goes through beats and eliminates if beats that are less than min_spacing apart
+        # step 3 - selects one datapoint from each beat window
+
+        self.iter_window_len = 0.1
+        avg = self.avg_volt
+                
+        min_spacing = 0.33 # will be feeling changes,
+        
+        previous_points = [[0,0] for i in range(20)] # list of the last 20 data points (from oldest to newest). Data points are in the format [timestamp,volts]        
+        beats1 = [[],[],[],[],[],[],[],[]]
+        power_set = []
+
+        for time,volts in sorted(self.data.iteritems()):
+
+            time = int(time)
+            
+            window = []
+            for point in previous_points:
+                if int(point[0]) > time-1000*self.iter_window_len:
+                    window.append(point)
+
+            windows = [[],[],[],[],[],[],[],[]]
+
+            if window <> []:
+
+                windows = []
+                for method in self.methods:
+                    iter_window_i = method.call_method(self,window)
+                    windows.append(iter_window_i)
+
+                power_set.append(window)
+
+            
+            for indx,pass_window in enumerate(windows):
+                if pass_window <> 0 and pass_window <> []:
+                    beats1[indx].append(pass_window)
+
+            previous_points.append([time,volts])
+            previous_points.pop(0)
+
+        total = len(power_set)
+        BS = len(beats1[0])
+        if total <> 0:
+            per_BS = 1 -  BS/float(total)
+            text_back = '{:.1%}'.format(per_BS)
+        else:
+            text_back = 'empty'
+
+        # 0 => method doesn't matter
+        # 1 => window must be selected by this method
+        # 2 => window must NOT be selected by this method
+        methods = [[1,beats1[0]],[0,beats1[1]],[0,beats1[2]],[0,beats1[3]],[0,beats1[4]],[2,beats1[5]],[2,beats1[6]],[0,beats1[7]]] # 5 and 6 2
+        beats11 = self.step111(power_set,methods)
+
+        # CHOOSE 1 - step 1.5
+        # beats15 = self.step151(beats1) # keeps beat with longer duration
+        beats15 = self.step152(beats11) # sticks together beats
+        # beats15 = self.step153(beats1) # no function here
+        # beats15 = self.step154(beats11)   # keeps last beat
+        # beats15 = self.step155(beats1) # keeps first beat
+
+        # CHOOSE 1 - step 2
+        # beats2 = self.step21(beats15,min_spacing)  # keeps higher or lower max voltage
+        # beats2 = self.step22(beats15,min_spacing)  # keeps higher or lower min voltage
+        # beats2 = self.step23(beats15,min_spacing)  # keeps higher or lower avg voltage
+        # beats2 = self.step24(beats15,min_spacing)  # keeps lower variance
+        beats2 = self.step25(beats15,min_spacing)  # keeps higher sum of squares
+        # beats2 = self.step26(beats15,min_spacing)  # keeps higher or lower duration
+
+        # CHOOSE 1 - step 3
+        # beats3 = self.step31(beats2)  # takes max voltage
+        # beats3 = self.step32(beats2)  # takes min voltage
+        beats3 = self.step33(beats2)  # takes median voltage
+        # beats3 = self.step34(beats2)  # takes first point
+        # beats3 = self.step35(beats2)    # takes last point
+
+        return beats3, text_back
+
+    # UTILITY FUNCTIONS
+
+    def regression(self, values, x):
+        length = len(values)
+        if length == 0:
+            return 0
+        Ey = 0    # Expectation of y
+        Ex = 0    # Expectatio of x
+        for element in values:
+            timestamp, voltage = element
+            timestamp = float(timestamp)
+            Ey += int(voltage)
+            Ex += int(timestamp)
+        Ey = Ey/length
+        Ex = Ex/length
+        Sxy = 0 # sum of squares xy
+        Sxx = 0 # sum of squares x
+        for element in values:
+            timestamp, voltage = element
+            timestamp = float(timestamp)
+            Sxy += (timestamp - Ex)*(voltage - Ey)
+            Sxx =+ (timestamp - Ex)**2
+        if Sxx == 0:
+            return 0
+        B1 = Sxy/Sxx
+        B0 = Ey - B1*Ex
+        y = B1*x + B0
+        return y
+
+    # slope of line of best fit. volts per thousands of a second.
+    def get_slope(self,values):
+        length = len(values)
+        if length == 0:
+            return 0
+        Ey = 0    # Expectation of y
+        Ex = 0    # Expectatio of x
+        for element in values:
+            timestamp, voltage = element
+            timestamp = float(timestamp)
+            Ey += int(voltage)
+            Ex += int(timestamp)
+        Ey = Ey/length
+        Ex = Ex/length
+        Sxy = 0.0 # sum of squares xy
+        Sxx = 0.0 # sum of squares x
+        for element in values:
+            timestamp, voltage = element
+            timestamp = float(timestamp)
+            Sxy += (timestamp - Ex)*(voltage - Ey)
+            Sxx =+ (timestamp - Ex)**2
+        if Sxx == 0:
+            return 0
+        B1 = Sxy/Sxx
+        return B1
+
+    def beat_avg_volt(self,beat):
+        sum = 0
+        for element in beat:
+            sum =+ element[1]
+        if len(beat) == 0:
+            return 0
+        else:
+            avg = sum/len(beat)
+            return avg
+
+    def beat_avg_time(self,beat):
+        sum = 0
+        for element in beat:
+            sum =+ element[0]
+        if len(beat) == 0:
+            return 0
+        else:
+            avg = sum/len(beat)
+            return avg
+
+    def beat_var(self,beat):
+        avg = self.beat_avg_volt(beat)
+        var = 0
+        for element in beat:
+            var += (avg - element[1])**2
+        if len(beat) == 0:
+            return 1000
+        else:
+            return var/len(beat)
+
+    def LSS(self,beat):
+        B1 = self.get_slope(beat)
+        Ey = self.beat_avg_volt(beat)
+        Ex = self.beat_avg_time(beat)
+        B0 = Ey - B1*Ex
+        LSS = 0
+        for element in beat:
+            predicted_volt = element[0]*B1 + B0
+            actual_volt =element[1]
+            LSS += (predicted_volt - actual_volt)**2
+        return LSS
+
+    def get_peaks(self):
+
+        self.PEAK = self.peak_benchmark()
+        self.EXTRAPOLATION = self.extrapolation_benchmark()
+
+        was_beat = False  # this boolean was implemented to prevent double counting beats that occur over two timestamps.
+        beats = [] # list that will contain all beats in the format [timestamp, volts]
+        previous_points = [[0,0] for i in range(20)] # list of the last 10 data points (from oldest to newest). List is also in the format [timestamp,volts]
+
+        for time,volts in sorted(self.data.iteritems()):
+            is_beat = False
+            time = int(time)
+
+            if previous_points[0] <> [0,0]:
+
+                if volts > self.PEAK:   # discards data that does not exceed peak benchmark
+
+                    regression_data = []  # preparing regression
+                    for point in previous_points:
+                        if int(point[0]) > time-1000*self.REACH_BACK:
+                            regression_data.append(point)
+                    regression_volts = self.regression(regression_data,time)
+                    if volts > regression_volts + self.EXTRAPOLATION: # discards data that does not exceed extrapolation benchmark
+                        if was_beat == False:
+                            beats.append([time,volts])
+                        is_beat = True
+
+            # setting up next key-value pair evaluation
+            previous_points.append([time,volts])
+            previous_points.pop(0)
+            was_beat = is_beat
+        return beats
+
+    # FPR get_peaks method. will almost certainly  be discarded.
+    PEAK =  191
+    EXTRAPOLATION = 19
+    REACH_BACK = 0.19
+
+
+
+    def peak_benchmark(self):
+        avg = self.avg_volt()
+        # There are two options I'd like to test at this point. Comment out one or the other.
+        # 1) PEAK = avg*a, where a is an element of [1.01,1.3)
+        # a = 1.05
+        # peak_benchmark = avg*a
+        # 2) PEAK = avg + a where a is an element of [5,30]
+        a = 5
+        peak_benchmark = avg + a
+        # In both cases I will need to derive an experiment that determines which method is the most accurate.
+        return peak_benchmark
+
+    def extrapolation_benchmark(self):
+        avg = self.avg_volt()
+        PEAK = self.peak_benchmark()
+        a = 3 # subject to experiments
+        extrapolation_benchmark = (PEAK - avg)*a
+        return extrapolation_benchmark
+
+        # STEPS OPTIONS
 
     # discard zeros in beat windows
-    def step10(self,window):
+    def step10(self,window, benchmark = 0):
         switch = True
         for element in window:
             if 0 in element:
@@ -388,257 +630,3 @@ class BPMServices(object):
         for beat in beats2:
             beats3.append(beat[-1])
         return beats3
-
-
-
-    def get_beats(self):
-        # INCOMPLETE - step 0 - moves through data 50 datapoints at a time and discards parts with crazy variances.
-        # step 1 - moves through data window by window and selects potential beats. returns list of windows that are/contain a beat
-        # step 1.1 - combination of methods from 1
-        # step 1.5 - moves through beat windows from step 1 and merges or chooses onw window if windows overlap
-        # step 2 - goes through beats and eliminates if beats that are less than min_spacing apart
-        # step 3 - selects one datapoint from each beat window
-
-        self.iter_window_len = 0.1
-        avg = self.avg_volt
-                
-        all_above = self.avg_benchmark(avg,1,2)
-        avg_above = self.avg_benchmark(avg,1,5)
-        max_above = self.avg_benchmark(avg,1,10)
-        min_above = self.avg_benchmark(avg,1,2)
-        var_below = self.avg_benchmark(avg,0.25,0)
-        slope_below = self.avg_benchmark(avg,-0.0125,0)
-        slope_above = self.avg_benchmark(avg,0.05,0)
-        min_spacing = 0.33 # will be feeling changes,
-        
-        previous_points = [[0,0] for i in range(20)] # list of the last 20 data points (from oldest to newest). Data points are in the format [timestamp,volts]        
-        beats1 = [[],[],[],[],[],[],[],[]]
-        power_set = []
-
-        for time,volts in sorted(self.data.iteritems()):
-
-            time = int(time)
-            
-            window = []
-            for point in previous_points:
-                if int(point[0]) > time-1000*self.iter_window_len:
-                    window.append(point)
-
-            windows = [[],[],[],[],[],[],[],[]]
-
-            if window <> []:
-
-                # CHOOSE 1 - step 1 or alter the arguments for step111 below.
-                window_0 = self.step10(window)                    # removes windows containing zeros
-                window_1 = self.step11(window,all_above)   # all values in window must be above all_above
-                window_2 = self.step12(window,avg_above)   # avg of window must be above avg_above
-                window_3 = self.step13(window,max_above)   # max of winodw must be above max_above (can be changed to max below)
-                window_4 = self.step14(window,min_above)   # min of window must be above min_above (can be changed to min below)
-                # window_5 = getattr(self,'step15')(window,slope_below)
-                # window_6 = getattr(self,'step16')(window,slope_above) WORKS
-                window_5 = self.step15(window,slope_below) # fit regression to window. slop must be below slope_below
-                window_6 = self.step16(window,slope_above) # fit regression to window. slop must be above slope_above                 
-                window_7 = self.step17(window,var_below)   # variance below given value
-                windows = [window_0, window_1,window_2,window_3,window_4,window_5,window_6,window_7]
-                power_set.append(window)
-
-            for indx,pass_window in enumerate(windows):
-                if pass_window <> 0 and pass_window <> []:
-                    beats1[indx].append(pass_window)
-
-            previous_points.append([time,volts])
-            previous_points.pop(0)
-
-        total = len(power_set)
-        BS = len(beats1[0])
-        if total <> 0:
-            per_BS = 1 -  BS/float(total)
-            text_back = '{:.1%}'.format(per_BS)
-        else:
-            text_back = 'empty'
-
-        # 0 => method doesn't matter
-        # 1 => window must be selected by this method
-        # 2 => window must NOT be selected by this method
-        methods = [[1,beats1[0]],[0,beats1[1]],[0,beats1[2]],[0,beats1[3]],[0,beats1[4]],[2,beats1[5]],[2,beats1[6]],[0,beats1[7]]] # 5 and 6 2
-        beats11 = self.step111(power_set,methods)
-
-        # CHOOSE 1 - step 1.5
-        # beats15 = self.step151(beats1) # keeps beat with longer duration
-        beats15 = self.step152(beats11) # sticks together beats
-        # beats15 = self.step153(beats1) # no function here
-        # beats15 = self.step154(beats11)   # keeps last beat
-        # beats15 = self.step155(beats1) # keeps first beat
-
-        # CHOOSE 1 - step 2
-        # beats2 = self.step21(beats15,min_spacing)  # keeps higher or lower max voltage
-        # beats2 = self.step22(beats15,min_spacing)  # keeps higher or lower min voltage
-        # beats2 = self.step23(beats15,min_spacing)  # keeps higher or lower avg voltage
-        # beats2 = self.step24(beats15,min_spacing)  # keeps lower variance
-        beats2 = self.step25(beats15,min_spacing)  # keeps higher sum of squares
-        # beats2 = self.step26(beats15,min_spacing)  # keeps higher or lower duration
-
-        # CHOOSE 1 - step 3
-        # beats3 = self.step31(beats2)  # takes max voltage
-        # beats3 = self.step32(beats2)  # takes min voltage
-        beats3 = self.step33(beats2)  # takes median voltage
-        # beats3 = self.step34(beats2)  # takes first point
-        # beats3 = self.step35(beats2)    # takes last point
-
-        return beats3, text_back
-
-    # UTILITY FUNCTIONS
-
-    def regression(self, values, x):
-        length = len(values)
-        if length == 0:
-            return 0
-        Ey = 0    # Expectation of y
-        Ex = 0    # Expectatio of x
-        for element in values:
-            timestamp, voltage = element
-            timestamp = float(timestamp)
-            Ey += int(voltage)
-            Ex += int(timestamp)
-        Ey = Ey/length
-        Ex = Ex/length
-        Sxy = 0 # sum of squares xy
-        Sxx = 0 # sum of squares x
-        for element in values:
-            timestamp, voltage = element
-            timestamp = float(timestamp)
-            Sxy += (timestamp - Ex)*(voltage - Ey)
-            Sxx =+ (timestamp - Ex)**2
-        if Sxx == 0:
-            return 0
-        B1 = Sxy/Sxx
-        B0 = Ey - B1*Ex
-        y = B1*x + B0
-        return y
-
-    # slope of line of best fit. volts per thousands of a second.
-    def get_slope(self,values):
-        length = len(values)
-        if length == 0:
-            return 0
-        Ey = 0    # Expectation of y
-        Ex = 0    # Expectatio of x
-        for element in values:
-            timestamp, voltage = element
-            timestamp = float(timestamp)
-            Ey += int(voltage)
-            Ex += int(timestamp)
-        Ey = Ey/length
-        Ex = Ex/length
-        Sxy = 0.0 # sum of squares xy
-        Sxx = 0.0 # sum of squares x
-        for element in values:
-            timestamp, voltage = element
-            timestamp = float(timestamp)
-            Sxy += (timestamp - Ex)*(voltage - Ey)
-            Sxx =+ (timestamp - Ex)**2
-        if Sxx == 0:
-            return 0
-        B1 = Sxy/Sxx
-        return B1
-
-    def beat_avg_volt(self,beat):
-        sum = 0
-        for element in beat:
-            sum =+ element[1]
-        if len(beat) == 0:
-            return 0
-        else:
-            avg = sum/len(beat)
-            return avg
-
-    def beat_avg_time(self,beat):
-        sum = 0
-        for element in beat:
-            sum =+ element[0]
-        if len(beat) == 0:
-            return 0
-        else:
-            avg = sum/len(beat)
-            return avg
-
-    def beat_var(self,beat):
-        avg = self.beat_avg_volt(beat)
-        var = 0
-        for element in beat:
-            var += (avg - element[1])**2
-        if len(beat) == 0:
-            return 1000
-        else:
-            return var/len(beat)
-
-    def LSS(self,beat):
-        B1 = self.get_slope(beat)
-        Ey = self.beat_avg_volt(beat)
-        Ex = self.beat_avg_time(beat)
-        B0 = Ey - B1*Ex
-        LSS = 0
-        for element in beat:
-            predicted_volt = element[0]*B1 + B0
-            actual_volt =element[1]
-            LSS += (predicted_volt - actual_volt)**2
-        return LSS
-
-    def get_peaks(self):
-
-        self.PEAK = self.peak_benchmark()
-        self.EXTRAPOLATION = self.extrapolation_benchmark()
-
-        was_beat = False  # this boolean was implemented to prevent double counting beats that occur over two timestamps.
-        beats = [] # list that will contain all beats in the format [timestamp, volts]
-        previous_points = [[0,0] for i in range(20)] # list of the last 10 data points (from oldest to newest). List is also in the format [timestamp,volts]
-
-        for time,volts in sorted(self.data.iteritems()):
-            is_beat = False
-            time = int(time)
-
-            if previous_points[0] <> [0,0]:
-
-                if volts > self.PEAK:   # discards data that does not exceed peak benchmark
-
-                    regression_data = []  # preparing regression
-                    for point in previous_points:
-                        if int(point[0]) > time-1000*self.REACH_BACK:
-                            regression_data.append(point)
-                    regression_volts = self.regression(regression_data,time)
-                    if volts > regression_volts + self.EXTRAPOLATION: # discards data that does not exceed extrapolation benchmark
-                        if was_beat == False:
-                            beats.append([time,volts])
-                        is_beat = True
-
-            # setting up next key-value pair evaluation
-            previous_points.append([time,volts])
-            previous_points.pop(0)
-            was_beat = is_beat
-        return beats
-
-    # FPR get_peaks method. will almost certainly  be discarded.
-    PEAK =  191
-    EXTRAPOLATION = 19
-    REACH_BACK = 0.19
-
-
-
-    def peak_benchmark(self):
-        avg = self.avg_volt()
-        # There are two options I'd like to test at this point. Comment out one or the other.
-        # 1) PEAK = avg*a, where a is an element of [1.01,1.3)
-        # a = 1.05
-        # peak_benchmark = avg*a
-        # 2) PEAK = avg + a where a is an element of [5,30]
-        a = 5
-        peak_benchmark = avg + a
-        # In both cases I will need to derive an experiment that determines which method is the most accurate.
-        return peak_benchmark
-
-    def extrapolation_benchmark(self):
-        avg = self.avg_volt()
-        PEAK = self.peak_benchmark()
-        a = 3 # subject to experiments
-        extrapolation_benchmark = (PEAK - avg)*a
-        return extrapolation_benchmark
