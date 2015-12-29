@@ -58,29 +58,11 @@ class BPMServices(object):
         self.density = self.get_density() # empty will be set to True if self.length == 0
         self.max_volt = max(self.data.itervalues())
         self.min_volt = min(self.data.itervalues())
-        self.avg_volt = self.get_avg_volt(self.data)
+        self.avg_volt,self.avg_time = self.get_avg(self.data)
         self.step1_methods = self.initialize_step1_method_objects(setting,self.avg_volt)
         self.step15_usage = setting.step15_usage
         self.step2_usage = setting.step2_usage
         self.step3_usage = setting.step3_usage
-
-    def get_avg_volt(self,sample):
-        sum = 0
-        count = 0
-        for time,volts in sample.items():
-            sum += volts
-            count += 1
-        if count == 0:
-            return 0
-        else:
-            return float(sum)/count
-    
-    def get_density(self):
-        if self.length == 0:
-            self.empty = True
-            self.density = 0
-        else:
-            self.density = self.size/(float(self.length)/1000)
 
     # DEFINE FUNCTION TO get METHOD USAGE in compact form - LATER, when doing tests
 
@@ -120,16 +102,18 @@ class BPMServices(object):
         previous_points = [[0,0] for i in range(20)] # COULD PROBABLY BE REDUCED. list of the last 20 data points (from oldest to newest). Data points are in the format [timestamp,volts]        
         beats11 = []
 
-        for time,volts in sorted(self.data.iteritems()):
+        for time,voltsignal in sorted(self.data.iteritems()):
 
             time = int(time)
             
-            iter_window = []
+            iter_window = {}
             for point in previous_points:
-                if int(point[0]) > time-1000*self.iter_window_len:
-                    iter_window.append(point)
+                timestamp = int(point[0])
+                volts = point[1]
+                if timestamp > time-1000*self.iter_window_len:
+                    iter_window[timestamp] = volts
 
-            if iter_window <> []:
+            if iter_window <> {}:
 
                 if self.step111(iter_window) == True: # NEEDS CLEAN UP
                     beats11.append(iter_window)
@@ -154,22 +138,11 @@ class BPMServices(object):
     # UTILITY FUNCTIONS
 
     # slope of line of best fit. volts per thousands of a second.
-    def get_slope(self,values):
-        length = len(values)
-        if length == 0:
-            return 0
-        Ey = 0    # Expectation of y
-        Ex = 0    # Expectatio of x
-        for element in values:
-            timestamp, voltage = element
-            timestamp = float(timestamp)
-            Ey += int(voltage)
-            Ex += int(timestamp)
-        Ey = Ey/length
-        Ex = Ex/length
+    def get_slope(self,sample):
+        Ey, Ex = self.get_avg(sample):    # Expectation of y, expectation of x
         Sxy = 0.0 # sum of squares xy
         Sxx = 0.0 # sum of squares x
-        for element in values:
+        for time, volts in sample.items():
             timestamp, voltage = element
             timestamp = float(timestamp)
             Sxy += (timestamp - Ex)*(voltage - Ey)
@@ -225,42 +198,38 @@ class BPMServices(object):
     # STEPS OPTIONS
 
     # discard zeros in beat windows
-    def step10(self,window, benchmark = 0):
-        for Tuple in window:
-            if 0 in Tuple:
+    def step10(self,iter_window, benchmark = 0):
+        for time,volts in iter_window.items():
+            if volts == 0:
                 return False
         return True
 
-    def step11(self,window,all_above):
-        for pair in window:
-            if pair[1] <= all_above:
+    def step11(self,iter_window,all_above):
+        for time,volts in iter_window.items():
+            if volts <= all_above:
                 return False
         return True
 
-    def step12(self,window,avg_above):
+    def step12(self,iter_window,avg_above):
         # CLEAN UP
-        avg = self.beat_avg_volt(window)
+        avg, dummy = self.get_avg(iter_window)
         if avg > avg_above:
             return True
         else:
             return False
     
     # CLEAN UP
-    def step13(self,window,max_above):
-        window.sort(key=lambda x: x[1],reverse = True)
-        max = window[0][1]
-        if max > max_above:
-            window.sort(key = lambda x: x[0])
+    def step13(self,iter_window,max_above):
+        max_volts = max(iter_window)
+        if max_volts > max_above:
             return True
         else:
             return False
 
     # CLEAN UP
-    def step14(self,window,min_above):
-        window.sort(key=lambda x: x[1],reverse = False)
-        min = window[0][1]
-        if min > min_above:
-            window.sort(key = lambda x: x[0])
+    def step14(self,iter_window,min_above):
+        min_volts = min(iter_window)
+        if min_volts > min_above:
             return True
         else:
             return False
@@ -495,6 +464,28 @@ class BPMServices(object):
         for beat in beats2:
             beats3.append(beat[-1])
         return beats3
+
+    def get_avg(self,sample):
+        volt_sum = 0
+        time_sum = 0
+        count = 0
+        for time,volts in sample.items():
+            volt_sum += volts
+            time_sum += time
+            count += 1
+        if count == 0:
+            return 0
+        else:
+            avg_volt = volt_sum/count
+            avg_time = time_sum/count
+            return avg_volt, avg_time
+    
+    def get_density(self):
+        if self.length == 0:
+            self.empty = True
+            self.density = 0
+        else:
+            self.density = self.size/(float(self.length)/1000)
 
     # PEAKS - WILL ALMOST CERTAINLY BE CUT
     def regression(self, values, x):
