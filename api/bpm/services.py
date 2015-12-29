@@ -90,8 +90,8 @@ class BPMServices(object):
             step1_methods.append([])
             step1_methods[i] = BPMmethod(1,i,setting,avg)
         return step1_methods
+    
     # BPM
-
     def get_bpm(self):
         # peaks = self.get_peaks()
         peaks = self.get_beats()
@@ -117,7 +117,6 @@ class BPMServices(object):
         # step 3 - selects one datapoint from each beat window
         
         #STEP 1
-
         previous_points = [[0,0] for i in range(20)] # COULD PROBABLY BE REDUCED. list of the last 20 data points (from oldest to newest). Data points are in the format [timestamp,volts]        
         beats11 = []
 
@@ -140,12 +139,10 @@ class BPMServices(object):
             previous_points.pop(0)
 
         # STEP 1.5
-
         step15_name = 'step15{}'.format(self.step15_usage)
         beats15 = getattr(self,step15_name)(beats11)
         
         # STEP 2
-        
         step2_name = 'step2{}'.format(self.step2_usage)
         beats2 = getattr(self,step2_name)(beats15)
 
