@@ -34,7 +34,7 @@ class BPMServices(object):
     # density := number of data_points per second
     # per100 := percentage of unusable data points
     # beats := times and volts of the data points that were considered beats
-    # methods := list containing information about which methods were used in deriving the window
+    # step1_methods := list containing information about which step1 methods were used in deriving the window
     # empty := no data points in dictionary
     # avg_volt := average voltage in window
     # min_volt := minimum voltage in window
@@ -77,16 +77,19 @@ class BPMServices(object):
         else:
             self.avg_volt = float(sum)/count
         ##################### maybe make into funciton later
-        self.methods = self.initialize_method_objects(setting,self.avg_volt)
+        self.step1_methods = self.initialize_step1_method_objects(setting,self.avg_volt)
+        self.step15_usage = setting.step15_usage
+        self.step2_usage = setting.step2_usage
+        self.step3_usage = setting.step3_usage
 
-    # DEFINE FUNCTION TO get METHOD USAGE EASILY
+    # DEFINE FUNCTION TO get METHOD USAGE in compact form
 
-    def initialize_method_objects(self,setting,avg):
-        methods = []
+    def initialize_step1_method_objects(self,setting,avg):
+        step1_methods = []
         for i in range(0,8):
-            methods.append([])
-            methods[i] = BPMmethod(1,i,setting,avg)
-        return methods
+            step1_methods.append([])
+            step1_methods[i] = BPMmethod(1,i,setting,avg)
+        return step1_methods
     # BPM
 
     def get_bpm(self):
@@ -113,6 +116,8 @@ class BPMServices(object):
         # step 2 - goes through beats and eliminates if beats that are less than min_spacing apart
         # step 3 - selects one datapoint from each beat window
         
+        #STEP 1
+
         previous_points = [[0,0] for i in range(20)] # COULD PROBABLY BE REDUCED. list of the last 20 data points (from oldest to newest). Data points are in the format [timestamp,volts]        
         beats11 = []
 
@@ -134,28 +139,19 @@ class BPMServices(object):
             previous_points.append([time,volts])
             previous_points.pop(0)
 
-        # CHOOSE 1 - step 1.5
-        # beats15 = self.step151(beats1) # keeps beat with longer duration
-        beats15 = self.step152(beats11) # sticks together beats
-        # beats15 = self.step153(beats1) # no function here
-        # beats15 = self.step154(beats11)   # keeps last beat
-        # beats15 = self.step155(beats1) # keeps first beat
+        # STEP 1.5
 
-        # CHOOSE 1 - step 2
-        # beats2 = self.step21(beats15,self.min_spacing)  # keeps higher or lower max voltage
-        # beats2 = self.step22(beats15,self.min_spacing)  # keeps higher or lower min voltage
-        # beats2 = self.step23(beats15,self.min_spacing)  # keeps higher or lower avg voltage
-        # beats2 = self.step24(beats15,self.min_spacing)  # keeps lower variance
-        beats2 = self.step25(beats15,self.min_spacing)  # keeps higher sum of squares
-        # beats2 = self.step26(beats15,self.min_spacing)  # keeps higher or lower duration
+        step15_name = 'step15{}'.format(self.step15_usage)
+        beats15 = getattr(self,step15_name)(beats11)
+        
+        # STEP 2
+        
+        step2_name = 'step2{}'.format(self.step2_usage)
+        beats2 = getattr(self,step2_name)(beats15)
 
-        # CHOOSE 1 - step 3
-        # beats3 = self.step31(beats2)  # takes max voltage
-        # beats3 = self.step32(beats2)  # takes min voltage
-        beats3 = self.step33(beats2)  # takes median voltage
-
-        # beats3 = self.step34(beats2)  # takes first point
-        # beats3 = self.step35(beats2)    # takes last point
+        # STEP 3
+        step3_name = 'step3{}'.format(self.step3_usage)
+        beats3 = getattr(self,step3_name)(beats2)
 
         return beats3
 
@@ -394,7 +390,7 @@ class BPMServices(object):
     # CLEAN-UP NEEDED
     def step111(self,window):
         stamp = [False, False, False, False, False, False, False, False] # CLEAN UP
-        for method in self.methods:
+        for method in self.step1_methods:
             state = method.call_method(self,window) 
             if method.usage == 0:
                 stamp[method.step_index] = True
@@ -408,7 +404,7 @@ class BPMServices(object):
             return True
         else:
             return False
-    
+
     def step151(self,beats1):
         beats15 = []
         for beat in beats1:
@@ -438,7 +434,7 @@ class BPMServices(object):
         
         return beats15
 
-    def step154(self,beats1):
+    def step153(self,beats1):
         beats15 = []
         for beat in beats1:
             if beats15 == []:
@@ -450,7 +446,7 @@ class BPMServices(object):
                 beats15.append(beat)
         return beats15
 
-    def step155(self,beats1):
+    def step154(self,beats1):
         beats15 = []
         for beat in beats1:
             if beats15 == []:
@@ -461,9 +457,9 @@ class BPMServices(object):
 
     # ADD METHOD THAT MAKES SPACING AS EVEN AS POSSIBLE
 
-    def step21(self,beats15,min_spacing):
+    def step21(self,beats15):
         beats2 = []
-        min_spacing = 1000*min_spacing
+        min_spacing = 1000*self.min_spacing
         for beat in beats15:
             if beats2 == []:
                 beats2.append(beat)
@@ -481,9 +477,9 @@ class BPMServices(object):
                 beats2.append(beat)
         return beats2
 
-    def step22(self,beats15,min_spacing):
+    def step22(self,beats15):
         beats2 = []
-        min_spacing = 1000*min_spacing
+        min_spacing = 1000*self.min_spacing
         for beat in beats15:
             if beats2 == []:
                 beats2.append(beat)
@@ -501,9 +497,9 @@ class BPMServices(object):
                 beats2.append(beat)
         return beats2
 
-    def step23(self,beats15,min_spacing):
+    def step23(self,beats15):
         beats2 = []
-        min_spacing = 1000*min_spacing
+        min_spacing = 1000*self.min_spacing
         for beat in beats15:
             if beats2 == []:
                 beats2.append(beat)
@@ -517,9 +513,9 @@ class BPMServices(object):
                 beats2.append(beat)
         return beats2
 
-    def step24(self,beats15,min_spacing):
+    def step24(self,beats15):
         beats2 = []
-        min_spacing = 1000*min_spacing
+        min_spacing = 1000*self.min_spacing
         for beat in beats15:
             if beats2 == []:
                 beats2.append(beat)
@@ -533,9 +529,9 @@ class BPMServices(object):
                 beats2.append(beat)
         return beats2
 
-    def step25(self,beats15,min_spacing):
+    def step25(self,beats15):
         beats2 = []
-        min_spacing = 1000*min_spacing
+        min_spacing = 1000*self.min_spacing
         for beat in beats15:
             if beats2 == []:
                 beats2.append(beat)
@@ -549,9 +545,9 @@ class BPMServices(object):
                 beats2.append(beat)
         return beats2
 
-    def step26(self,beats15,min_spacing):
+    def step26(self,beats15):
         beats2 = []
-        min_spacing = 1000*min_spacing
+        min_spacing = 1000*self.min_spacing
         for beat in beats15:
             if beats2 == []:
                 beats2.append(beat)

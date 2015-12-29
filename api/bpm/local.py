@@ -106,7 +106,9 @@ def initialize_setting():
     setting.step1_benchmarks = [[0,0],[1,2],[1,5],[1,10],[1,2],[-0.0125,0],[0.025,0],[0.25,0]]
     setting.min_spacing = 0.33
     setting.iter_window_len = 0.1
-    setting.step2_usage = []
+    setting.step15_usage = 2
+    setting.step2_usage = 5
+    setting.step3_usage = 3
     return setting
 
 def main():
