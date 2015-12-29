@@ -82,7 +82,6 @@ class BPMServices(object):
         else:
             self.density = self.size/(float(self.length)/1000)
 
-
     # DEFINE FUNCTION TO get METHOD USAGE in compact form - LATER, when doing tests
 
     def initialize_step1_method_objects(self,setting,avg):
@@ -180,6 +179,7 @@ class BPMServices(object):
         B1 = Sxy/Sxx
         return B1
 
+    # could be cut, should I choose to change my structure to have more dictionaries than lists.
     def beat_avg_volt(self,beat):
         sum = 0
         for element in beat:
@@ -226,38 +226,26 @@ class BPMServices(object):
 
     # discard zeros in beat windows
     def step10(self,window, benchmark = 0):
-        switch = True
-        for element in window:
-            if 0 in element:
-                switch = False
-        if switch:
-            return True
-        else:
-            return False
+        for Tuple in window:
+            if 0 in Tuple:
+                return False
+        return True
 
     def step11(self,window,all_above):
-        beat = True
         for pair in window:
-            if pair[1] < all_above:
-                beat = False
-        if beat:
-            return True
-        else:
-            return False
+            if pair[1] <= all_above:
+                return False
+        return True
 
     def step12(self,window,avg_above):
-        length = len(window)
-        if length == 0:
-            return False
-        sum = 0
-        for point in window:
-            sum += point[1]
-        avg = sum/float(length)
+        # CLEAN UP
+        avg = self.beat_avg_volt(window)
         if avg > avg_above:
             return True
         else:
             return False
     
+    # CLEAN UP
     def step13(self,window,max_above):
         window.sort(key=lambda x: x[1],reverse = True)
         max = window[0][1]
@@ -267,6 +255,7 @@ class BPMServices(object):
         else:
             return False
 
+    # CLEAN UP
     def step14(self,window,min_above):
         window.sort(key=lambda x: x[1],reverse = False)
         min = window[0][1]

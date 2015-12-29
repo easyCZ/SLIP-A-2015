@@ -25,6 +25,7 @@
 14) improve text_back system
 	a) objectify output from get_beats()
 15) change setting to be more user friendly and easy to follow
+16) be more consistent with use of lists or dictionaries. would allow me to cut down on number of functions( and lines). Probably use dictionaries only.
 
 1) fix benchmarks - CHECK
 2) create bullshit detection - grrrrr
