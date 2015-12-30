@@ -98,6 +98,9 @@ class BPMServices(object):
         # step 2 - goes through beats and eliminates if beats that are less than min_spacing apart
         # step 3 - selects one datapoint from each beat window
         
+        if self.empty:
+            return []
+
         #STEP 1
         previous_points = [[0,0] for i in range(20)] # COULD PROBABLY BE REDUCED. list of the last 20 data points (from oldest to newest). Data points are in the format [timestamp,volts]        
         beats11 = []
@@ -122,10 +125,8 @@ class BPMServices(object):
             previous_points.append([time,voltsignal])
             previous_points.pop(0)
 
-        # STEP 1.5)
-        
-        step15_name = 'step15{}'.format(self.step15_usage)
-        beats15 = getattr(self,step15_name)(beats11)
+        # STEP 1.5   
+        beats15 = self.step150(beats11)
         
         # STEP 2
         step2_name = 'step2{}'.format(self.step2_usage)
@@ -135,7 +136,6 @@ class BPMServices(object):
         # STEP 3
         step3_name = 'step3{}'.format(self.step3_usage)
         beats3 = getattr(self,step3_name)(beats2)
-        print len(beats11)
         return beats3
 
     # UTILITY FUNCTIONS
@@ -231,52 +231,47 @@ class BPMServices(object):
         else:
             return False
 
-    def step151(self,beats1):
-        beats15 = []
-        for beat in beats1:
-            beat_duration = beat[-1][0] - beat[0][0]
-            prev_beat_duration = beats1[-1][-1][0] - beats1[-1][0][0]
-            if beats15 == []:
+    def step150(self,beats11):
+        step15_name = 'step15{}'.format(self.step15_usage)
+        if beats11 == []:
+            return []
+        beats15 = [beats11[0]]
+        for beat in beats11[1:-1]:
+            previous_beat = beats15[-1]
+            combine, replace_previous = getattr(self,step15_name)(beat,previous_beat)
+            if min(beat) > max(previous_beat):
                 beats15.append(beat)
-            elif beat[0][0] > beats15[-1][-1][0]:
-                beats15.append(beat)
-            elif prev_beat_duration < beat_duration:
+            elif replace_previous:
                 beats15.pop()
                 beats15.append(beat)
-        return beats15
-
-    def step152(self,beats1):
-        beats15 = []
-        for beat in beats1:
-            if beats15 == []:
-                beats15.append(beat)
-            elif min(beat) > max(beats15[-1]):
-                beats15.append(beat)
-            else:
+            elif combine:
                 for time,volts in beat.items():
                     beats15[-1][time] = volts
         return beats15
+    
+    def step151(self,beat,previous_beat):
+        combine = False
+        replace_previous = False
+        beat_duration = max(beat) - min(beat)
+        prev_beat_duration = beats11[-1] - beats1[-1][0][0]
+        if prev_beat_duration < beat_duration:
+            replace_previous = True
+        return combine, replace_previous
 
-    def step153(self,beats1):
-        beats15 = []
-        for beat in beats1:
-            if beats15 == []:
-                beats15.append(beat)
-            elif beat[0][0] > beats15[-1][-1][0]:
-                beats15.append(beat)
-            else:
-                beats15.pop()
-                beats15.append(beat)
-        return beats15
+    def step152(self,beat = [],previous_beat = []):
+        combine = True
+        replace_previous = False
+        return combine, replace_previous
 
-    def step154(self,beats1):
-        beats15 = []
-        for beat in beats1:
-            if beats15 == []:
-                beats15.append(beat)
-            elif beat[0][0] > beats15[-1][-1][0]:
-                beats15.append(beat)
-        return beats15
+    def step153(self,beat = [], previous_beat = []):
+        combine = False
+        replace_previous = True
+        return combine, replace_previous
+
+    def step154(self,beat = [], previous_beat = []):
+        combine = False
+        replace_previous = False
+        return combine, replace_previous
 
     # ADD METHOD THAT MAKES SPACING AS EVEN AS POSSIBLE
 

@@ -7,7 +7,7 @@
 3) test data
 	a) BPM to actual
 	b) compare what distance should be and what it is
-4) implement moving window within moving window or growing window. Probably growing window.
+4) implement moving window within moving window or growing window. Probably growing window. depends on situation.
 5) R - justify why it's ok for this method to have troubles with high heart rates
 	a) wouldn't detect peaks anyways because data is not dense enough. Give bound for BPM with current data density.
 6) Clean-up
