@@ -92,17 +92,16 @@ class BPMServices(object):
 
     def get_beats(self):
         # INCOMPLETE - step 0 - some sort of 'bad data' detection
-        # step 1 - moves through data window by window and selects potential beats. returns list of windows that are/contain a beat
-        # step 1.1 - combination of methods from 1
-        # step 1.5 - moves through beat windows from step 1 and merges or chooses onw window if windows overlap
-        # step 2 - goes through beats and eliminates if beats that are less than min_spacing apart
+        # step 1 - moves through data iter_window by iter_window and selects potential beats. returns dictionaries of iter_windows that are/contain a beat.
+        # step 1.5 - moves through beat iter_windows from step 1 and combines them or chooses one iter_window if the iter_windows overlap
+        # step 2 - goes through beats and eliminates if beats that are less than self.min_spacing apart
         # step 3 - selects one datapoint from each beat window
-        
-        if self.empty:
-            return []
 
         # STEP 1
         beats11 = self.step1()
+
+        if beats11 == []:
+            return []
 
         # STEP 1.5   
         beats15 = self.step150(beats11)
@@ -115,22 +114,10 @@ class BPMServices(object):
         # STEP 3
         step3_name = 'step3{}'.format(self.step3_usage)
         beats3 = getattr(self,step3_name)(beats2)
+        
         return beats3
 
-    # UTILITY FUNCTIONS
-
-    def LSS(self,beat):
-        B1 = self.get_slope(beat)
-        Ey,Ex = self.get_avg(beat)
-        B0 = Ey - B1*Ex
-        LSS = 0
-        for time,volts in beat.items():
-            predicted_volt = time*B1 + B0
-            actual_volt = volts
-            LSS += (predicted_volt - actual_volt)**2
-        return LSS
-
-    # STEPS methods
+    # STEP methods
 
     def step1(self):
         previous_points = [[0,0] for i in range(20)] # COULD PROBABLY BE REDUCED. list of the last 20 data points (from oldest to newest). Data points are in the format [timestamp,volts]        
@@ -157,8 +144,6 @@ class BPMServices(object):
             previous_points.pop(0)
         
         return beats11
-
-
 
     # discard zeros in beat windows
     def step10(self,iter_window, benchmark = 0):
@@ -240,8 +225,6 @@ class BPMServices(object):
 
     def step150(self,beats11):
         step15_name = 'step15{}'.format(self.step15_usage)
-        if beats11 == []:
-            return []
         beats15 = [beats11[0]]
         for beat in beats11[1:-1]:
             previous_beat = beats15[-1]
@@ -281,26 +264,29 @@ class BPMServices(object):
         return combine, replace_previous
 
     # ADD METHOD THAT MAKES SPACING AS EVEN AS POSSIBLE
+    # replace, nothing
 
-    def step21(self,beats15):
-        beats2 = []
+    def step20(self,beats15):
+        beats2 = [beats[0]]
         min_spacing = 1000*self.min_spacing
         for beat in beats15:
-            if beats2 == []:
+            previous_beat = beats2[-1]
+            if min(beat) > max(previous_beat) + min_spacing:
                 beats2.append(beat)
-            elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
-                beat.sort(key = lambda x: x[1], reverse = True)
-                beat_max_volt = beat[0][1]
-                beat.sort(key = lambda x: x[0], reverse = False)
-                beats2[-1].sort(key = lambda x: x[1], reverse = True)
-                prev_beat_max_volt =  beats2[-1][0][1]
-                beats2[-1].sort(key = lambda x: x[0], reverse = False)
-                if beat_max_volt > prev_beat_max_volt:
+            else: # created else to save time
+                replace_previous = getattr(self,step2_name)(beat,previous_beat)
+                if replace_previous:
                     beats2.pop()
                     beats2.append(beat)
-            else:
-                beats2.append(beat)
         return beats2
+
+    def step21(self,beat, previous_beat):
+        replace_previous = False
+        beat_max_volt = beat[max(beat, key=beats15[2].get)]
+        prev_beat_max_volt = prev_beat[min(prev_beat, key=beats15[2].get)]
+        if beat_max_volt > prev_beat_max_volt:
+            replace_previous = True
+        return replace_previous
 
     def step22(self,beats15):
         beats2 = []
@@ -426,6 +412,7 @@ class BPMServices(object):
             beats3.append(beat[-1])
         return beats3
 
+    # UTILITY FUNCTIONS
     def get_avg(self,sample):
         volt_sum = 0
         time_sum = 0
@@ -452,7 +439,6 @@ class BPMServices(object):
             Sxx += (time - Ex)**2
         return Syy,Sxy,Sxx
 
-
         # slope of line of best fit. volts per thousands of a second.
     def get_slope(self,sample):
         Syy,Sxy,Sxx = self.SyySxySxx(sample)
@@ -460,6 +446,17 @@ class BPMServices(object):
             return 0
         B1 = Sxy/Sxx
         return B1
+
+    def LSS(self,beat):
+        B1 = self.get_slope(beat)
+        Ey,Ex = self.get_avg(beat)
+        B0 = Ey - B1*Ex
+        LSS = 0
+        for time,volts in beat.items():
+            predicted_volt = time*B1 + B0
+            actual_volt = volts
+            LSS += (predicted_volt - actual_volt)**2
+        return LSS
 
     def get_density(self):
         if self.length == 0:

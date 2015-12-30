@@ -32,6 +32,7 @@
 20) remove repitition in step15 and step2 functions
 21) google code formatting
 22) add step 15 methods
+23) rename step methods to be more intuitive
 
 1) fix benchmarks - CHECK
 2) create bullshit detection - grrrrr
