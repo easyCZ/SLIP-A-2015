@@ -77,16 +77,11 @@ class BPMServices(object):
     def get_bpm(self):
         # peaks = self.get_peaks()
         peaks = self.get_beats()
-        if type(peaks) is str:
-            return 0, text_back
-        keys = [int(key) for (key, volts) in peaks]
-        if not keys:
+        if len(peaks) - 1 <= 0:
             return 0
-        if len(peaks) - 1 == 0:
-            return 0
-        avg = (max(keys) - min(keys)) / (len(peaks)-1)
+        avg = (max(peaks) - min(peaks)) / (len(peaks)-1)
         if avg == 0:
-            return 0, text_back
+            return 0
         Expected_BPM = 60.0 * 1000.0 / avg
         return Expected_BPM
 
@@ -107,9 +102,7 @@ class BPMServices(object):
         beats15 = self.step150(beats11)
         
         # STEP 2
-        step2_name = 'step2{}'.format(self.step2_usage)
-        beats2 = getattr(self,step2_name)(beats15)
-
+        beats2 = self.step2(beats15)
 
         # STEP 3
         step3_name = 'step3{}'.format(self.step3_usage)
@@ -239,6 +232,7 @@ class BPMServices(object):
                     beats15[-1][time] = volts
         return beats15
     
+    # longer beat duration
     def step151(self,beat,previous_beat):
         combine = False
         replace_previous = False
@@ -248,26 +242,28 @@ class BPMServices(object):
             replace_previous = True
         return combine, replace_previous
 
+    # combine
     def step152(self,beat = [],previous_beat = []):
         combine = True
         replace_previous = False
         return combine, replace_previous
 
+    # always replace previous
     def step153(self,beat = [], previous_beat = []):
         combine = False
         replace_previous = True
         return combine, replace_previous
-
+    
+    # always keep previous
     def step154(self,beat = [], previous_beat = []):
         combine = False
         replace_previous = False
         return combine, replace_previous
 
     # ADD METHOD THAT MAKES SPACING AS EVEN AS POSSIBLE
-    # replace, nothing
-
-    def step20(self,beats15):
-        beats2 = [beats[0]]
+    def step2(self,beats15):
+        step2_name = 'step2{}'.format(self.step2_usage)
+        beats2 = [beats15[0]]
         min_spacing = 1000*self.min_spacing
         for beat in beats15:
             previous_beat = beats2[-1]
@@ -280,122 +276,85 @@ class BPMServices(object):
                     beats2.append(beat)
         return beats2
 
-    def step21(self,beat, previous_beat):
+        # keep larger max voltage
+    def step21(self,beat, prev_beat):
         replace_previous = False
-        beat_max_volt = beat[max(beat, key=beats15[2].get)]
-        prev_beat_max_volt = prev_beat[min(prev_beat, key=beats15[2].get)]
+        beat_max_volt = beat[max(beat, key=beat.get)]
+        prev_beat_max_volt = prev_beat[max(prev_beat, key=prev_beat.get)]
         if beat_max_volt > prev_beat_max_volt:
             replace_previous = True
         return replace_previous
 
-    def step22(self,beats15):
-        beats2 = []
-        min_spacing = 1000*self.min_spacing
-        for beat in beats15:
-            if beats2 == []:
-                beats2.append(beat)
-            elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
-                beat.sort(key = lambda x: x[1], reverse = False)
-                beat_min_volt = beat[0][1]
-                beat.sort(key = lambda x: x[0], reverse = False)
-                beats2[-1].sort(key = lambda x: x[1], reverse = False)
-                prev_beat_min_volt =  beats2[-1][0][1]
-                beats2[-1].sort(key = lambda x: x[0], reverse = False)
-                if beat_min_volt < prev_beat_min_volt:
-                    beats2.pop()
-                    beats2.append(beat)
-            else:
-                beats2.append(beat)
-        return beats2
+        # keep larger min voltage
+    def step22(self,beat,prev_beat):
+        replace_previous = False
+        beat_min_volt = beat[min(beat, key=beat.get)]
+        prev_beat_max_volt = prev_beat[min(prev_beat, key=prev_beat.get)]
+        if beat_min_volt > prev_beat_min_volt:
+            replace_previous = True
+        return replace_previous
 
-    def step23(self,beats15):
-        beats2 = []
-        min_spacing = 1000*self.min_spacing
-        for beat in beats15:
-            if beats2 == []:
-                beats2.append(beat)
-            elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
-                beat_avg = self.beat_avg_volt(beat)
-                prev_beat_avg = self.beat_avg_volt(beats2[-1])
-                if beat_avg > prev_beat_avg:
-                    beats2.pop()
-                    beats2.append(beat)
-            else:
-                beats2.append(beat)
-        return beats2
+        # keep larger avg voltage
+    def step23(self,beat,prev_beat):
+        replace_previous = False
+        beat_avg_volt, dummy1 = self.get_avg(beat)
+        prev_beat_avg_volt, dummy2 = self.get_avg(prev_beat)
+        if beat_avg_volt > prev_beat_avg_volt:
+            replace_previous = True
+        return replace_previous
 
-    def step24(self,beats15):
-        beats2 = []
-        min_spacing = 1000*self.min_spacing
-        for beat in beats15:
-            if beats2 == []:
-                beats2.append(beat)
-            elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
-                beat_var = self.beat_var(beat)
-                prev_beat_var = self.beat_var(beats2[-1])
-                if beat_var < prev_beat_var:
-                    beats2.pop()
-                    beats2.append(beat)
-            else:
-                beats2.append(beat)
-        return beats2
+        # keep larger variance COULD USE SMALLER VARIANCE FUNCTION TOO
+    def step24(self,beat,prev_beat):
+        beat_var,dummy1,dummy2 = self.SyySxySxx(beat)
+        prev_beat_var,dummy1,dummy2 = self.SyySxySxx(prev_beat)
+        if beat_var > prev_beat_var:
+            replace_previous = True
+        return replace_previous
 
-    def step25(self,beats15):
-        beats2 = []
-        min_spacing = 1000*self.min_spacing
-        for beat in beats15:
-            if beats2 == []:
-                beats2.append(beat)
-            elif min(beat) < max(beats2[-1]) + min_spacing:
-                beat_LSS = self.LSS(beat)
-                prev_beat_LSS = self.LSS(beats2[-1])
-                if beat_LSS > prev_beat_LSS:
-                    beats2.pop()
-                    beats2.append(beat)
-            else:
-                beats2.append(beat)
-        return beats2
+        # keep largest LSS COULD USE SMALLEST LSS FUNCTION TOO
+    def step25(self,beat, prev_beat):
+        replace_previous = False
+        beat_LSS = self.LSS(beat)
+        prev_beat_LSS = self.LSS(prev_beat)
+        if beat_LSS > prev_beat_LSS:
+            replace_previous = True
+        return replace_previous
 
-    def step26(self,beats15):
-        beats2 = []
-        min_spacing = 1000*self.min_spacing
-        for beat in beats15:
-            if beats2 == []:
-                beats2.append(beat)
-            elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
-                beat_duration = beat[-1][0] - beat[0][0]
-                prev_beat_duration = beats15[-1][-1][0] - beats15[-1][0][0]
-                if beat_duration > prev_beat_duration:
-                    beats2.pop()
-                    beats2.append(beat)
-            else:
-                beats2.append(beat)
-        return beats2
+        # keep largest beat duration
+    def step26(self,beat, prev_beat):
+        replace_previous = False
+        beat_duration = max(beat) - min(beat)
+        prev_beat_duration = max(prev_beat) - min(prev_beat)
+        if beat_duration > prev_beat_duration:
+            replace_previous = True
+        return replace_previous
 
-    # May be incorrect CLEAN UP
+    # take max volts
     def step31(self,beats2):
-        beats3 = []
+        beats3 = {}
         for beat in beats2:
-            beat.sort()
-            beats3.append(beat[-1])
+            max_volt_key = max(beat, key=beat.get)
+            beats3[max_volt_key] = beat[max_volt_key]
         return beats3
 
+    # take min volts
     def step32(self,beats2):
-        beats3 = []
+        beats3 = {}
         for beat in beats2:
-            beat.sort()
-            beats3.append(beat[0])
+            min_volt_key = min(beat, key=beat.get)
+            beats3[min_volt_key] = beat[min_volt_key]
         return beats3
 
+    # median
     def step33(self,beats2):
-        beats3 = []
+        beats3 = {}
         for beat in beats2:
             length = len(beat)
             index = int(length/2)
             count = 0
             for time,volts in sorted(beat.iteritems()):
                 if count == index:
-                    beats3.append([time,volts])
+                    beats3[time] = volts
                     break
                 count += 1
         return beats3
