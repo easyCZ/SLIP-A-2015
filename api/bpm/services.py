@@ -67,6 +67,7 @@ class BPMServices(object):
         self.step2_usage = setting.step2_usage
         self.step3_usage = setting.step3_usage
         self.nnz_iter_windows = 0
+        self.bad_data_factor = 'not assigned yet'
 
     # DEFINE FUNCTION TO get METHOD USAGE in compact form - LATER, when doing tests
 
@@ -223,7 +224,16 @@ class BPMServices(object):
             elif method.usage == 2:
                 if state == False:
                     stamp[method.step_index] = True
-                
+            elif method.usage == 3:
+                if state == True:
+                    return True
+                else:
+                    return False
+            elif method.usage == 4:
+                if state == False:
+                    return True
+                else:
+                    return False
         if stamp == [True,True,True,True,True,True,True,True]:
             return True
         else:

@@ -3,29 +3,14 @@
 6) Clean-up
 	a) local.py
 	b) services.py
+10) R - justify not doing regression
+12) R - compare fluctuations in bpm to fluctuations in actual heart_beat
+13) develop method that matches setting not to BPM but also to fluctuations in bpm - not too difficult. more manual work.
+17) get rid of dummies - LATER
+21) google code formatting - LATER
+22) add step 15 methods - DESIGN EXPERIMENT FIRST
+23) rename step methods to be more intuitive - LATER
 
-7) graph how window length affects results
-8) crop computational effort.
-	a) might not be necessary if we are only using small windows
-9) Test emulator start and finish times
-10) justify not doing regression
-11) why does it take warm-up time
-12) compare fluctuations in bpm to fluctuations in actual heart_beat
-13) need to check previous points part. 
-14) improve text_back system
-	a) objectify output from get_beats()
-15) change setting to be more user friendly and easy to follow
-16) be more consistent with use of lists or dictionaries. would allow me to cut down on number of functions( and lines). Probably use dictionaries only.
-17) get rid of dummies
-18) more flexibility with step1 function settings
-19) confirm dictionary minimums
-20) remove repitition in step15 and step2 functions
-21) google code formatting
-22) add step 15 methods
-23) rename step methods to be more intuitive
-
-1) fix benchmarks - CHECK
-2) create bullshit detection - grrrrr
 3) change to growing window - create window size indicator - CHECK
 3.5) clean-up
 3.6) ripple through BS
@@ -46,8 +31,12 @@ object of all methods or object per method?
 
 window_length
 
+EXPERIMENT 1
 1) what do I want in test feedback?
 	a) bpm vs actual
 	b) bad_data_factor 
 	c) at_risk
 2) figure out a way to loop through settings
+EXPERIMENT 2
+graph how window length affects data
+graph warm-up time too
