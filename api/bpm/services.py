@@ -101,29 +101,8 @@ class BPMServices(object):
         if self.empty:
             return []
 
-        #STEP 1
-        previous_points = [[0,0] for i in range(20)] # COULD PROBABLY BE REDUCED. list of the last 20 data points (from oldest to newest). Data points are in the format [timestamp,volts]        
-        beats11 = []
-
-        for time,voltsignal in sorted(self.data.iteritems()):
-
-            time = int(time)
-            
-            iter_window = {}
-            for point in previous_points:
-                timestamp = int(point[0])
-                volts = point[1]
-                if timestamp > time-1000*self.iter_window_len:
-                    iter_window[timestamp] = volts
-
-            if iter_window <> {}:
-
-                if self.step111(iter_window) == True: # NEEDS CLEAN UP
-                    beats11.append(iter_window)
-
-
-            previous_points.append([time,voltsignal])
-            previous_points.pop(0)
+        # STEP 1
+        beats11 = self.step1()
 
         # STEP 1.5   
         beats15 = self.step150(beats11)
@@ -151,7 +130,35 @@ class BPMServices(object):
             LSS += (predicted_volt - actual_volt)**2
         return LSS
 
-    # STEPS OPTIONS
+    # STEPS methods
+
+    def step1(self):
+        previous_points = [[0,0] for i in range(20)] # COULD PROBABLY BE REDUCED. list of the last 20 data points (from oldest to newest). Data points are in the format [timestamp,volts]        
+        beats11 = []
+
+        for time,voltsignal in sorted(self.data.iteritems()):
+
+            time = int(time)
+            
+            iter_window = {}
+            for point in previous_points:
+                timestamp = int(point[0])
+                volts = point[1]
+                if timestamp > time-1000*self.iter_window_len:
+                    iter_window[timestamp] = volts
+
+            if iter_window <> {}:
+
+                if self.step111(iter_window) == True: # NEEDS CLEAN UP
+                    beats11.append(iter_window)
+
+
+            previous_points.append([time,voltsignal])
+            previous_points.pop(0)
+        
+        return beats11
+
+
 
     # discard zeros in beat windows
     def step10(self,iter_window, benchmark = 0):
