@@ -27,6 +27,9 @@
 15) change setting to be more user friendly and easy to follow
 16) be more consistent with use of lists or dictionaries. would allow me to cut down on number of functions( and lines). Probably use dictionaries only.
 17) get rid of dummies
+18) more flexibility with step1 function settings
+19) confirm dictionary minimums
+20) remove repitition in step15 and step2 functions
 
 1) fix benchmarks - CHECK
 2) create bullshit detection - grrrrr

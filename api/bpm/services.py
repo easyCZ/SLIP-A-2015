@@ -118,10 +118,12 @@ class BPMServices(object):
                 if self.step111(iter_window) == True: # NEEDS CLEAN UP
                     beats11.append(iter_window)
 
-            previous_points.append([time,volts])
+
+            previous_points.append([time,voltsignal])
             previous_points.pop(0)
 
-        # STEP 1.5
+        # STEP 1.5)
+        
         step15_name = 'step15{}'.format(self.step15_usage)
         beats15 = getattr(self,step15_name)(beats11)
         
@@ -129,69 +131,23 @@ class BPMServices(object):
         step2_name = 'step2{}'.format(self.step2_usage)
         beats2 = getattr(self,step2_name)(beats15)
 
+
         # STEP 3
         step3_name = 'step3{}'.format(self.step3_usage)
         beats3 = getattr(self,step3_name)(beats2)
-
+        print len(beats11)
         return beats3
 
     # UTILITY FUNCTIONS
 
-    # slope of line of best fit. volts per thousands of a second.
-    def get_slope(self,sample):
-        Ey, Ex = self.get_avg(sample):    # Expectation of y, expectation of x
-        Sxy = 0.0 # sum of squares xy
-        Sxx = 0.0 # sum of squares x
-        for time, volts in sample.items():
-            timestamp, voltage = element
-            timestamp = float(timestamp)
-            Sxy += (timestamp - Ex)*(voltage - Ey)
-            Sxx =+ (timestamp - Ex)**2
-        if Sxx == 0:
-            return 0
-        B1 = Sxy/Sxx
-        return B1
-
-    # could be cut, should I choose to change my structure to have more dictionaries than lists.
-    def beat_avg_volt(self,beat):
-        sum = 0
-        for element in beat:
-            sum =+ element[1]
-        if len(beat) == 0:
-            return 0
-        else:
-            avg = sum/len(beat)
-            return avg
-
-    def beat_avg_time(self,beat):
-        sum = 0
-        for element in beat:
-            sum =+ element[0]
-        if len(beat) == 0:
-            return 0
-        else:
-            avg = sum/len(beat)
-            return avg
-
-    def beat_var(self,beat):
-        avg = self.beat_avg_volt(beat)
-        var = 0
-        for element in beat:
-            var += (avg - element[1])**2
-        if len(beat) == 0:
-            return 1000
-        else:
-            return var/len(beat)
-
     def LSS(self,beat):
         B1 = self.get_slope(beat)
-        Ey = self.beat_avg_volt(beat)
-        Ex = self.beat_avg_time(beat)
+        Ey,Ex = self.get_avg(beat)
         B0 = Ey - B1*Ex
         LSS = 0
-        for element in beat:
-            predicted_volt = element[0]*B1 + B0
-            actual_volt =element[1]
+        for time,volts in beat.items():
+            predicted_volt = time*B1 + B0
+            actual_volt = volts
             LSS += (predicted_volt - actual_volt)**2
         return LSS
 
@@ -249,8 +205,9 @@ class BPMServices(object):
         else:
             return False
 
-    def step17(self,window,var_below):
-        var = self.beat_var(window)
+    # CLEAN UP dummies
+    def step17(self,iter_window,var_below):
+        var,dummy1,dummy2 = self.SyySxySxx(iter_window)
         if var < var_below:
             return True
         else:
@@ -293,14 +250,11 @@ class BPMServices(object):
         for beat in beats1:
             if beats15 == []:
                 beats15.append(beat)
-            elif beat[0][0] > beats15[-1][-1][0]:
+            elif min(beat) > max(beats15[-1]):
                 beats15.append(beat)
             else:
-                for element in beat:
-                    if element not in beats15[-1]:
-                        beats15[-1].append(element)
-                beats15[-1].sort(key = lambda x: x[0])
-        
+                for time,volts in beat.items():
+                    beats15[-1][time] = volts
         return beats15
 
     def step153(self,beats1):
@@ -404,7 +358,7 @@ class BPMServices(object):
         for beat in beats15:
             if beats2 == []:
                 beats2.append(beat)
-            elif beat[0][0] < beats2[-1][-1][0] + min_spacing:
+            elif min(beat) < max(beats2[-1]) + min_spacing:
                 beat_LSS = self.LSS(beat)
                 prev_beat_LSS = self.LSS(beats2[-1])
                 if beat_LSS > prev_beat_LSS:
@@ -430,6 +384,7 @@ class BPMServices(object):
                 beats2.append(beat)
         return beats2
 
+    # May be incorrect CLEAN UP
     def step31(self,beats2):
         beats3 = []
         for beat in beats2:
@@ -447,10 +402,14 @@ class BPMServices(object):
     def step33(self,beats2):
         beats3 = []
         for beat in beats2:
-            beat.sort()
             length = len(beat)
             index = int(length/2)
-            beats3.append(beat[index])
+            count = 0
+            for time,volts in sorted(beat.iteritems()):
+                if count == index:
+                    beats3.append([time,volts])
+                    break
+                count += 1
         return beats3
 
     def step34(self,beats2):
@@ -476,10 +435,30 @@ class BPMServices(object):
         if count == 0:
             return 0
         else:
-            avg_volt = volt_sum/count
-            avg_time = time_sum/count
+            avg_volt = float(volt_sum)/count
+            avg_time = float(time_sum)/count
             return avg_volt, avg_time
-    
+
+    def SyySxySxx(self,sample):
+        Ey, Ex = self.get_avg(sample)
+        Syy = 0.0 # variance
+        Sxy = 0.0 # sum of squares xy
+        Sxx = 0.0 # sum of squares x
+        for time, volts in sample.items():
+            Syy += (volts - Ey)**2
+            Sxy += (time - Ex)*(volts - Ey)
+            Sxx += (time - Ex)**2
+        return Syy,Sxy,Sxx
+
+
+        # slope of line of best fit. volts per thousands of a second.
+    def get_slope(self,sample):
+        Syy,Sxy,Sxx = self.SyySxySxx(sample)
+        if Sxx == 0:
+            return 0
+        B1 = Sxy/Sxx
+        return B1
+
     def get_density(self):
         if self.length == 0:
             self.empty = True
