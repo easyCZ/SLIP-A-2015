@@ -1,13 +1,3 @@
-1) implement 'bad data' detection. where?
-	a) before steps - loop through windows in second intervals. if variance greater than benchmark, discard second.
-	b) in between steps - if there is a zero in beat window i want it gone.
-	c) after beats
-	d) after bpm
-2) reduce window size to minimum
-3) test data
-	a) BPM to actual
-	b) compare what distance should be and what it is
-4) implement moving window within moving window or growing window. Probably growing window. depends on situation.
 5) R - justify why it's ok for this method to have troubles with high heart rates
 	a) wouldn't detect peaks anyways because data is not dense enough. Give bound for BPM with current data density.
 6) Clean-up
@@ -54,5 +44,10 @@ I want to iterate over methods
 object CHOSEN
 object of all methods or object per method?
 
-
 window_length
+
+1) what do I want in test feedback?
+	a) bpm vs actual
+	b) bad_data_factor 
+	c) at_risk
+2) figure out a way to loop through settings
