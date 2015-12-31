@@ -48,7 +48,7 @@ def emulator(data, actual, setting, return_average = True, export = False, filen
         if return_average and actual <> 'unknown':
             sum += abs(BPM - actual)
             count1 += 1
-        # print BPM, service_object.bad_data_factor, service_object.at_risk, service_object.bad_data,count,actual
+        print BPM, service_object.bad_data_factor, service_object.at_risk, service_object.bad_data,count,actual
         if export:
             c.writerow(['',BPM, service_object.bad_data_factor, service_object.at_risk, service_object.bad_data, count, actual,service_object.length,service_object.size,service_object.density,service_object.beats,service_object.min_volt,service_object.max_volt,service_object.avg_volt,service_object.var_volt,service_object.step1_usage,service_object.step15_usage,service_object.step2_usage,service_object.step3_usage])
         count += 1
@@ -74,13 +74,13 @@ def print_data(data, export = False):
 
 def initialize_setting():
     setting = Setting(1)
-    setting.step1_usage = [1,0,0,0,0,0,0,2] # NOTE keep step 10 setting as 1!!!!!
-    setting.step1_benchmarks = [[0,0],[1,2],[1,5],[1,10],[1,2],[-0.0125,0],[0.025,0],[0.25,0]]
+    setting.step1_usage = [1,0,0,0,0,0,2] # NOTE keep step 10 setting as 1!!!!!
+    setting.step1_benchmarks = [[0,0],[1,2],[1,5],[1,10],[1,2],[0.025,0],[0.25,0]]
     setting.min_spacing = 0.33
     setting.iter_window_len = 0.1
-    setting.step15_usage = 2
+    setting.step15_usage = 1
     setting.step2_usage = 5
-    setting.step3_usage = 3
+    setting.step3_usage = 2
     setting.crazy_var = 60
     setting.window_length = 200
     return setting
@@ -89,8 +89,8 @@ def main():
     sets = ['hayden1','hayden2','test1','test2','test3','roy1','filip1','filip2']
     data, actual = choose_data('filip2') 
     setting = initialize_setting()
-    # emulator(data,actual, setting)
-    EXPERIMENT1(sets,setting,'EXPERIMENT1_2.CSV') # ALL SETS
+    emulator(data,actual, setting)
+    # EXPERIMENT1(sets,setting,'EXPERIMENT1_2.CSV') # ALL SETS
     # print_data(data)
 
 main()

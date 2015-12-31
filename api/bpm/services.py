@@ -60,6 +60,7 @@ class BPMServices(object):
         self.min_volt = min(self.data.itervalues())
         self.avg_volt,self.avg_time = self.get_avg(self.data)
         self.var_volt,dummy1,dummy2 = self.SyySxySxx(self.data)
+        self.crazy_var = setting.crazy_var
         self.at_risk = self.at_risk()
         self.step1_methods = self.initialize_step1_method_objects(setting,self.avg_volt)
         self.step1_usage()
@@ -79,7 +80,7 @@ class BPMServices(object):
 
     def initialize_step1_method_objects(self,setting,avg):
         step1_methods = []
-        for i in range(0,8):
+        for i in range(0,7):
             step1_methods.append([])
             step1_methods[i] = BPMmethod(1,i,setting,avg)
         return step1_methods
@@ -168,21 +169,22 @@ class BPMServices(object):
         self.nnz_iter_windows += 1
         return True
 
+    # all values in beat have volt above
     def step11(self,iter_window,all_above):
         for time,volts in iter_window.items():
             if volts <= all_above:
                 return False
         return True
 
+    # avg_volt above
     def step12(self,iter_window,avg_above):
-        # CLEAN UP
         avg, dummy = self.get_avg(iter_window)
         if avg > avg_above:
             return True
         else:
             return False
     
-    # CLEAN UP
+    #max_volts above
     def step13(self,iter_window,max_above):
         max_volts = max(iter_window.itervalues())
         if max_volts > max_above:
@@ -190,7 +192,7 @@ class BPMServices(object):
         else:
             return False
 
-    # CLEAN UP
+    # min_volts above
     def step14(self,iter_window,min_above):
         min_volts = min(iter_window.itervalues())
         if min_volts > min_above:
@@ -198,15 +200,8 @@ class BPMServices(object):
         else:
             return False
 
-    def step15(self,window,slope_below):
-        slope = self.get_slope(window)
-        if slope <= slope_below:
-            return True
-        else:
-            return False
-
-    # unnecessary
-    def step16(self,window,slope_above):
+    # absolute value of slope above
+    def step15(self,window,slope_above):
         slope = self.get_slope(window)
         if abs(slope) > slope_above:
             return True
@@ -214,7 +209,8 @@ class BPMServices(object):
             return False
 
     # CLEAN UP dummies
-    def step17(self,iter_window,var_below):
+    # variance above or below
+    def step16(self,iter_window,var_below):
         var,dummy1,dummy2 = self.SyySxySxx(iter_window)
         if var < var_below:
             return True
@@ -259,31 +255,21 @@ class BPMServices(object):
                 for time,volts in beat.items():
                     beats15[-1][time] = volts
         return beats15
-    
-    # longer beat duration
-    def step151(self,beat,previous_beat):
-        combine = False
-        replace_previous = False
-        beat_duration = max(beat) - min(beat)
-        prev_beat_duration = beats11[-1] - beats1[-1][0][0]
-        if prev_beat_duration < beat_duration:
-            replace_previous = True
-        return combine, replace_previous
 
     # combine
-    def step152(self,beat = [],previous_beat = []):
+    def step151(self,beat = [],previous_beat = []):
         combine = True
         replace_previous = False
         return combine, replace_previous
 
     # always replace previous
-    def step153(self,beat = [], previous_beat = []):
+    def step152(self,beat = [], previous_beat = []):
         combine = False
         replace_previous = True
         return combine, replace_previous
     
     # always keep previous
-    def step154(self,beat = [], previous_beat = []):
+    def step153(self,beat = [], previous_beat = []):
         combine = False
         replace_previous = False
         return combine, replace_previous
@@ -365,16 +351,8 @@ class BPMServices(object):
             beats3[max_volt_key] = beat[max_volt_key]
         return beats3
 
-    # take min volts
-    def step32(self,beats2):
-        beats3 = {}
-        for beat in beats2:
-            min_volt_key = min(beat, key=beat.get)
-            beats3[min_volt_key] = beat[min_volt_key]
-        return beats3
-
     # median
-    def step33(self,beats2):
+    def step32(self,beats2):
         beats3 = {}
         for beat in beats2:
             length = len(beat)
@@ -385,22 +363,6 @@ class BPMServices(object):
                     beats3[time] = volts
                     break
                 count += 1
-        return beats3
-
-        # first tuple
-    def step34(self,beats2):
-        beats3 = {}
-        for beat in beats2:
-            min_key = min(beat)
-            beats2[min_key] = beat[min_key]
-            return beats3
-
-        # last tuple
-    def step35(self,beats2):
-        beats3 = {}
-        for beat in beats2:
-            max_key = max(beat)
-            beats3[max_key] = beat[max_key]
         return beats3
 
     # UTILITY FUNCTIONS
@@ -431,7 +393,7 @@ class BPMServices(object):
         return Syy,Sxy,Sxx
 
     def at_risk(self):
-        if self.var_volt**(1/2) > 0.25*self.avg_volt:
+        if self.var_volt**(1/2) > self.crazy_var*self.avg_volt:
             return True
         else:
             return False
