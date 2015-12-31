@@ -68,6 +68,7 @@ class BPMServices(object):
         self.step3_usage = setting.step3_usage
         self.nnz_iter_windows = 0
         self.bad_data_factor = 'not assigned yet'
+        self.bad_data = True
 
     # DEFINE FUNCTION TO get METHOD USAGE in compact form - LATER, when doing tests
 
@@ -85,6 +86,8 @@ class BPMServices(object):
             return 0
         if self.nnz_iter_windows > 0 and self.size > 0:
             self.bad_data_factor = self.nnz_iter_windows/float(self.size)
+            if self.bad_data_factor > 0.9:
+                self.bad_data = False
         else:
             self.bad_data_factor = 1
             self.empty = True
@@ -129,7 +132,6 @@ class BPMServices(object):
 
         for time,voltsignal in sorted(self.data.iteritems()):
 
-            print time, voltsignal
             time = int(time)
             
             iter_window = {}

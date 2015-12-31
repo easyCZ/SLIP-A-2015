@@ -13,6 +13,8 @@
 24) check out at_risk()
 25) there is an affect of previous windows on later windows!
 26) had to clean-up data
+27) removal of min_spacing isn't working correctly -- ahh it's the bad data factor
+28) figure out how to adjust the bad data factor for step2
 
 
 3.5) clean-up
@@ -35,9 +37,10 @@ window_length
 
 EXPERIMENT 1
 1) what do I want in test feedback?
-	a) bpm vs actual
-	b) bad_data_factor 
-	c) at_risk
+	a) bpm vs actual - avg-diff for good data only
+	b) bad_data_factor - distribution
+	c) at_risk - at_risk percentage
+	d) bad_data_bool - compare ratio to actual ratio
 2) figure out a way to loop through settings
 EXPERIMENT 2
 graph how window length affects data

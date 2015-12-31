@@ -15,6 +15,12 @@ def get_json(file_name):
         return json_data
     return {}
 
+def choose_data(name):
+    actuals = {'hayden1':68, 'hayden2':84, 'test1':'unknown', 'test2':'unknown','test3':84,'roy1':74,'filip1':60,'filip2':66}
+    data = get_json(name + '_ecg.JSON')
+    actual = actuals[name]
+    return data, actual
+
 def emulator(data, actual, settings, return_average = True, export = False, filename = "no export"):
 
     window_length = 200
@@ -46,17 +52,13 @@ def emulator(data, actual, settings, return_average = True, export = False, file
             sum += abs(BPM - actual)
             count1 += 1
         if actual <> 'unknown':
-            print BPM, actual - BPM, service_object.bad_data_factor, service_object.at_risk
+            print BPM, actual - BPM, service_object.bad_data_factor, service_object.at_risk, service_object.bad_data
         else:
-            print 'insufficient data'
+            print BPM, service_object.bad_data_factor, service_object.at_risk, service_object.bad_data
 
         count += 1
 
-def choose_data(name):
-    actuals = {'hayden1':68, 'hayden2':84, 'test1':'unknown', 'test2':'unknown','test4':84,'roy1':74,'filip1':60,'filip2':66}
-    data = get_json(name + '_ecg.JSON')
-    actual = actuals[name]
-    return data, actual
+# def eval()
 
 def print_data(data, export = False):
     if export:
@@ -79,8 +81,8 @@ def initialize_setting():
     return setting
 
 def main():
-    sets = ['hayden1','hayden2','test1','test2','test4','roy1','filip1','filip2']
-    data, actual = choose_data('hayden2') 
+    sets = ['hayden1','hayden2','test1','test2','test3','roy1','filip1','filip2']
+    data, actual = choose_data('filip2') 
     setting = initialize_setting()
     emulator(data,actual, setting)
     # print_data(data)
