@@ -32,7 +32,6 @@ class BPMServices(object):
     # BPM := The best guess for the BPM of the abovementioned data set.
     # size := number of data points in window
     # density := number of data_points per second
-    # per100 := percentage of unusable data points
     # beats := times and volts of the data points that were considered beats
     # step1_methods := list of BPMmethod objects for step 1
     # empty := no data points in dictionary
@@ -56,19 +55,25 @@ class BPMServices(object):
         self.empty = False
         self.min_spacing = setting.min_spacing
         self.iter_window_len = setting.iter_window_len
-        self.density = self.get_density() # empty will be set to True if self.length == 0 or self.size == 0.
+        self.get_density() # empty will be set to True if self.length == 0 or self.size == 0.
         self.max_volt = max(self.data.itervalues())
         self.min_volt = min(self.data.itervalues())
         self.avg_volt,self.avg_time = self.get_avg(self.data)
         self.var_volt,dummy1,dummy2 = self.SyySxySxx(self.data)
         self.at_risk = self.at_risk()
         self.step1_methods = self.initialize_step1_method_objects(setting,self.avg_volt)
+        self.step1_usage()
         self.step15_usage = setting.step15_usage
         self.step2_usage = setting.step2_usage
         self.step3_usage = setting.step3_usage
         self.nnz_iter_windows = 0
         self.bad_data_factor = 'not assigned yet'
         self.bad_data = True
+
+    def step1_usage(self):
+        self.step1_usage = []
+        for method in self.step1_methods:
+            self.step1_usage.append(method.usage)
 
     # DEFINE FUNCTION TO get METHOD USAGE in compact form - LATER, when doing tests
 
@@ -218,30 +223,26 @@ class BPMServices(object):
 
     # CLEAN-UP NEEDED
     def step111(self,window):
-        stamp = [False for i in range(0,8)]
         for method in self.step1_methods:
-            state = method.call_method(self,window) 
-            if method.usage == 0:
-                stamp[method.step_index] = True
-            elif method.usage == 1:
-                stamp[method.step_index] = state
-            elif method.usage == 2:
-                if state == False:
-                    stamp[method.step_index] = True
-            elif method.usage == 3:
-                if state == True:
-                    return True
-                else:
-                    return False
-            elif method.usage == 4:
-                if state == False:
-                    return True
-                else:
-                    return False
-        if stamp == [True for i in range(0,8)]:
-            return True
-        else:
-            return False
+            if method.usage <> 0:
+                state = method.call_method(self,window) 
+                if method.usage == 3:
+                    if state == True:
+                        return True
+                    else:
+                        return False
+                elif method.usage == 4:
+                    if state == False:
+                        return True
+                    else:
+                        return False
+                elif method.usage == 1:
+                    if state == False:
+                        return False
+                elif method.usage == 2:
+                    if state == True:
+                        return False
+        return True
 
     def step150(self,beats11):
         step15_name = 'step15{}'.format(self.step15_usage)
