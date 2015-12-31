@@ -53,7 +53,7 @@ def emulator(data, actual, settings, return_average = True, export = False, file
         count += 1
 
 def choose_data(name):
-    actuals = {'hayden1':68, 'hayden2':84, 'test1':'unknown', 'test2':'unknown','roy1':74,'filip1':60,'filip2':66}
+    actuals = {'hayden1':68, 'hayden2':84, 'test1':'unknown', 'test2':'unknown','test4':84,'roy1':74,'filip1':60,'filip2':66}
     data = get_json(name + '_ecg.JSON')
     actual = actuals[name]
     return data, actual
@@ -79,7 +79,7 @@ def initialize_setting():
     return setting
 
 def main():
-    sets = ['hayden1','hayden2','test1','test2','roy1','filip1','filip2']
+    sets = ['hayden1','hayden2','test1','test2','test4','roy1','filip1','filip2']
     data, actual = choose_data('hayden2') 
     setting = initialize_setting()
     emulator(data,actual, setting)

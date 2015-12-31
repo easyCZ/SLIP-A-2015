@@ -103,7 +103,6 @@ class BPMServices(object):
 
         # STEP 1
         beats11 = self.step1()
-        print len(beats11)
 
         if beats11 == []:
             self.beats = []
@@ -130,6 +129,7 @@ class BPMServices(object):
 
         for time,voltsignal in sorted(self.data.iteritems()):
 
+            print time, voltsignal
             time = int(time)
             
             iter_window = {}
@@ -177,7 +177,7 @@ class BPMServices(object):
     
     # CLEAN UP
     def step13(self,iter_window,max_above):
-        max_volts = max(iter_window)
+        max_volts = max(iter_window.itervalues())
         if max_volts > max_above:
             return True
         else:
@@ -185,7 +185,7 @@ class BPMServices(object):
 
     # CLEAN UP
     def step14(self,iter_window,min_above):
-        min_volts = min(iter_window)
+        min_volts = min(iter_window.itervalues())
         if min_volts > min_above:
             return True
         else:
@@ -216,7 +216,7 @@ class BPMServices(object):
 
     # CLEAN-UP NEEDED
     def step111(self,window):
-        stamp = [False, False, False, False, False, False, False, False] # CLEAN UP
+        stamp = [False for i in range(0,8)]
         for method in self.step1_methods:
             state = method.call_method(self,window) 
             if method.usage == 0:
@@ -236,7 +236,7 @@ class BPMServices(object):
                     return True
                 else:
                     return False
-        if stamp == [True,True,True,True,True,True,True,True]:
+        if stamp == [True for i in range(0,8)]:
             return True
         else:
             return False
@@ -304,8 +304,8 @@ class BPMServices(object):
         # keep larger max voltage
     def step21(self,beat, prev_beat):
         replace_previous = False
-        beat_max_volt = beat[max(beat, key=beat.get)]
-        prev_beat_max_volt = prev_beat[max(prev_beat, key=prev_beat.get)]
+        beat_max_volt = max(beat.itervalues())
+        prev_beat_max_volt = max(prev_beat.itervalues())
         if beat_max_volt > prev_beat_max_volt:
             replace_previous = True
         return replace_previous
@@ -313,8 +313,8 @@ class BPMServices(object):
         # keep larger min voltage
     def step22(self,beat,prev_beat):
         replace_previous = False
-        beat_min_volt = beat[min(beat, key=beat.get)]
-        prev_beat_max_volt = prev_beat[min(prev_beat, key=prev_beat.get)]
+        beat_min_volt = min(beat.itervalues())
+        prev_beat_min_volt = min(prev_beat.iter_values())
         if beat_min_volt > prev_beat_min_volt:
             replace_previous = True
         return replace_previous

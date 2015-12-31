@@ -11,9 +11,11 @@
 22) add step 15 methods - DESIGN EXPERIMENT FIRST
 23) rename step methods to be more intuitive - LATER
 24) check out at_risk()
+25) there is an affect of previous windows on later windows!
+26) had to clean-up data
+
 
 3.5) clean-up
-3.6) ripple through BS
 4) begin testing
 5) improve step 1 method to contain beat shape or something
 
