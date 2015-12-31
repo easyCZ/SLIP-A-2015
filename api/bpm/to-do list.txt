@@ -10,8 +10,8 @@
 21) google code formatting - LATER
 22) add step 15 methods - DESIGN EXPERIMENT FIRST
 23) rename step methods to be more intuitive - LATER
+24) check out at_risk()
 
-3) change to growing window - create window size indicator - CHECK
 3.5) clean-up
 3.6) ripple through BS
 4) begin testing

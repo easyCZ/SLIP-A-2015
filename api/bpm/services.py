@@ -103,6 +103,7 @@ class BPMServices(object):
 
         # STEP 1
         beats11 = self.step1()
+        print len(beats11)
 
         if beats11 == []:
             self.beats = []
@@ -119,6 +120,7 @@ class BPMServices(object):
         beats3 = getattr(self,step3_name)(beats2)
         
         self.beats = beats3
+
 
     # STEP methods
 
