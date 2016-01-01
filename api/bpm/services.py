@@ -71,7 +71,7 @@ class BPMServices(object):
         self.nnz_iter_windows = 0
         self.bad_data_factor = 'not assigned yet'
         self.bad_data = True
-        self.per100 = 'NOT assigned yet'
+        self.per100 = 'not assigned yet'
 
     def step1_usage(self):
         self.step1_usage = []

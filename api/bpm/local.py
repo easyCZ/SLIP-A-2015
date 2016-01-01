@@ -58,7 +58,7 @@ def emulator(data, actual, setting,time_saver = False, export = False, filename 
             #IMPOSE RESTRICTIONS HERE
 
             # PRINT AND EXPORT
-            print BPM, service_object.per100, service_object.at_risk, service_object.bad_data,actual
+            # print BPM, service_object.per100, service_object.at_risk, service_object.bad_data,actual
             if export:
                 c.writerow(['',BPM, service_object.bad_data_factor, service_object.at_risk, service_object.bad_data, actual,service_object.length,service_object.size,service_object.density,service_object.beats,service_object.min_volt,service_object.max_volt,service_object.avg_volt,service_object.var_volt,service_object.step1_usage,service_object.step15_usage,service_object.step2_usage,service_object.step3_usage])
     if avg_diff and count1 <> 0:
@@ -90,11 +90,12 @@ def EXPERIMENT2(subjects,filename):
     c.writerow([min_spacing,iter_window_len,crazy_var,window_length,step1_benchmarks,step15_usage])
     c.writerow(['subject','avg diff','setting.step1_usage','setting.step1_benchmarks', 'setting.step15_usage','setting.step2_usage','setting.step3_usage'])
     for setting in settings:
+        avg_diff = 0
         for subject in subjects:
-            if subject == 'roy1':
-                data, actual = choose_data(subject)
-                diff = emulator(data,actual,setting,True,False,'Using_predefined_csv_file',False,True)
-                c.writerow([subject,diff,setting.step1_usage,setting.step1_benchmarks, setting.step15_usage,setting.step2_usage,setting.step3_usage])
+            data, actual = choose_data(subject)
+            avg_diff = avg_diff + emulator(data,actual,setting,True,False,'Using_predefined_csv_file',False,True)
+        avg_diff = avg_diff/3
+        c.writerow([subjects,avg_diff,setting.step1_usage,setting.step1_benchmarks, setting.step15_usage,setting.step2_usage,setting.step3_usage])
 
 def settings2(step1_benchmarks,min_spacing,iter_window_len,crazy_var,window_length,step15_usage):
     settings = []

@@ -5,35 +5,17 @@
 	b) services.py
 10) R - justify not doing regression
 12) R - compare fluctuations in bpm to fluctuations in actual heart_beat
-13) develop method that matches setting not to BPM but also to fluctuations in bpm - not too difficult. more manual work.
+13) develop method that matches setting not to BPM but also to fluctuations in bpm - not too difficult. more manual work.???
 17) get rid of dummies - LATER
 21) google code formatting - LATER
 22) add step 15 methods - DESIGN EXPERIMENT FIRST
 23) rename step methods to be more intuitive - LATER
-28) figure out how to adjust the bad data factor for step2
-29) check whether self.stuff ripples through
-30) change bad_data to 0.75 or 0.8
-31) 'on edges' problem could do good! -> i should only do bad data factor for inside the beats - should be good
-32) do step1 options 3 and 4 - should be good
-
+28) figure out how to adjust the bad data factor for step2???
+29) exploit [1,0,0,0,0]
 
 3.5) clean-up
 4) begin testing
 5) improve step 1 method to contain beat shape or something
-
-
-text_back
-'empty' = power set empty
-number = percentage BS
-
-which methods 0,1,2
-what were the benchmarks?
-I want to iterate over methods
-
-object CHOSEN
-object of all methods or object per method?
-
-window_length
 
 EXPERIMENT 1 - BS detection
 
