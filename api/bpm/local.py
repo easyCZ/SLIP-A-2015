@@ -55,6 +55,16 @@ def EXPERIMENT1(subjects,setting, filename = 'EXPERIMENT1_undefined.CSV'):
         data,actual = choose_data(subject)
         emulator(data,actual,setting,True,'USING_Predifined_CSV_FILE',c)
 
+def EXPERIMENT2(subjects,filename):
+    c = csv.writer(open(filename),'wb'))
+    c.writerow([filename])
+    setting = Setting(1)
+    setting.min_spacing = 0.33
+    setting.iter_window_len = 0.1
+    setting.crazy_var = 60
+    setting.window_length - 200
+    c.writerow([min_spacing =setting.min_spacing,iter_window_len = setting.iter_window_len, crazy_var = setting.crazy_var, window_length = setting.window_length])
+
 
 def print_data(data, export = False):
     if export:
@@ -83,6 +93,7 @@ def main():
     setting = initialize_setting()
     emulator(data,actual, setting)
     # EXPERIMENT1(sets,setting,'EXPERIMENT1_2.CSV') # ALL SETS
+    EXPERIMENT2(['filip2','hayden2','roy1'],'EXPERIMENT2_1.CSV')
     # print_data(data)
 
 main()
