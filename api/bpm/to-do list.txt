@@ -38,15 +38,10 @@ object of all methods or object per method?
 
 window_length
 
-EXPERIMENT 1
-1) what do I want in test feedback?
-	ROW = [bpm, bad_data_factor, at_risk, bad_data_bool, actual]
-	a) bpm vs actual - avg-diff for good data only
-	b) bad_data_factor - distribution
-	c) at_risk - at_risk percentage
-	d) bad_data_bool - compare ratio to actual ratio
+EXPERIMENT 1 - BS detection
 
-2) figure out a way to loop through settings
-EXPERIMENT 2
+EXPERIMENT 2 - abs(bpm - actual)
+
+EXPERIMENT 3
 graph how window length affects data
 graph warm-up time too

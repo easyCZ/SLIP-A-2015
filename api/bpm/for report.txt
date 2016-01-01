@@ -1,0 +1,40 @@
+Things to put in my report
+
+A) Intro
+	1) I worked on the ECG and with the RESpeck PERHAPS OMIT
+
+B) ECG
+	1) Scope of work GRAPH - this section should cover how my part fits in with the rest
+		a) find bpm
+		b) moving window (0-10 seconds)
+		c) JSON file dictionary {'timestamp':volts}
+		d) return BPM
+		e) BPMServices intro
+	2) Method
+		a) BPM function
+			i) theory behind extrapolation to 60 seconds -> task: find times when beats occur GRAPH
+			ii) actual function name and code
+		b) step structure
+			i) step structure overview
+				-> why the step structure?
+					- background: get_peaks
+					- purpose: freedom to let computation give solution where I am unable (because there is too much data for me to parse manually)
+					- purpose: possible to build on code with increasing amounts of available data
+				-> What do the individual steps do and how/why does the format of data change throughout? GRAPHS to illustrate format and how we go from data to bpm
+					- individual steps no prob
+					- list vs dictionary. consistency throughout (PROS allows me to have fewer functions, more natural way of formatting, sometimes faster. CONS sometimes slower, frequent sorting)
+			ii) table of all available methods GRAPH
+				-> justify why some were kept and others weren't
+				-> which one was deemed best. Testing provides detailed information.
+		c) Testing
+			i) introduction to testing
+				- purpose - find best option
+				- specs - passing data back and forth
+			ii) 'Programming environment'
+				- graphical format for what i have created to match specs GRAPH
+				- emulator
+				- Setting -> BPMServices -> CSV/command prompt   GRAPH
+				- What exactly did Setting and BPMServices objects contain and why? GRAPH
+			iii) 
+				
+C) RESpeck
