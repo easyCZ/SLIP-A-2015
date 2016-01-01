@@ -64,7 +64,7 @@ def emulator(data, actual, setting,time_saver = False, export = False, filename 
     if avg_diff and count1 <> 0:
         return float(difference)/count1
     else:
-        return 'NADA'
+        return 100
 
 def EXPERIMENT1(subjects,setting, filename = 'EXPERIMENT1_undefined.CSV'):
     subjects = ['hayden1','hayden2','test1','test2','test3','roy1','filip1','filip2']
@@ -93,7 +93,8 @@ def EXPERIMENT2(subjects,filename):
         avg_diff = 0
         for subject in subjects:
             data, actual = choose_data(subject)
-            avg_diff = avg_diff + emulator(data,actual,setting,True,False,'Using_predefined_csv_file',False,True)
+            diff = emulator(data,actual,setting,True,False,'Using_predefined_csv_file',False,True)
+            avg_diff = avg_diff + diff
         avg_diff = avg_diff/3
         c.writerow([subjects,avg_diff,setting.step1_usage,setting.step1_benchmarks, setting.step15_usage,setting.step2_usage,setting.step3_usage])
 
@@ -115,7 +116,8 @@ def generate_step1_usage():
         for method2 in range(0,5):
             for method3 in range(0,5):
                 for method4 in range(0,5):
-                    usages.append([1,method1,method2,method3,method4])
+                    if method1 <> 0 or method2 <>0 or method3 <>0 or method4<>0:
+                        usages.append([1,method1,method2,method3,method4])
     return usages
 
 def print_data(data, export = False):
