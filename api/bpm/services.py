@@ -80,7 +80,7 @@ class BPMServices(object):
 
     def initialize_step1_method_objects(self,setting,avg):
         step1_methods = []
-        for i in range(0,7):
+        for i in range(0,5):
             step1_methods.append([])
             step1_methods[i] = BPMmethod(1,i,setting,avg)
         return step1_methods
@@ -192,25 +192,17 @@ class BPMServices(object):
         else:
             return False
 
-    # min_volts above
-    def step14(self,iter_window,min_above):
-        min_volts = min(iter_window.itervalues())
-        if min_volts > min_above:
-            return True
-        else:
-            return False
-
-    # absolute value of slope above
-    def step15(self,window,slope_above):
-        slope = self.get_slope(window)
-        if abs(slope) > slope_above:
-            return True
-        else:
-            return False
+    # # absolute value of slope above
+    # def step14(self,window,slope_above):
+    #     slope = self.get_slope(window)
+    #     if abs(slope) > slope_above:
+    #         return True
+    #     else:
+    #         return False
 
     # CLEAN UP dummies
     # variance above or below
-    def step16(self,iter_window,var_below):
+    def step14(self,iter_window,var_below):
         var,dummy1,dummy2 = self.SyySxySxx(iter_window)
         if var < var_below:
             return True
@@ -222,17 +214,18 @@ class BPMServices(object):
         for method in self.step1_methods:
             if method.usage <> 0:
                 state = method.call_method(self,window) 
-                if method.usage == 3:
-                    if state == True:
-                        return True
-                    else:
-                        return False
-                elif method.usage == 4:
-                    if state == False:
-                        return True
-                    else:
-                        return False
-                elif method.usage == 1:
+                # CODE INCORRECT. REWRITE IN CASE OF USAGE
+                # if method.usage == 3:
+                #     if state == True:
+                #         return True
+                #     else:
+                #         return False
+                # elif method.usage == 4:
+                #     if state == False:
+                #         return True
+                #     else:
+                #         return False
+                if method.usage == 1:
                     if state == False:
                         return False
                 elif method.usage == 2:
