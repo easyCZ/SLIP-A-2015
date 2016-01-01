@@ -1,7 +1,0 @@
-EXPERIMENT2_1.CSV
-min_spacing,iter_window_len,crazy_var,window_length
-0.33,0.1,60,200
-subject,avg diff,setting.step1_usage,setting.step1_benchmarks,setting.step15_usage,setting.step2_usage,setting.step3_usage
-filip2,5.39184040179,"[1, 0, 0, 0, 2]","[[0, 0], [1.01, 0], [1.025, 0], [1.05, 0], [0.25, 0]]",1,5,2
-hayden2,35.7277949778,"[1, 0, 0, 0, 2]","[[0, 0], [1.01, 0], [1.025, 0], [1.05, 0], [0.25, 0]]",1,5,2
-roy1,7.08333766847,"[1, 0, 0, 0, 2]","[[0, 0], [1.01, 0], [1.025, 0], [1.05, 0], [0.25, 0]]",1,5,2

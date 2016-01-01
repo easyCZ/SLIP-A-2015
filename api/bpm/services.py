@@ -297,7 +297,7 @@ class BPMServices(object):
     def step22(self,beat,prev_beat):
         replace_previous = False
         beat_min_volt = min(beat.itervalues())
-        prev_beat_min_volt = min(prev_beat.iter_values())
+        prev_beat_min_volt = min(prev_beat.itervalues())
         if beat_min_volt > prev_beat_min_volt:
             replace_previous = True
         return replace_previous
@@ -313,6 +313,7 @@ class BPMServices(object):
 
         # keep larger variance COULD USE SMALLER VARIANCE FUNCTION TOO
     def step24(self,beat,prev_beat):
+        replace_previous = False
         beat_var,dummy1,dummy2 = self.SyySxySxx(beat)
         prev_beat_var,dummy1,dummy2 = self.SyySxySxx(prev_beat)
         if beat_var > prev_beat_var:

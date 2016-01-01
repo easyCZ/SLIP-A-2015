@@ -6,9 +6,10 @@ from services import BPMmethod
 
 class Setting(object):
 
-    def __init__(self,step1_usage,step1_benchmarks,step2_usage,step3_usage,crazy_var,min_spacing,iter_window_len,window_length):
+    def __init__(self,step1_usage,step1_benchmarks,step15_usage,step2_usage,step3_usage,crazy_var,min_spacing,iter_window_len,window_length):
         self.step1_usage = step1_usage
         self.step1_benchmarks = step1_benchmarks
+        self.step15_usage = step15_usage
         self.step2_usage = step2_usage
         self.step3_usage = step3_usage
         self.crazy_var = crazy_var
@@ -78,39 +79,43 @@ def EXPERIMENT1(subjects,setting, filename = 'EXPERIMENT1_undefined.CSV'):
 def EXPERIMENT2(subjects,filename):
     c = csv.writer(open(filename,'wb'))
     c.writerow([filename])
-    setting = Setting(1)
-    setting.min_spacing = 0.33
-    setting.iter_window_len = 0.1
-    setting.crazy_var = 60
-    setting.window_length = 200
-    setting = initialize_setting() # JUST FOR NOW
-    c.writerow(['min_spacing','iter_window_len', 'crazy_var', 'window_length'])
-    c.writerow([setting.min_spacing,setting.iter_window_len,setting.crazy_var,setting.window_length])
-    c.writerow(['subject','avg diff','setting.step1_usage','setting.step1_benchmarks', 'setting.step15_usage','setting.step2_usage','setting.step3_usage'])
-    for subject in subjects:
-        if subject == 'roy1':
-            data, actual = choose_data(subject)
-            diff = emulator(data,actual,setting,True,False,'Using_predefined_csv_file',False,True)
-            c.writerow([subject,diff,setting.step1_usage,setting.step1_benchmarks, setting.step15_usage,setting.step2_usage,setting.step3_usage])
-
-def settings2(setting):
-    settings = []
-    count = 0
     step1_benchmarks = [[0,0],[1.01,0],[1.025,0],[1.05,0],[0.25,0]]
     min_spacing = 0.33
     iter_window_len = 0.1
-     crazy_var = 60
+    crazy_var = 60
     window_length = 200
-    for step2_usage in range(1,7):
-        for step3_usage in [1,2]:
-            settings.append(1)
-            settings[count] = Setting(step1_usage,step1_benchmarks,step2_usage,step3_usage,crazy_var,min_spacing,iter_window_len,window_length)
-            count += 1
+    step15_usage = 1
+    settings = settings2(step1_benchmarks,min_spacing,iter_window_len,crazy_var,window_length,step15_usage)
+    c.writerow(['min_spacing','iter_window_len', 'crazy_var', 'window_length','step1_benchmarks','step15_usage'])
+    c.writerow([min_spacing,iter_window_len,crazy_var,window_length,step1_benchmarks,step15_usage])
+    c.writerow(['subject','avg diff','setting.step1_usage','setting.step1_benchmarks', 'setting.step15_usage','setting.step2_usage','setting.step3_usage'])
+    for setting in settings:
+        for subject in subjects:
+            if subject == 'roy1':
+                data, actual = choose_data(subject)
+                diff = emulator(data,actual,setting,True,False,'Using_predefined_csv_file',False,True)
+                c.writerow([subject,diff,setting.step1_usage,setting.step1_benchmarks, setting.step15_usage,setting.step2_usage,setting.step3_usage])
 
+def settings2(step1_benchmarks,min_spacing,iter_window_len,crazy_var,window_length,step15_usage):
+    settings = []
+    count = 0
+    step1_usages = generate_step1_usage()
+    for step1_usage in step1_usages:
+        for step2_usage in range(1,7):
+            for step3_usage in [1,2]:
+                settings.append(1)
+                settings[count] = Setting(step1_usage,step1_benchmarks,step15_usage,step2_usage,step3_usage,crazy_var,min_spacing,iter_window_len,window_length)
+                count += 1
+    return settings
 
 def generate_step1_usage():
     usages = []
-    
+    for method1 in range(0,5):
+        for method2 in range(0,5):
+            for method3 in range(0,5):
+                for method4 in range(0,5):
+                    usages.append([1,method1,method2,method3,method4])
+    return usages
 
 def print_data(data, export = False):
     if export:
@@ -130,16 +135,16 @@ def initialize_setting():
     step3_usage = 2
     crazy_var = 60
     window_length = 200
-    setting = Setting(step1_usage,step1_benchmarks,step2_usage,step3_usage,crazy_var,min_spacing,iter_window_len,window_length)
+    setting = Setting(step1_usage,step1_benchmarks,step15_usage,step2_usage,step3_usage,crazy_var,min_spacing,iter_window_len,window_length)
     return setting
 
 def main():
     sets = ['hayden1','hayden2','test1','test2','test3','roy1','filip1','filip2']
     data, actual = choose_data('hayden2') 
     setting = initialize_setting()
-    emulator(data,actual, setting)
+    # emulator(data,actual, setting)
     # EXPERIMENT1(sets,setting,'EXPERIMENT1_2.CSV') # ALL SETS
-    # EXPERIMENT2(['filip2','hayden2','roy1'],'EXPERIMENT2_1.CSV')
+    EXPERIMENT2(['filip2','hayden2','roy1'],'EXPERIMENT2_1.CSV')
     # print_data(data)
 
 main()

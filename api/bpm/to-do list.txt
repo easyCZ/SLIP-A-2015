@@ -18,6 +18,7 @@
 29) check whether self.stuff ripples through
 30) change bad_data to 0.75 or 0.8
 31) 'on edges' problem could do good! -> i should only do bad data factor for inside the beats
+32) do step1 options 3 and 4
 
 
 3.5) clean-up
