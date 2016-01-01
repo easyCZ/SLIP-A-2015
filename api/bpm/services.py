@@ -59,7 +59,8 @@ class BPMServices(object):
         self.max_volt = max(self.data.itervalues())
         self.min_volt = min(self.data.itervalues())
         self.avg_volt,self.avg_time = self.get_avg(self.data)
-        self.var_volt,dummy1,dummy2 = self.SyySxySxx(self.data)
+        Syy,Sxy,Sxx = self.SyySxySxx(self.data)
+        self.var_volt = Syy/self.size
         self.crazy_var = setting.crazy_var
         self.at_risk = self.at_risk()
         self.step1_methods = self.initialize_step1_method_objects(setting,self.avg_volt)

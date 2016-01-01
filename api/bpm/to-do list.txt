@@ -16,6 +16,8 @@
 27) removal of min_spacing isn't working correctly -- ahh it's the bad data factor
 28) figure out how to adjust the bad data factor for step2
 29) check whether self.stuff ripples through
+30) change bad_data to 0.75 or 0.8
+31) 'on edges' problem could do good! -> i should only do bad data factor for inside the beats
 
 
 3.5) clean-up
