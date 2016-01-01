@@ -58,7 +58,7 @@ def emulator(data, actual, setting,time_saver = False, export = False, filename 
             #IMPOSE RESTRICTIONS HERE
 
             # PRINT AND EXPORT
-            print BPM, service_object.bad_data_factor, service_object.at_risk, service_object.bad_data,actual
+            print BPM, service_object.per100, service_object.at_risk, service_object.bad_data,actual
             if export:
                 c.writerow(['',BPM, service_object.bad_data_factor, service_object.at_risk, service_object.bad_data, actual,service_object.length,service_object.size,service_object.density,service_object.beats,service_object.min_volt,service_object.max_volt,service_object.avg_volt,service_object.var_volt,service_object.step1_usage,service_object.step15_usage,service_object.step2_usage,service_object.step3_usage])
     if avg_diff and count1 <> 0:

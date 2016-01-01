@@ -10,15 +10,11 @@
 21) google code formatting - LATER
 22) add step 15 methods - DESIGN EXPERIMENT FIRST
 23) rename step methods to be more intuitive - LATER
-24) check out at_risk()
-25) there is an affect of previous windows on later windows!
-26) had to clean-up data
-27) removal of min_spacing isn't working correctly -- ahh it's the bad data factor
 28) figure out how to adjust the bad data factor for step2
 29) check whether self.stuff ripples through
 30) change bad_data to 0.75 or 0.8
-31) 'on edges' problem could do good! -> i should only do bad data factor for inside the beats
-32) do step1 options 3 and 4
+31) 'on edges' problem could do good! -> i should only do bad data factor for inside the beats - should be good
+32) do step1 options 3 and 4 - should be good
 
 
 3.5) clean-up

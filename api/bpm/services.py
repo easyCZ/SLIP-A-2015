@@ -71,6 +71,7 @@ class BPMServices(object):
         self.nnz_iter_windows = 0
         self.bad_data_factor = 'not assigned yet'
         self.bad_data = True
+        self.per100 = 'NOT assigned yet'
 
     def step1_usage(self):
         self.step1_usage = []
@@ -92,17 +93,31 @@ class BPMServices(object):
         if len(self.beats) - 1 <= 0:
             return 0
         if self.nnz_iter_windows > 0 and self.size > 0:
-            self.bad_data_factor = self.nnz_iter_windows/float(self.size)
-            if self.bad_data_factor > 0.9:
+            self.per100 = float(self.nnz_iter_windows)/self.size
+            if self.per100 > 0.9:
                 self.bad_data = False
-        else:
-            self.bad_data_factor = 1
-            self.empty = True
+        self.bad_data_factor = self.bad_data_factor_function()
         avg = self.bad_data_factor*(max(self.beats) - min(self.beats)) / (len(self.beats)-1)
         if avg == 0:
             return 0
         Expected_BPM = 60.0 * 1000.0 / avg
         return Expected_BPM
+
+    def bad_data_factor_function(self):
+        start = min(self.beats)
+        finish = max(self.beats)
+        self.unbiased_nnz = 0
+        count = 0
+        for time, volts in self.data.items():
+            time = int(time)
+            if time > start and time < finish and volts <> 0:
+                count += 1
+                self.unbiased_nnz += 1
+        if self.unbiased_nnz <> 0 and count <> 0:
+            return float(self.unbiased_nnz)/count
+        else:
+            self.empty = True
+            return 0
 
     def get_beats(self):
         # INCOMPLETE - step 0 - some sort of 'bad data' detection
@@ -212,27 +227,23 @@ class BPMServices(object):
 
     # CLEAN-UP NEEDED
     def step111(self,window):
+        check = True
         for method in self.step1_methods:
             if method.usage <> 0:
                 state = method.call_method(self,window) 
-                # CODE INCORRECT. REWRITE IN CASE OF USAGE
-                # if method.usage == 3:
-                #     if state == True:
-                #         return True
-                #     else:
-                #         return False
-                # elif method.usage == 4:
-                #     if state == False:
-                #         return True
-                #     else:
-                #         return False
-                if method.usage == 1:
+                if method.usage == 3:
+                    if state == True:
+                        return True
+                elif method.usage == 4:
                     if state == False:
-                        return False
+                        return True
+                elif method.usage == 1:
+                    if state == False:
+                        check = False
                 elif method.usage == 2:
                     if state == True:
-                        return False
-        return True
+                        check = False
+        return check
 
     def step150(self,beats11):
         step15_name = 'step15{}'.format(self.step15_usage)
