@@ -18,7 +18,6 @@ define [
   class Router extends Backbone.Router
     routes:
       '': 'index',
-      'about': 'about',
       'login': 'login',
 
     initialize: (options) ->
@@ -32,9 +31,6 @@ define [
         @app.rootView.main.show new DashboardView()
       else
         @app.rootView.main.show new IndexView()
-
-    about: ->
-      @app.rootView.main.show new AboutView()
 
     login: ->
       @app.rootView.main.show new LoginView()

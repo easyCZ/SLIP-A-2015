@@ -1,7 +1,9 @@
-gulp = require 'gulp'
 concat = require 'gulp-concat'
+foreach = require 'gulp-foreach'
+gulp = require 'gulp'
 gutil = require 'gulp-util'
 merge = require 'merge-stream'
+streamqueue = require 'streamqueue'
 
 #
 # Stylesheets
@@ -14,7 +16,6 @@ gulp.task 'sass', ->
     includePaths: [
       'bower_components'
     ]
-  .pipe concat 'app.css'
   .pipe gulp.dest 'dist/css'
   .on 'error', gutil.log
 
@@ -82,6 +83,23 @@ gulp.task 'html', ->
     .pipe gulp.dest 'dist'
 
 #
+# Report
+#
+marked = require('gulp-marked')
+
+gulp.task 'report', ->
+  gulp.src '../report/*.md'
+    .pipe marked()
+    .pipe(foreach (stream, file) ->
+      header = gulp.src 'src/report/header.html'
+      footer = gulp.src 'src/report/footer.html'
+
+      streamqueue({ objectMode: true }, header, stream, footer)
+        .pipe concat(file)
+    )
+    .pipe gulp.dest 'dist/report'
+
+#
 # Sample Data
 #
 
@@ -118,4 +136,4 @@ gulp.task 'server', ['default', 'connect', 'watch']
 # Full Build
 #
 
-gulp.task 'default', ['styles', 'scripts', 'html', 'sample_data', 'fonts']
+gulp.task 'default', ['styles', 'scripts', 'html', 'sample_data', 'fonts', 'report']

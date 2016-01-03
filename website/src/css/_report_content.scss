@@ -1,0 +1,11 @@
+$report-background: #eee;
+$report-color: #000;
+
+.report-content {
+  padding: 20px;
+
+  color: $report-color;
+  background-color: $report-background;
+
+  border-radius: 5px;
+}

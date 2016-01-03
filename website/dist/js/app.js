@@ -25122,7 +25122,6 @@ define('router',['backbone', 'backbone.radio', 'views/index', 'views/dashboard',
 
     Router.prototype.routes = {
       '': 'index',
-      'about': 'about',
       'login': 'login'
     };
 
@@ -25141,10 +25140,6 @@ define('router',['backbone', 'backbone.radio', 'views/index', 'views/dashboard',
       } else {
         return this.app.rootView.main.show(new IndexView());
       }
-    };
-
-    Router.prototype.about = function() {
-      return this.app.rootView.main.show(new AboutView());
     };
 
     Router.prototype.login = function() {
@@ -25248,7 +25243,7 @@ define('templates/navbar',["handlebars"], function(Handlebars) { return Handleba
 
   return "<div class=\"container\">\n  <div class=\"navbar-header\">\n    <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\n      <span class=\"sr-only\">Toggle navigation</span>\n      <span class=\"icon-bar\"></span>\n      <span class=\"icon-bar\"></span>\n      <span class=\"icon-bar\"></span>\n    </button>\n    <a class=\"navbar-brand\" href=\"#/\">SLIP Group A</a>\n  </div>\n  <div id=\"navbar\" class=\"collapse navbar-collapse\">\n    <ul class=\"nav navbar-nav\">\n"
     + ((stack1 = helpers['if'].call(depth0,(depth0 != null ? depth0.loggedIn : depth0),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "    </ul>\n\n    <ul class=\"nav navbar-nav pull-right\">\n      <li><a href=\"#/about\">About</a></li>\n    </ul>\n  </div><!--/.nav-collapse -->\n</div>\n";
+    + "    </ul>\n\n    <ul class=\"nav navbar-nav pull-right\">\n      <li><a href=\"report/\">About</a></li>\n    </ul>\n  </div><!--/.nav-collapse -->\n</div>\n";
 },"useData":true}); });
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
