@@ -85,11 +85,11 @@ gulp.task 'html', ->
 #
 # Report
 #
-marked = require('gulp-marked')
+kramdown = require('gulp-kramdown')
 
 gulp.task 'report', ->
   gulp.src '../report/*.md'
-    .pipe marked()
+    .pipe kramdown()
     .pipe(foreach (stream, file) ->
       header = gulp.src 'src/report/header.html'
       footer = gulp.src 'src/report/footer.html'
