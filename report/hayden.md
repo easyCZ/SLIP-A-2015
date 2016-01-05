@@ -24,6 +24,25 @@ analogue to digital converter (ADC) and Bluetooth Low Energy transceiver.
 
 ### ECG Circuit
 
+One of the more technically challenging aspects of the project was designing
+and building a circuit for obtaining a clean ECG trace.
+
+An ECG shows the change in electrical potential between two points on the body
+caused by the depolarization and repolarisation of different heart muscles.
+
+At first, this may appear to be a trivial problem to solve - we simply need to
+build an amplifier to amplify the difference in potential between two electrodes
+attached to the body. Unfortunately, there are also a number of challenges to
+overcome.
+
+The differential signal we are trying to obtain is in the order of 500μV,
+meaning we must obtain a gain of around 30dB to obtain a usable signal. This,
+as is to be expected with high gain amplifiers, introduces a large amount of
+noise into the signal. Thankfully - for the basic QRS sequence we are interested
+in - the signal frequency content is around 10Hz, allowing us to filter a large
+amount of the noise introduced.
+
+[^1]
 
 #### Circuit Evaluation
 discuss filtering
@@ -58,3 +77,12 @@ Website
 ### Backbone
 ### Firebase
 ### Graphing
+
+[^1]: http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html
+
+References:
+A Study on the Optimal Positions of ECG Electrodes
+in a Garment for the Design of ECG-Monitoring
+Clothing for Male
+Hakyung Cho1 & Joo Hyeon Lee 2
+http://download.springer.com.ezproxy.is.ed.ac.uk/static/pdf/307/art%253A10.1007%252Fs10916-015-0279-2.pdf?originUrl=http%3A%2F%2Flink.springer.com%2Farticle%2F10.1007%2Fs10916-015-0279-2&token2=exp=1451992300~acl=%2Fstatic%2Fpdf%2F307%2Fart%25253A10.1007%25252Fs10916-015-0279-2.pdf%3ForiginUrl%3Dhttp%253A%252F%252Flink.springer.com%252Farticle%252F10.1007%252Fs10916-015-0279-2*~hmac=625b5b688ef63cdf41e20c474298e158c0320bba8cd689cd2816679e657533f2
