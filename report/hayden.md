@@ -177,13 +177,16 @@ Website
 ### Firebase
 ### Graphing
 
-[^1]: http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html
+### Footnotes and References
+
+[^1]:
+  http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html
+
 [^2]:
   Exercise Physiology: Nutrition, Energy, and Human Performance
   By William D. McArdle, Frank I. Katch, Victor L. Katch
   PP327
 
-References:
 A Study on the Optimal Positions of ECG Electrodes
 in a Garment for the Design of ECG-Monitoring
 Clothing for Male
