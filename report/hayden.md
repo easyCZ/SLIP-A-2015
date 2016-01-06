@@ -132,12 +132,12 @@ easily introduced, causing a complete loss of our desired signal.
 
 After a little research, I came across an alternative electrode configuration
 which is recommended for use in exercise physiology (which involves large
-amounts of movement during tests). The configuration, introduced in "Excercise
+amounts of movement during tests). The configuration, introduced in "Exercise
 Physiology: Nutrition, Energy, and Human Performance" [^2], has the ground
 electrode on the sternum, with the -ve and +ve electrodes in the 5th intercostal
 space on each side of the chest.
 
-![From "Excercise Physiology: Nutrition, Energy, and Human Performance"](pictures/bipolar configuration.png)
+![From "Exercise Physiology: Nutrition, Energy, and Human Performance"](pictures/bipolar configuration.png)
 
 This placement produces a satisfactory trace, pictured below:
 
