@@ -2,10 +2,24 @@ $report-background: #eee;
 $report-color: #000;
 
 .report-content {
+  position: relative;
+
   padding: 20px;
 
   color: $report-color;
   background-color: $report-background;
 
   border-radius: 5px;
+
+  img {
+    max-width: 100%;
+  }
+
+  table {
+    color: $report-color;
+
+    td {
+      padding: 10px;
+    }
+  }
 }

@@ -87,7 +87,7 @@ gulp.task 'html', ->
 #
 kramdown = require('gulp-kramdown')
 
-gulp.task 'report', ->
+gulp.task 'report-markdown', ->
   gulp.src '../report/*.md'
     .pipe kramdown()
     .pipe(foreach (stream, file) ->
@@ -98,6 +98,12 @@ gulp.task 'report', ->
         .pipe concat(file)
     )
     .pipe gulp.dest 'dist/report'
+
+gulp.task 'report-images', ->
+  gulp.src '../report/**/*.{png,jpg}'
+    .pipe gulp.dest 'dist/report'
+
+gulp.task 'report', ['report-markdown', 'report-images']
 
 #
 # Sample Data
