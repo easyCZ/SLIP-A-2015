@@ -42,18 +42,117 @@ noise into the signal. Thankfully - for the basic QRS sequence we are interested
 in - the signal frequency content is around 10Hz, allowing us to filter a large
 amount of the noise introduced.
 
-[^1]
+As the output of the circuit was to be sampled at around 25Hz, we also took care
+to ensure that we had sufficient filtering beyond 12.5Hz to avoid aliasing.
+
+Roy was responsible for the initial circuit design (based on Jason Nguyen's
+circuit [^1]), which I then built and tested. Following initial testing, Roy and
+myself worked together to tackle the challenges described above.
+
+#### Circuit refinement
+
+The initial circuit provided a recognizable ECG trace, shown below.
+
+![ECG trace without filter](waveforms/ECG without filter.png)
+
+Although recognizable, the trace obtained contains a large amount of noise as
+the first iteration of the circuit made little attempt to filter noise.
+
+Using a Picoscope, we were able to identify the frequency of the noise
+introduced:
+
+![ECG frequency without filter](waveforms/ecg without filter frequency.png)
+
+We identified the troublesome frequencies as being 50Hz and its harmonics
+(100Hz, 200Hz, 400Hz, etc), which was likely introduced by our power supply.
+However, as these are beyond our desired signal frequency of 10Hz, we were able
+to simply add a 2nd order low pass filter to remove the noise.
+
+The addition of the low pass filter had a significant impact, resulting in the
+following output:
+
+![ECG trace with filter](waveforms/ECG output waveform.png)
+![ECG frequency with filter](waveforms/Spectrum with 2nd order filter_1.png)
+
+The frequency trace clearly shows our new 40dB/decade roll-off above the
+frequencies of interest, effectively removing the majority of noise present.
+This also had the advantage of meeting our requirement of reducing frequencies
+beyond 12.5Hz, preventing any aliasing issues.
 
 #### Circuit Evaluation
-discuss filtering
+discuss off the shelf alternatives
 
 ### Vest Electrodes
+Up to this point, we have been testing using "Skintact" electrodes - an "off the
+shelf" product that is designed to achieve good electrical contact between the
+electrode and the skin. Unfortunately, the electrodes are single use, and are
+also uncomfortable (particularly when removing them!).
+
+As part of the project we wanted to integrate the ECG electrodes into the vest,
+removing the need for single-use electrodes, and providing more comfort to the
+wearer. We also spent time investigating different placements of the electrodes,
+with the aim of reducing movement artifacts (caused by electrical activity in
+other muscles) and obtaining an acceptable input signal.
+
 #### Electrode Placement
-abnormal
-refer to:
-  Exercise Physiology: Nutrition, Energy, and Human Performance
-  By William D. McArdle, Frank I. Katch, Victor L. Katch
-  PP327
+
+The generally accepted electrode placement for a 3 lead ECG has the -ve
+electrode on the right side of the chest, just below the shoulder bone, the
+ground electrode is placed on the left side of the chest, opposite the -ve
+electrode, and the +ve electrode is placed in the 5th or 6th intercostal space
+on the left side of the chest. Unfortunately, very large movement artifacts are
+easily introduced, causing a complete loss of our desired signal.
+
+<table>
+  <tr>
+    <td>
+      <img src="electrode_placement_trials/placement6.jpg">
+    </td>
+    <td>
+      <img src="electrode_placement_trials/placement6_waveform_normal.png">
+    </td>
+    <td>
+      <img src="electrode_placement_trials/placement6_waveform_movement.png">
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+
+    <td>
+      With little movement, a very clear trace is obtained (although in the
+      image the +ve and -ve electrodes have been incorrectly connected,
+      resulting in an inverted trace).
+    </td>
+
+    <td>
+      However, with movement, the trace becomes unintelligible.
+    </td>
+  </tr>
+</table>
+
+After a little research, I came across an alternative electrode configuration
+which is recommended for use in exercise physiology (which involves large
+amounts of movement during tests). The configuration, introduced in "Excercise
+Physiology: Nutrition, Energy, and Human Performance" [^2], has the ground
+electrode on the sternum, with the -ve and +ve electrodes in the 5th intercostal
+space on each side of the chest.
+
+![From "Excercise Physiology: Nutrition, Energy, and Human Performance"](pictures/bipolar configuration.png)
+
+This placement produces a satisfactory trace, pictured below:
+
+<table>
+  <tr>
+    <td>
+      <img src="electrode_placement_trials/placement1.jpg">
+    </td>
+    <td>
+      <img src="electrode_placement_trials/placement1_waveform.png">
+    </td>
+  </tr>
+</table>
+
+#### Electrode design
 
 #### Evaluation
 requires gel
@@ -79,6 +178,10 @@ Website
 ### Graphing
 
 [^1]: http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html
+[^2]:
+  Exercise Physiology: Nutrition, Energy, and Human Performance
+  By William D. McArdle, Frank I. Katch, Victor L. Katch
+  PP327
 
 References:
 A Study on the Optimal Positions of ECG Electrodes

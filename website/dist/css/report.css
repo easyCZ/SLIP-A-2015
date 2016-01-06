@@ -8095,7 +8095,14 @@ body {
   background-color: #333333; }
 
 .report-content {
+  position: relative;
   padding: 20px;
   color: #000;
   background-color: #eee;
   border-radius: 5px; }
+  .report-content img {
+    max-width: 100%; }
+  .report-content table {
+    color: #000; }
+    .report-content table td {
+      padding: 10px; }
