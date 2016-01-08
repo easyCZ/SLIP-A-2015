@@ -85,7 +85,7 @@ discuss off the shelf alternatives
 ### Vest Electrodes
 Up to this point, we have been testing using "Skintact" electrodes - an "off the
 shelf" product that is designed to achieve good electrical contact between the
-electrode and the skin. Unfortunately, the electrodes are single use, and are
+electrode and the skin. Unfortunately, the electrodes are single use and are
 also uncomfortable (particularly when removing them!).
 
 As part of the project we wanted to integrate the ECG electrodes into the vest,
@@ -139,7 +139,8 @@ space on each side of the chest.
 
 ![From "Exercise Physiology: Nutrition, Energy, and Human Performance"](pictures/bipolar configuration.png)
 
-This placement produces a satisfactory trace, pictured below:
+This placement produces a satisfactory trace, pictured below, which is less
+susceptible to movement artifacts.
 
 <table>
   <tr>
@@ -152,12 +153,87 @@ This placement produces a satisfactory trace, pictured below:
   </tr>
 </table>
 
+This positioning is also suggested by [^3].
+
 #### Electrode design
 
+Having decided on a suitable placement for the electrodes, I then spent a small
+amount of time investigating different materials that could be used for the
+electrodes. A number of papers ([^4][^5] to list two) have been published on
+this subject in recent years, and provide interesting reading.
+
+Unfortunately, the lead time and expense of such materials meant that it was not
+practical to use such materials in the project. Instead, Roy and I attempted a
+few different solutions.
+
+One option that we considered was using parts of the Skintact electrodes, as
+pictured below:
+
+![Fixing Skintact electrodes into the vest](pictures/cut up skintact positions.jpg)
+
+Unfortunately, we found that the sponge material used in the electrodes became
+very fragile when it dried out, making it unsuitable for longer term use.
+
+Another option was to use conductive copper tape. This was cut into small
+sections of approximately 15mm, and stuck to the inside of the vest. While this
+was somewhat successful, we found that performance was improved by adding a
+slight bulge to the electrode. By wrapping the tape round a metal stud the
+contact area is pushed into the skin a little more, improving the contact surface.
+
+![Copper tape electrodes](pictures/conductive tape.jpg)
+
 #### Evaluation
-requires gel
+
+The vest is relatively comfortable to wear, with the main discomfort being
+caused by the poor integration of the signal wires into the vest.
+
+The requirement to use a conductive gel is disappointing, and makes putting on
+the vest difficult. While not particularly uncomfortable, the design would be
+significantly improved if this requirement could be removed. Given the amount
+of research into conductive materials and wearable technology, it is likely that
+this could be overcome with a little more time and research.
+
+The output obtained from the vest leaves much to be desired.
+
+The R and S sections of the trace are quite clearly visible (although small),
+with the Q section of the trace occasionally obtained. However, the T section of
+the trace is significantly distorted, and the P section is rarely seen.
+
+<table>
+  <tr>
+    <td>
+      <img src="waveforms/ECG output waveform.png">
+    </td>
+    <td>
+      <img src="waveforms/vest final.png">
+    </td>
+    <td>
+      <img src="waveforms/vest final movement.png">
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      The trace obtained using Skintact electrodes
+    </td>
+    <td>
+      The final output from the vest and ECG circuit
+    </td>
+    <td>
+      Movement artifacts seen in the final output
+    </td>
+  </tr>
+</table>
+
+As seen above, movement is still an issue. However, even during movement R and S
+sections of the ECG trace can be identified. While it has not been possible as
+part of the project, I wonder whether digital signal processing (particularly in
+combination with other sensors) could be used to recover a reasonable ECG trace.
 
 ### Thermometer Circuit
+
+
+
 #### Evaluation
 further calibration required
 
@@ -184,11 +260,20 @@ Website
 
 [^2]:
   Exercise Physiology: Nutrition, Energy, and Human Performance
-  By William D. McArdle, Frank I. Katch, Victor L. Katch
+  William D. McArdle, Frank I. Katch, Victor L. Katch
   PP327
 
-A Study on the Optimal Positions of ECG Electrodes
-in a Garment for the Design of ECG-Monitoring
-Clothing for Male
-Hakyung Cho1 & Joo Hyeon Lee 2
-http://download.springer.com.ezproxy.is.ed.ac.uk/static/pdf/307/art%253A10.1007%252Fs10916-015-0279-2.pdf?originUrl=http%3A%2F%2Flink.springer.com%2Farticle%2F10.1007%2Fs10916-015-0279-2&token2=exp=1451992300~acl=%2Fstatic%2Fpdf%2F307%2Fart%25253A10.1007%25252Fs10916-015-0279-2.pdf%3ForiginUrl%3Dhttp%253A%252F%252Flink.springer.com%252Farticle%252F10.1007%252Fs10916-015-0279-2*~hmac=625b5b688ef63cdf41e20c474298e158c0320bba8cd689cd2816679e657533f2
+[^3]:
+  A Study on the Optimal Positions of ECG Electrodes in a Garment for the Design of ECG-Monitoring Clothing for Male
+  Hakyung Cho, Joo Hyeon Lee
+  Journal of Medical Systems, 2015, Vol.39(9), pp.1-14
+
+[^4]:
+  Wearable Textile Electrodes for ECG Measurement
+  Lukas Vojtech, Radoslav Bortel, Marek Neruda, Milos Kozak
+  Advances in Electrical and Electronic Engineering, 01 January 2013, Vol.11(5), pp.410-414
+
+[^5]:
+  Fabrication of conductive fabric as textile electrode for ECG monitoring
+  Yun Zhou, Xin Ding, Jingwei Zhang, Yaru Duan, Jiyong Hu, Xudong Yang
+  Fibers and Polymers, 2014, Vol.15(11), pp.2260-226
