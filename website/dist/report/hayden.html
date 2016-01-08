@@ -94,7 +94,7 @@ beyond 12.5Hz, preventing any aliasing issues.</p>
 <h3 id="vest-electrodes">Vest Electrodes</h3>
 <p>Up to this point, we have been testing using &quot;Skintact&quot; electrodes - an &quot;off the
 shelf&quot; product that is designed to achieve good electrical contact between the
-electrode and the skin. Unfortunately, the electrodes are single use, and are
+electrode and the skin. Unfortunately, the electrodes are single use and are
 also uncomfortable (particularly when removing them!).</p>
 <p>As part of the project we wanted to integrate the ECG electrodes into the vest,
 removing the need for single-use electrodes, and providing more comfort to the
@@ -137,12 +137,13 @@ easily introduced, causing a complete loss of our desired signal.</p>
 
 <p>After a little research, I came across an alternative electrode configuration
 which is recommended for use in exercise physiology (which involves large
-amounts of movement during tests). The configuration, introduced in &quot;Excercise
+amounts of movement during tests). The configuration, introduced in &quot;Exercise
 Physiology: Nutrition, Energy, and Human Performance&quot; <sup><a href="#fn_2" id="reffn_2">2</a></sup>, has the ground
 electrode on the sternum, with the -ve and +ve electrodes in the 5th intercostal
 space on each side of the chest.</p>
-<p><img src="pictures/bipolar configuration.png" alt="From &quot;Excercise Physiology: Nutrition, Energy, and Human Performance&quot;"></p>
-<p>This placement produces a satisfactory trace, pictured below:</p>
+<p><img src="pictures/bipolar configuration.png" alt="From &quot;Exercise Physiology: Nutrition, Energy, and Human Performance&quot;"></p>
+<p>This placement produces a satisfactory trace, pictured below, which is less
+susceptible to movement artifacts.</p>
 <table>
   <tr>
     <td>
@@ -154,9 +155,68 @@ space on each side of the chest.</p>
   </tr>
 </table>
 
+<p>This positioning is also suggested by <sup><a href="#fn_3" id="reffn_3">3</a></sup>.</p>
 <h4 id="electrode-design">Electrode design</h4>
+<p>Having decided on a suitable placement for the electrodes, I then spent a small
+amount of time investigating different materials that could be used for the
+electrodes. A number of papers (<sup><a href="#fn_4" id="reffn_4">4</a></sup><sup><a href="#fn_5" id="reffn_5">5</a></sup> to list two) have been published on
+this subject in recent years, and provide interesting reading.</p>
+<p>Unfortunately, the lead time and expense of such materials meant that it was not
+practical to use such materials in the project. Instead, Roy and I attempted a
+few different solutions.</p>
+<p>One option that we considered was using parts of the Skintact electrodes, as
+pictured below:</p>
+<p><img src="pictures/cut up skintact positions.jpg" alt="Fixing Skintact electrodes into the vest"></p>
+<p>Unfortunately, we found that the sponge material used in the electrodes became
+very fragile when it dried out, making it unsuitable for longer term use.</p>
+<p>Another option was to use conductive copper tape. This was cut into small
+sections of approximately 15mm, and stuck to the inside of the vest. While this
+was somewhat successful, we found that performance was improved by adding a
+slight bulge to the electrode. By wrapping the tape round a metal stud the
+contact area is pushed into the skin a little more, improving the contact surface.</p>
+<p><img src="pictures/conductive tape.jpg" alt="Copper tape electrodes"></p>
 <h4 id="evaluation">Evaluation</h4>
-<p>requires gel</p>
+<p>The vest is relatively comfortable to wear, with the main discomfort being
+caused by the poor integration of the signal wires into the vest.</p>
+<p>The requirement to use a conductive gel is disappointing, and makes putting on
+the vest difficult. While not particularly uncomfortable, the design would be
+significantly improved if this requirement could be removed. Given the amount
+of research into conductive materials and wearable technology, it is likely that
+this could be overcome with a little more time and research.</p>
+<p>The output obtained from the vest leaves much to be desired.</p>
+<p>The R and S sections of the trace are quite clearly visible (although small),
+with the Q section of the trace occasionally obtained. However, the T section of
+the trace is significantly distorted, and the P section is rarely seen.</p>
+<table>
+  <tr>
+    <td>
+      <img src="waveforms/ECG output waveform.png">
+    </td>
+    <td>
+      <img src="waveforms/vest final.png">
+    </td>
+    <td>
+      <img src="waveforms/vest final movement.png">
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      The trace obtained using Skintact electrodes
+    </td>
+    <td>
+      The final output from the vest and ECG circuit
+    </td>
+    <td>
+      Movement artifacts seen in the final output
+    </td>
+  </tr>
+</table>
+
+<p>As seen above, movement is still an issue. However, even during movement R and S
+sections of the ECG trace can be identified. While it has not been possible as
+part of the project, I wonder whether digital signal processing (particularly in
+combination with other sensors) could be used to recover a reasonable ECG trace.</p>
 <h3 id="thermometer-circuit">Thermometer Circuit</h3>
 <h4 id="evaluation">Evaluation</h4>
 <p>further calibration required</p>
@@ -170,19 +230,25 @@ space on each side of the chest.</p>
 <h3 id="backbone">Backbone</h3>
 <h3 id="firebase">Firebase</h3>
 <h3 id="graphing">Graphing</h3>
-<blockquote id="fn_1">
-<sup>1</sup>. <a href="http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html">http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html</a><a href="#reffn_1" title="Jump back to footnote [1] in the text."> &#8617;</a>
-</blockquote>
+<h3 id="footnotes-and-references">Footnotes and References</h3>
+<p><sup><a href="#fn_1" id="reffn_1">1</a></sup>:
+  <a href="http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html">http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html</a></p>
 <p><sup><a href="#fn_2" id="reffn_2">2</a></sup>:
   Exercise Physiology: Nutrition, Energy, and Human Performance
-  By William D. McArdle, Frank I. Katch, Victor L. Katch
+  William D. McArdle, Frank I. Katch, Victor L. Katch
   PP327</p>
-<p>References:
-A Study on the Optimal Positions of ECG Electrodes
-in a Garment for the Design of ECG-Monitoring
-Clothing for Male
-Hakyung Cho1 &amp; Joo Hyeon Lee 2
-<a href="http://download.springer.com.ezproxy.is.ed.ac.uk/static/pdf/307/art%253A10.1007%252Fs10916-015-0279-2.pdf?originUrl=http%3A%2F%2Flink.springer.com%2Farticle%2F10.1007%2Fs10916-015-0279-2&amp;token2=exp=1451992300~acl=%2Fstatic%2Fpdf%2F307%2Fart%25253A10.1007%25252Fs10916-015-0279-2.pdf%3ForiginUrl%3Dhttp%253A%252F%252Flink.springer.com%252Farticle%252F10.1007%252Fs10916-015-0279-2*~hmac=625b5b688ef63cdf41e20c474298e158c0320bba8cd689cd2816679e657533f2">http://download.springer.com.ezproxy.is.ed.ac.uk/static/pdf/307/art%253A10.1007%252Fs10916-015-0279-2.pdf?originUrl=http%3A%2F%2Flink.springer.com%2Farticle%2F10.1007%2Fs10916-015-0279-2&amp;token2=exp=1451992300~acl=%2Fstatic%2Fpdf%2F307%2Fart%25253A10.1007%25252Fs10916-015-0279-2.pdf%3ForiginUrl%3Dhttp%253A%252F%252Flink.springer.com%252Farticle%252F10.1007%252Fs10916-015-0279-2*~hmac=625b5b688ef63cdf41e20c474298e158c0320bba8cd689cd2816679e657533f2</a></p>
+<p><sup><a href="#fn_3" id="reffn_3">3</a></sup>:
+  A Study on the Optimal Positions of ECG Electrodes in a Garment for the Design of ECG-Monitoring Clothing for Male
+  Hakyung Cho, Joo Hyeon Lee
+  Journal of Medical Systems, 2015, Vol.39(9), pp.1-14</p>
+<p><sup><a href="#fn_4" id="reffn_4">4</a></sup>:
+  Wearable Textile Electrodes for ECG Measurement
+  Lukas Vojtech, Radoslav Bortel, Marek Neruda, Milos Kozak
+  Advances in Electrical and Electronic Engineering, 01 January 2013, Vol.11(5), pp.410-414</p>
+<p><sup><a href="#fn_5" id="reffn_5">5</a></sup>:
+  Fabrication of conductive fabric as textile electrode for ECG monitoring
+  Yun Zhou, Xin Ding, Jingwei Zhang, Yaru Duan, Jiyong Hu, Xudong Yang
+  Fibers and Polymers, 2014, Vol.15(11), pp.2260-226</p>
 
     </div> <!-- .container -->
 
