@@ -4,8 +4,8 @@ Introduction
 Team Members
 ------------
 
-* Hayden Ball
-* Filip Frahm
-* Roy Hotrabhavnon
-* Milan Pavlik
-* Jonathan Redmond
+* [Filip Frahm](filip.html)
+* [Hayden Ball](hayden.html)
+* [Jonathan Redmond](jonathan.html)
+* [Milan Pavlik](milan.html)
+* [Roy Hotrabhavnon](roy.html)

@@ -227,12 +227,28 @@ the trace is significantly distorted, and the P section is rarely seen.
 
 As seen above, movement is still an issue. However, even during movement R and S
 sections of the ECG trace can be identified. While it has not been possible as
-part of the project, I wonder whether digital signal processing (particularly in
-combination with other sensors) could be used to recover a reasonable ECG trace.
+part of the project, I would like to investigate in the future wheter
+digital signal processing (particularly in combination with other sensors, such
+as accelerometers) could be used to recover a reasonable ECG trace.
 
 ### Thermometer Circuit
 
+A reasonably late addition to the vest was adding a thermister and incorporating
+a potential divider circuit in the belt pack so that we could measure the body
+temperature of the wearer.
 
+I designed the (very simple) circuit for the sensor, which consisted of a
+potential divider fed into an op-amp. The op-amp provided a suitably low output
+impedence, ensuring that the measurement wasn't affected by current flowing into
+the ADC of the nRF51822.
+
+The thermistor was sewn into the vest under the right armpit. This is one of the
+few locations on the body where skin temperature gives a good indication of core
+body temperature.
+
+The voltage produced by the potential divider was then converted into a
+temperature by software running on the nRF51822, as discussed in the following
+section.
 
 #### Evaluation
 further calibration required

@@ -24,7 +24,11 @@
           <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav pull-right">
               <li><a href="./">About</a></li>
+              <li><a href="./filip.html">Filip</a></li>
               <li><a href="./hayden.html">Hayden</a></li>
+              <li><a href="./jonathan.html">Jonathan</a></li>
+              <li><a href="./milan.html">Milan</a></li>
+              <li><a href="./roy.html">Roy</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -215,9 +219,23 @@ the trace is significantly distorted, and the P section is rarely seen.</p>
 
 <p>As seen above, movement is still an issue. However, even during movement R and S
 sections of the ECG trace can be identified. While it has not been possible as
-part of the project, I wonder whether digital signal processing (particularly in
-combination with other sensors) could be used to recover a reasonable ECG trace.</p>
+part of the project, I would like to investigate in the future wheter
+digital signal processing (particularly in combination with other sensors, such
+as accelerometers) could be used to recover a reasonable ECG trace.</p>
 <h3 id="thermometer-circuit">Thermometer Circuit</h3>
+<p>A reasonably late addition to the vest was adding a thermister and incorporating
+a potential divider circuit in the belt pack so that we could measure the body
+temperature of the wearer.</p>
+<p>I designed the (very simple) circuit for the sensor, which consisted of a
+potential divider fed into an op-amp. The op-amp provided a suitably low output
+impedence, ensuring that the measurement wasn&#39;t affected by current flowing into
+the ADC of the nRF51822.</p>
+<p>The thermistor was sewn into the vest under the right armpit. This is one of the
+few locations on the body where skin temperature gives a good indication of core
+body temperature.</p>
+<p>The voltage produced by the potential divider was then converted into a
+temperature by software running on the nRF51822, as discussed in the following
+section.</p>
 <h4 id="evaluation">Evaluation</h4>
 <p>further calibration required</p>
 <h3 id="mbed-programming">mbed Programming</h3>
