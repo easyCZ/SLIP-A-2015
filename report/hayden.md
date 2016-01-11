@@ -38,12 +38,17 @@ overcome.
 The differential signal we are trying to obtain is in the order of 500μV,
 meaning we must obtain a gain of around 30dB to obtain a usable signal. This,
 as is to be expected with high gain amplifiers, introduces a large amount of
-noise into the signal. Thankfully - for the basic QRS sequence we are interested
-in - the signal frequency content is around 10Hz, allowing us to filter a large
-amount of the noise introduced.
+noise into the signal.
 
-As the output of the circuit was to be sampled at around 25Hz, we also took care
-to ensure that we had sufficient filtering beyond 12.5Hz to avoid aliasing.
+We were also aware that the output of the circuit was to be sampled at 50Hz
+(discussed in more detail in the "mbed programming" section below). To avoid
+aliasing, we are forced to ensure that frequencies beyond 25Hz are sufficiently
+filtered out (to conform with the Nyquist–Shannon sampling theorem).
+
+While high frequency components of an ECG trace can sometimes be of interest,
+the maximum frequency of the basic QRS sequence is 10Hz, allowing us to filter
+at slightly above 10Hz. This not only satisfies our sampling requirement, but
+also significantly reduces the amount of noise seen in the signal.
 
 Roy was responsible for the initial circuit design (based on Jason Nguyen's
 circuit [^1]), which I then built and tested. Following initial testing, Roy and
@@ -251,19 +256,103 @@ temperature by software running on the nRF51822, as discussed in the following
 section.
 
 #### Evaluation
-further calibration required
+
+The themometer circuit was very simple and provided reasonable peformance.
+Futher testing and validation of the performance of the sensor would be required
+to give a more thorough evaluation of the sensor, as the sensor was only tested
+at room temperature and body temperature due to time constraints.
 
 ### mbed Programming
-#### Evaluation
-discuss sampling
 
+I was solely responsible for writing the software that ran on the nRF51822.
+
+For the most part, the software is very simple. As the mbed libraries contain
+all the code required for the setup and use of the ADC and bluetooth chip, all
+that was required was to link the two together and perform simple arithmetic on
+the temperature sensor readings to convert the obtained voltage to degrees
+celsius.
+
+#### ECG Sampling
+
+In order to show high frequency components of the ECG trace, we must sample the
+ECG output as frequently as possible. Sampling was achieved by setting up a
+`Ticker`, which interrupts the CPU at a defined interval and causes a reading
+from the ADC to be taken. The value is then transmitted using Bluetooth Low
+Energy.
+
+Due to the overhead of sampling the analogue signal and transmitting the new
+value, I found that the minimum practical interval for sampling was 20ms. This
+gives a sampling frequency of 50Hz, which is sufficient for sampling signals of
+up to 25Hz.
+
+#### Temperature Sampling and Calculation
+
+For the temperature measurement obtained to be useful, I needed to convert the
+voltage obtained from the thermistor into degrees celsius. The temperature (in
+degrees Kelvin) of a thermistor can be approximated using the extended
+"Steinhart and Hart" formula:
+
+  T^(-1) = A1 + B1 * ln(R / Rref) + C1 * ln^2(R / Rref) + D1 * ln^3(R/Rref)
+
+where A1, B1, C1 and D1 are constants specific to the thermistor. These values
+were obtained from the thermistor's datasheet [^6].
+
+Having calculated `T`, it was then simply a case of subtracting 273 to convert
+to degrees celsius.
+
+As body temperature changes relatively infrequently, the temperature was only
+sampled once every second. While a smaller interval could have been used, this
+would have increased the minimum sampling interval for the ECG sensor with
+little gain.
+
+#### Evaluation
+
+The software was functional, ensuring that values obtained from the two sensors
+were correctly sampled and transmitted. However, better sampling rates may have
+been achieved by storing a number of samples and transmitting them in chunks
+(reducing the amount of time spent transmitting).
+
+If more time were available, it would be worth spending a significant amount of
+time investigating more efficient ways of transmitting the data obtained, as
+this would appear to be the major bottleneck in the system.
 
 ### Packaging
+
+I sew the ECG electrodes, thermistor and stranded cable into the inside of a
+compression shirt. This ensured that the sensors remained in the same place, and
+the cabling was kept tidy.
+
+![Inside of the compression shirt](pictures/shirt inside.png)
+
+The 5 cables coming out of the shirt were then loomed together using AT7 PVC
+tape, and connected to a male 9 pin D-Type connector. Using a D type connector
+allows easy disconnection of the shirt from the belt pack, which allows the
+shirt to be washed.
+
+![The case, opened to show components](pictures/case.jpg)
+
+The ECG and thermometer circuits, together with 3 9V batteries and the nRF51-DK
+were placed into a black plastic case. On the front of the case I added a power
+switch, indicator LED and a female 9 pin D-Type connector. I also added 2 female
+headers which were connected to the output of the ECG circuit to allow the
+output to be recorded easily once the case has been closed for the purposes of
+evaluation and composing the group's reports.
+
 #### Evaluation
-large beltpack
+
+Unfortunately, the belt pack was very large. This is largely due to the size of
+the nRF51-DK, and the ECG circuit PCB. This made it cumbersome to carry around,
+and would need to be improved if more time were available. The compression shirt
+worked reasonably well, although use of thinner stranded cable would have
+reduced the small amount of discomfort caused by the routing of sensor cables.
 
 Website
 -------
+
+I was also responsible for the design and implementation of the group website.
+
+The website has two primary functions - as well as hosting the group's reports,
+the website also displays the data obtained from the health monitoring vest.
 
 ### Backbone
 ### Firebase
@@ -293,3 +382,7 @@ Website
   Fabrication of conductive fabric as textile electrode for ECG monitoring
   Yun Zhou, Xin Ding, Jingwei Zhang, Yaru Duan, Jiyong Hu, Xudong Yang
   Fibers and Polymers, 2014, Vol.15(11), pp.2260-226
+
+[^6]:
+  Vishay NTCLE100E3 NTC Thermistors Data Sheet
+  http://www.farnell.com/datasheets/1784420.pdf
