@@ -24099,7 +24099,7 @@ return /******/ (function(modules) { // webpackBootstrap
 });
 ;
 define('templates/index',["handlebars"], function(Handlebars) { return Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<div class=\"jumbotron\">\n  <div class=\"background\">\n    <h2>ECG</h2>\n\n    <canvas class=\"ecg-live\" height=\"100\"></canvas>\n\n    <h2>Heart Rate</h2>\n\n    <canvas class=\"heart-rate-live\" height=\"100\"></canvas>\n\n    <h2>Respiratory Data</h2>\n\n    <canvas class=\"respiratory-live\" height=\"100\"></canvas>\n  </div>\n\n  <div class=\"overlay\">\n    <h1>UberVest</h1>\n\n    <p>\n      View Vital Signs.\n    </p>\n\n    <p>\n      Live.\n    </p>\n\n    <p>\n      Anywhere.\n    </p>\n  </div>\n</div>\n";
+    return "<div class=\"jumbotron\">\n  <div class=\"background\">\n    <h2>ECG</h2>\n\n    <canvas class=\"ecg-live\" height=\"100\"></canvas>\n\n    <h2>Heart Rate</h2>\n\n    <canvas class=\"heart-rate-live\" height=\"100\"></canvas>\n\n    <h2>Respiratory Data</h2>\n\n    <canvas class=\"respiratory-live\" height=\"100\"></canvas>\n  </div>\n\n  <div class=\"overlay\">\n    <h1>UberVest</h1>\n\n    <p>\n      View Vital Signs.\n    </p>\n\n    <p>\n      Live.\n    </p>\n\n    <p>\n      Anywhere.\n    </p>\n\n    <p style=\"margin-top: 40px;\">\n      <a href=\"./report\" class=\"btn btn-primary btn-lg\">About the Project</a>\n    </p>\n  </div>\n</div>\n";
 },"useData":true}); });
 define('helpers/liveChart',['jquery', 'smoothie'], function($, Smoothie) {
   return $.fn.liveChart = function(series, options) {
