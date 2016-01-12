@@ -28,7 +28,7 @@ One of the more technically challenging aspects of the project was designing
 and building a circuit for obtaining a clean ECG trace.
 
 An ECG shows the change in electrical potential between two points on the body
-caused by the depolarization and repolarisation of different heart muscles.
+caused by the depolarisation and repolarisation of different heart muscles.
 
 At first, this may appear to be a trivial problem to solve - we simply need to
 build an amplifier to amplify the difference in potential between two electrodes
@@ -45,9 +45,9 @@ We were also aware that the output of the circuit was to be sampled at 50Hz
 aliasing, we are forced to ensure that frequencies beyond 25Hz are sufficiently
 filtered out (to conform with the Nyquist–Shannon sampling theorem).
 
-While high frequency components of an ECG trace can sometimes be of interest,
+While high-frequency components of an ECG trace can sometimes be of interest,
 the maximum frequency of the basic QRS sequence is 10Hz, allowing us to filter
-at slightly above 10Hz. This not only satisfies our sampling requirement, but
+at slightly above 10Hz. This not only satisfies our sampling requirement but
 also significantly reduces the amount of noise seen in the signal.
 
 Roy was responsible for the initial circuit design (based on Jason Nguyen's
@@ -104,7 +104,7 @@ other muscles) and obtaining an acceptable input signal.
 The generally accepted electrode placement for a 3 lead ECG has the -ve
 electrode on the right side of the chest, just below the shoulder bone, the
 ground electrode is placed on the left side of the chest, opposite the -ve
-electrode, and the +ve electrode is placed in the 5th or 6th intercostal space
+electrode and the +ve electrode is placed in the 5th or 6th intercostal space
 on the left side of the chest. Unfortunately, very large movement artifacts are
 easily introduced, causing a complete loss of our desired signal.
 
@@ -182,7 +182,7 @@ very fragile when it dried out, making it unsuitable for longer term use.
 Another option was to use conductive copper tape. This was cut into small
 sections of approximately 15mm, and stuck to the inside of the vest. While this
 was somewhat successful, we found that performance was improved by adding a
-slight bulge to the electrode. By wrapping the tape round a metal stud the
+slight bulge to the electrode. By wrapping the tape round a metal stud, the
 contact area is pushed into the skin a little more, improving the contact surface.
 
 ![Copper tape electrodes](pictures/conductive tape.jpg)
@@ -232,7 +232,7 @@ the trace is significantly distorted, and the P section is rarely seen.
 
 As seen above, movement is still an issue. However, even during movement R and S
 sections of the ECG trace can be identified. While it has not been possible as
-part of the project, I would like to investigate in the future wheter
+part of the project, I would like to investigate in the future whether
 digital signal processing (particularly in combination with other sensors, such
 as accelerometers) could be used to recover a reasonable ECG trace.
 
@@ -244,7 +244,7 @@ temperature of the wearer.
 
 I designed the (very simple) circuit for the sensor, which consisted of a
 potential divider fed into an op-amp. The op-amp provided a suitably low output
-impedence, ensuring that the measurement wasn't affected by current flowing into
+impedance, ensuring that the measurement wasn't affected by current flowing into
 the ADC of the nRF51822.
 
 The thermistor was sewn into the vest under the right armpit. This is one of the
@@ -257,8 +257,8 @@ section.
 
 #### Evaluation
 
-The themometer circuit was very simple and provided reasonable peformance.
-Futher testing and validation of the performance of the sensor would be required
+The thermometer circuit was very simple and provided reasonable performance.
+Further testing and validation of the performance of the sensor would be required
 to give a more thorough evaluation of the sensor, as the sensor was only tested
 at room temperature and body temperature due to time constraints.
 
@@ -267,14 +267,14 @@ at room temperature and body temperature due to time constraints.
 I was solely responsible for writing the software that ran on the nRF51822.
 
 For the most part, the software is very simple. As the mbed libraries contain
-all the code required for the setup and use of the ADC and bluetooth chip, all
+all the code required for the setup and use of the ADC and Bluetooth chip, all
 that was required was to link the two together and perform simple arithmetic on
 the temperature sensor readings to convert the obtained voltage to degrees
 celsius.
 
 #### ECG Sampling
 
-In order to show high frequency components of the ECG trace, we must sample the
+In order to show high-frequency components of the ECG trace, we must sample the
 ECG output as frequently as possible. Sampling was achieved by setting up a
 `Ticker`, which interrupts the CPU at a defined interval and causes a reading
 from the ADC to be taken. The value is then transmitted using Bluetooth Low
@@ -325,15 +325,15 @@ the cabling was kept tidy.
 ![Inside of the compression shirt](pictures/shirt inside.png)
 
 The 5 cables coming out of the shirt were then loomed together using AT7 PVC
-tape, and connected to a male 9 pin D-Type connector. Using a D type connector
+tape, and connected to a male 9 pin D-Type connector. Using a D-type connector
 allows easy disconnection of the shirt from the belt pack, which allows the
 shirt to be washed.
 
 ![The case, opened to show components](pictures/case.jpg)
 
 The ECG and thermometer circuits, together with 3 9V batteries and the nRF51-DK
-were placed into a black plastic case. On the front of the case I added a power
-switch, indicator LED and a female 9 pin D-Type connector. I also added 2 female
+were placed into a black plastic case. On the front of the case, I added a power
+switch, indicator LED, and a female 9 pin D-Type connector. I also added 2 female
 headers which were connected to the output of the ECG circuit to allow the
 output to be recorded easily once the case has been closed for the purposes of
 evaluation and composing the group's reports.
@@ -369,8 +369,8 @@ javascript to pull data from the API server and Firebase.
 
 ### Backbone
 
-In order to increase the maintainability of the site I decided to use the
-Backbone.JS [^L1] library, which provides base classes for models, collections,
+In order to increase the maintainability of the site, I decided to use the
+Backbone.JS [^L1] library which provides base classes for models, collections,
 and views. This allows a developer to easily split a potentially fairly large
 amount of javascript into discrete components.
 
@@ -388,8 +388,8 @@ using SCSS [^L4], which allows classes to be nested and also provides a number o
 useful helper functions.
 
 Both of these tools require that code is compiled before it can be served to the
-user. Add to this a number of libraries that have made front end development
-easier (such as the Bootstrap css library [^L5]), and it is clear that the build
+user. Add to this a number of libraries that have made front-end development
+easier (such as the Bootstrap CSS library [^L5]), and it is clear that the build
 process is non-trivial.
 
 Thankfully, a number of tools exist to automate the build process. I decided to
