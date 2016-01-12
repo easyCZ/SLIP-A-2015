@@ -57,7 +57,7 @@ analogue to digital converter (ADC) and Bluetooth Low Energy transceiver.</p>
 <p>One of the more technically challenging aspects of the project was designing
 and building a circuit for obtaining a clean ECG trace.</p>
 <p>An ECG shows the change in electrical potential between two points on the body
-caused by the depolarization and repolarisation of different heart muscles.</p>
+caused by the depolarisation and repolarisation of different heart muscles.</p>
 <p>At first, this may appear to be a trivial problem to solve - we simply need to
 build an amplifier to amplify the difference in potential between two electrodes
 attached to the body. Unfortunately, there are also a number of challenges to
@@ -70,9 +70,9 @@ noise into the signal.</p>
 (discussed in more detail in the &quot;mbed programming&quot; section below). To avoid
 aliasing, we are forced to ensure that frequencies beyond 25Hz are sufficiently
 filtered out (to conform with the Nyquist–Shannon sampling theorem).</p>
-<p>While high frequency components of an ECG trace can sometimes be of interest,
+<p>While high-frequency components of an ECG trace can sometimes be of interest,
 the maximum frequency of the basic QRS sequence is 10Hz, allowing us to filter
-at slightly above 10Hz. This not only satisfies our sampling requirement, but
+at slightly above 10Hz. This not only satisfies our sampling requirement but
 also significantly reduces the amount of noise seen in the signal.</p>
 <p>Roy was responsible for the initial circuit design (based on Jason Nguyen&#39;s
 circuit <sup><a href="#fn_1" id="reffn_1">1</a></sup>), which I then built and tested. Following initial testing, Roy and
@@ -96,7 +96,7 @@ following output:</p>
 <p>The frequency trace clearly shows our new 40dB/decade roll-off above the
 frequencies of interest, effectively removing the majority of noise present.
 This also had the advantage of meeting our requirement of reducing frequencies
-beyond 12.5Hz, preventing any aliasing issues.</p>
+beyond 25Hz, preventing any aliasing issues.</p>
 <h4 id="circuit-evaluation">Circuit Evaluation</h4>
 <p>discuss off the shelf alternatives</p>
 <h3 id="vest-electrodes">Vest Electrodes</h3>
@@ -113,7 +113,7 @@ other muscles) and obtaining an acceptable input signal.</p>
 <p>The generally accepted electrode placement for a 3 lead ECG has the -ve
 electrode on the right side of the chest, just below the shoulder bone, the
 ground electrode is placed on the left side of the chest, opposite the -ve
-electrode, and the +ve electrode is placed in the 5th or 6th intercostal space
+electrode and the +ve electrode is placed in the 5th or 6th intercostal space
 on the left side of the chest. Unfortunately, very large movement artifacts are
 easily introduced, causing a complete loss of our desired signal.</p>
 <table>
@@ -180,7 +180,7 @@ very fragile when it dried out, making it unsuitable for longer term use.</p>
 <p>Another option was to use conductive copper tape. This was cut into small
 sections of approximately 15mm, and stuck to the inside of the vest. While this
 was somewhat successful, we found that performance was improved by adding a
-slight bulge to the electrode. By wrapping the tape round a metal stud the
+slight bulge to the electrode. By wrapping the tape round a metal stud, the
 contact area is pushed into the skin a little more, improving the contact surface.</p>
 <p><img src="pictures/conductive tape.jpg" alt="Copper tape electrodes"></p>
 <h4 id="evaluation">Evaluation</h4>
@@ -223,7 +223,7 @@ the trace is significantly distorted, and the P section is rarely seen.</p>
 
 <p>As seen above, movement is still an issue. However, even during movement R and S
 sections of the ECG trace can be identified. While it has not been possible as
-part of the project, I would like to investigate in the future wheter
+part of the project, I would like to investigate in the future whether
 digital signal processing (particularly in combination with other sensors, such
 as accelerometers) could be used to recover a reasonable ECG trace.</p>
 <h3 id="thermometer-circuit">Thermometer Circuit</h3>
@@ -232,7 +232,7 @@ a potential divider circuit in the belt pack so that we could measure the body
 temperature of the wearer.</p>
 <p>I designed the (very simple) circuit for the sensor, which consisted of a
 potential divider fed into an op-amp. The op-amp provided a suitably low output
-impedence, ensuring that the measurement wasn&#39;t affected by current flowing into
+impedance, ensuring that the measurement wasn&#39;t affected by current flowing into
 the ADC of the nRF51822.</p>
 <p>The thermistor was sewn into the vest under the right armpit. This is one of the
 few locations on the body where skin temperature gives a good indication of core
@@ -241,19 +241,19 @@ body temperature.</p>
 temperature by software running on the nRF51822, as discussed in the following
 section.</p>
 <h4 id="evaluation">Evaluation</h4>
-<p>The themometer circuit was very simple and provided reasonable peformance.
-Futher testing and validation of the performance of the sensor would be required
+<p>The thermometer circuit was very simple and provided reasonable performance.
+Further testing and validation of the performance of the sensor would be required
 to give a more thorough evaluation of the sensor, as the sensor was only tested
 at room temperature and body temperature due to time constraints.</p>
 <h3 id="mbed-programming">mbed Programming</h3>
 <p>I was solely responsible for writing the software that ran on the nRF51822.</p>
 <p>For the most part, the software is very simple. As the mbed libraries contain
-all the code required for the setup and use of the ADC and bluetooth chip, all
+all the code required for the setup and use of the ADC and Bluetooth chip, all
 that was required was to link the two together and perform simple arithmetic on
 the temperature sensor readings to convert the obtained voltage to degrees
 celsius.</p>
 <h4 id="ecg-sampling">ECG Sampling</h4>
-<p>In order to show high frequency components of the ECG trace, we must sample the
+<p>In order to show high-frequency components of the ECG trace, we must sample the
 ECG output as frequently as possible. Sampling was achieved by setting up a
 <code>Ticker</code>, which interrupts the CPU at a defined interval and causes a reading
 from the ADC to be taken. The value is then transmitted using Bluetooth Low
@@ -290,13 +290,13 @@ compression shirt. This ensured that the sensors remained in the same place, and
 the cabling was kept tidy.</p>
 <p><img src="pictures/shirt inside.png" alt="Inside of the compression shirt"></p>
 <p>The 5 cables coming out of the shirt were then loomed together using AT7 PVC
-tape, and connected to a male 9 pin D-Type connector. Using a D type connector
+tape, and connected to a male 9 pin D-Type connector. Using a D-type connector
 allows easy disconnection of the shirt from the belt pack, which allows the
 shirt to be washed.</p>
 <p><img src="pictures/case.jpg" alt="The case, opened to show components"></p>
 <p>The ECG and thermometer circuits, together with 3 9V batteries and the nRF51-DK
-were placed into a black plastic case. On the front of the case I added a power
-switch, indicator LED and a female 9 pin D-Type connector. I also added 2 female
+were placed into a black plastic case. On the front of the case, I added a power
+switch, indicator LED, and a female 9 pin D-Type connector. I also added 2 female
 headers which were connected to the output of the ECG circuit to allow the
 output to be recorded easily once the case has been closed for the purposes of
 evaluation and composing the group&#39;s reports.</p>
@@ -310,10 +310,52 @@ reduced the small amount of discomfort caused by the routing of sensor cables.</
 <p>I was also responsible for the design and implementation of the group website.</p>
 <p>The website has two primary functions - as well as hosting the group&#39;s reports,
 the website also displays the data obtained from the health monitoring vest.</p>
+<p>The website has been built as a &quot;mock-up&quot; of what a production site may look
+like, with the homepage advertising the product and a dashboard for users to view
+data obtained from the vest.</p>
+<p>Users would use the &quot;Login&quot; button in the top left to access their own data.
+Since the API does not yet handle authentication, any email address and password
+may be used to login at this time.</p>
+<p>Taking into account the web hosting facilities that were made available, I
+decided it would be best to create a &quot;static&quot; website (that is, one where pages
+are not generated by the server when they are requested) and make use of
+javascript to pull data from the API server and Firebase.</p>
 <h3 id="backbone">Backbone</h3>
-<h3 id="firebase">Firebase</h3>
-<h3 id="graphing">Graphing</h3>
-<h3 id="footnotes-and-references">Footnotes and References</h3>
+<p>In order to increase the maintainability of the site, I decided to use the
+Backbone.JS <sup><a href="#fn_L1" id="reffn_L1">L1</a></sup> library which provides base classes for models, collections,
+and views. This allows a developer to easily split a potentially fairly large
+amount of javascript into discrete components.</p>
+<p>On top of Backbone.JS, I also used the Marionette library <sup><a href="#fn_L2" id="reffn_L2">L2</a></sup> which removes a
+large amount of &quot;boilerplate&quot; code that is often associated with Backbone
+applications.</p>
+<h3 id="gulp">Gulp</h3>
+<p>A number of different tools have been used to make developing the
+website easier. JavaScript code has been written in CoffeeScript <sup><a href="#fn_L3" id="reffn_L3">L3</a></sup>, as this makes
+files easier to read and provides a number of useful features such as classes
+(which aren&#39;t otherwise available in JavaScript). Stylesheets have been written
+using SCSS <sup><a href="#fn_L4" id="reffn_L4">L4</a></sup>, which allows classes to be nested and also provides a number of
+useful helper functions.</p>
+<p>Both of these tools require that code is compiled before it can be served to the
+user. Add to this a number of libraries that have made front-end development
+easier (such as the Bootstrap CSS library <sup><a href="#fn_L5" id="reffn_L5">L5</a></sup>), and it is clear that the build
+process is non-trivial.</p>
+<p>Thankfully, a number of tools exist to automate the build process. I decided to
+use Gulp <sup><a href="#fn_L6" id="reffn_L6">L6</a></sup> - a relatively new tool designed for automating build processes
+that I hadn&#39;t used before - as this provided a good opportunity to learn how to
+use it.</p>
+<p>Gulp is configured using a <code>gulpfile</code>, which defines a number of task &quot;streams&quot;.
+A stream is created by selecting source files (such as CoffeeScript files), then
+run through a plugin that performs some manipulation on the stream (such as
+a CoffeeScript compiler), then output to target - either a single file or a
+directory.</p>
+<p>The final <code>gulpfile</code> is available in the <code>website</code> section of the source code,
+and defines tasks for compiling CoffeeScript, SCSS, handlebars templates, and
+markdown, as well as tasks for moving dependencies into accessible locations.</p>
+<h3 id="evaluation">Evaluation</h3>
+<p>The website is currently fairly simple, but successfully shows the data obtained
+from the vest. It has been written in such a way that adding additional sensors
+and features would be relatively simple.</p>
+<h2 id="references">References</h2>
 <p><sup><a href="#fn_1" id="reffn_1">1</a></sup>:
   <a href="http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html">http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html</a></p>
 <p><sup><a href="#fn_2" id="reffn_2">2</a></sup>:
@@ -335,6 +377,19 @@ the website also displays the data obtained from the health monitoring vest.</p>
 <p><sup><a href="#fn_6" id="reffn_6">6</a></sup>:
   Vishay NTCLE100E3 NTC Thermistors Data Sheet
   <a href="http://www.farnell.com/datasheets/1784420.pdf">http://www.farnell.com/datasheets/1784420.pdf</a></p>
+<h2 id="links">Links</h2>
+<p><sup><a href="#fn_L1" id="reffn_L1">L1</a></sup>:
+  <a href="http://backbonejs.org">http://backbonejs.org</a></p>
+<p><sup><a href="#fn_L2" id="reffn_L2">L2</a></sup>:
+  <a href="http://marionettejs.com/">http://marionettejs.com/</a></p>
+<p><sup><a href="#fn_L3" id="reffn_L3">L3</a></sup>:
+  <a href="http://coffeescript.org/">http://coffeescript.org/</a></p>
+<p><sup><a href="#fn_L4" id="reffn_L4">L4</a></sup>:
+  <a href="http://sass-lang.com/">http://sass-lang.com/</a></p>
+<p><sup><a href="#fn_L5" id="reffn_L5">L5</a></sup>:
+  <a href="http://getbootstrap.com/">http://getbootstrap.com/</a></p>
+<p><sup><a href="#fn_L6" id="reffn_L6">L6</a></sup>:
+  <a href="http://gulpjs.com/">http://gulpjs.com/</a></p>
 
     </div> <!-- .container -->
 
