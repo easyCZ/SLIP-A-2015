@@ -8101,8 +8101,12 @@ body {
   background-color: #eee;
   border-radius: 5px; }
   .report-content img {
-    max-width: 100%; }
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 10px auto; }
   .report-content table {
-    color: #000; }
+    color: #000;
+    margin: 10px auto; }
     .report-content table td {
       padding: 10px; }

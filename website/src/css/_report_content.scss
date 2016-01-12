@@ -12,11 +12,18 @@ $report-color: #000;
   border-radius: 5px;
 
   img {
-    max-width: 100%;
+    display: block;
+
+    width: 100%;
+    max-width: 400px;
+
+    margin: 10px auto;
   }
 
   table {
     color: $report-color;
+
+    margin: 10px auto;
 
     td {
       padding: 10px;
