@@ -18,14 +18,22 @@ $report-color: #000;
     max-width: 400px;
 
     margin: 10px auto;
+
+    cursor: pointer;
   }
 
   table {
-    color: $report-color;
-
     margin: 10px auto;
 
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+
+    color: $report-color;
+
+    table-layout: fixed;
+
     td {
+      width: 2%;
       padding: 10px;
     }
   }

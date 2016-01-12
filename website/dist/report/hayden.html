@@ -98,14 +98,25 @@ frequencies of interest, effectively removing the majority of noise present.
 This also had the advantage of meeting our requirement of reducing frequencies
 beyond 25Hz, preventing any aliasing issues.</p>
 <h4 id="circuit-evaluation">Circuit Evaluation</h4>
-<p>discuss off the shelf alternatives</p>
+<p>The ECG circuit generally performed pretty well, with P,Q,R,S and T sections of
+the trace clearly visible.</p>
+<p>One issue that was identified later in the project was that the output of the
+circuit was biased at 4.5V. As the range of the ADC of the nRF51822 is 0 - 5V,
+this meant that we were not taking full advantage of the available resolution of
+the ADC, as we could have a maximum output swing of 1V.</p>
+<p>While this turned out to not normally be an issue, we did occasionally find that
+the ADC was saturated at 5V, so a future revision of the circuit would include
+rebiasing the output to 2.5V.</p>
+<p>It would also have been worth spending more time investigating &quot;off the shelf&quot;
+alternatives - while the circuit performance was acceptable, better results may
+have been obtained by using an IC such as the Analog Devices AD8232 <sup><a href="#fn_L7" id="reffn_L7">L7</a></sup>.</p>
 <h3 id="vest-electrodes">Vest Electrodes</h3>
 <p>Up to this point, we have been testing using &quot;Skintact&quot; electrodes - an &quot;off the
 shelf&quot; product that is designed to achieve good electrical contact between the
 electrode and the skin. Unfortunately, the electrodes are single use and are
 also uncomfortable (particularly when removing them!).</p>
 <p>As part of the project we wanted to integrate the ECG electrodes into the vest,
-removing the need for single-use electrodes, and providing more comfort to the
+removing the need for single-use electrodes and providing more comfort to the
 wearer. We also spent time investigating different placements of the electrodes,
 with the aim of reducing movement artifacts (caused by electrical activity in
 other muscles) and obtaining an acceptable input signal.</p>
@@ -143,7 +154,8 @@ easily introduced, causing a complete loss of our desired signal.</p>
   </tr>
 </table>
 
-<p>After a little research, I came across an alternative electrode configuration
+<p>Roy and I investigated a number of different electrode placements, but after
+a little research, I came across an alternative electrode configuration
 which is recommended for use in exercise physiology (which involves large
 amounts of movement during tests). The configuration, introduced in &quot;Exercise
 Physiology: Nutrition, Energy, and Human Performance&quot; <sup><a href="#fn_2" id="reffn_2">2</a></sup>, has the ground
@@ -163,7 +175,12 @@ susceptible to movement artifacts.</p>
   </tr>
 </table>
 
-<p>This positioning is also suggested by <sup><a href="#fn_3" id="reffn_3">3</a></sup>.</p>
+<p>This positioning is also suggested by Hakyung Cho and Joo Hyeon Lee in their
+paper &quot;A Study on the Optimal Positions of ECG Electrodes in a Garment for the
+Design of ECG-Monitoring Clothing for Male&quot; (sic) <sup><a href="#fn_3" id="reffn_3">3</a></sup>.</p>
+<p>When integrating the electrodes into the shirt (discussed in more detail below),
+we found that moving the ground electrode to the right shoulder produced a very
+similar trace but provided better contact with the skin.</p>
 <h4 id="electrode-design">Electrode design</h4>
 <p>Having decided on a suitable placement for the electrodes, I then spent a small
 amount of time investigating different materials that could be used for the
@@ -357,7 +374,10 @@ from the vest. It has been written in such a way that adding additional sensors
 and features would be relatively simple.</p>
 <h2 id="references">References</h2>
 <p><sup><a href="#fn_1" id="reffn_1">1</a></sup>:
-  <a href="http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html">http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html</a></p>
+  Homemade Electrocardiograph
+  Jason Nguyen
+  <a href="http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html">http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html</a>
+  Accessed 2015-10-12</p>
 <p><sup><a href="#fn_2" id="reffn_2">2</a></sup>:
   Exercise Physiology: Nutrition, Energy, and Human Performance
   William D. McArdle, Frank I. Katch, Victor L. Katch
@@ -390,6 +410,8 @@ and features would be relatively simple.</p>
   <a href="http://getbootstrap.com/">http://getbootstrap.com/</a></p>
 <p><sup><a href="#fn_L6" id="reffn_L6">L6</a></sup>:
   <a href="http://gulpjs.com/">http://gulpjs.com/</a></p>
+<p><sup><a href="#fn_L7" id="reffn_L7">L7</a></sup>:
+  <a href="http://www.analog.com/en/products/application-specific/medical/ecg/ad8232.html">http://www.analog.com/en/products/application-specific/medical/ecg/ad8232.html</a></p>
 
     </div> <!-- .container -->
 
@@ -406,5 +428,8 @@ and features would be relatively simple.</p>
 
       </div>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="../js/report.js"></script>
   </body>
 </html>

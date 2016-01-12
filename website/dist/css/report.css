@@ -8104,9 +8104,14 @@ body {
     display: block;
     width: 100%;
     max-width: 400px;
-    margin: 10px auto; }
+    margin: 10px auto;
+    cursor: pointer; }
   .report-content table {
+    margin: 10px auto;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
     color: #000;
-    margin: 10px auto; }
+    table-layout: fixed; }
     .report-content table td {
+      width: 2%;
       padding: 10px; }

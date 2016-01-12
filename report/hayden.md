@@ -85,7 +85,22 @@ This also had the advantage of meeting our requirement of reducing frequencies
 beyond 25Hz, preventing any aliasing issues.
 
 #### Circuit Evaluation
-discuss off the shelf alternatives
+
+The ECG circuit generally performed pretty well, with P,Q,R,S and T sections of
+the trace clearly visible.
+
+One issue that was identified later in the project was that the output of the
+circuit was biased at 4.5V. As the range of the ADC of the nRF51822 is 0 - 5V,
+this meant that we were not taking full advantage of the available resolution of
+the ADC, as we could have a maximum output swing of 1V.
+
+While this turned out to not normally be an issue, we did occasionally find that
+the ADC was saturated at 5V, so a future revision of the circuit would include
+rebiasing the output to 2.5V.
+
+It would also have been worth spending more time investigating "off the shelf"
+alternatives - while the circuit performance was acceptable, better results may
+have been obtained by using an IC such as the Analog Devices AD8232 [^L7].
 
 ### Vest Electrodes
 Up to this point, we have been testing using "Skintact" electrodes - an "off the
@@ -94,7 +109,7 @@ electrode and the skin. Unfortunately, the electrodes are single use and are
 also uncomfortable (particularly when removing them!).
 
 As part of the project we wanted to integrate the ECG electrodes into the vest,
-removing the need for single-use electrodes, and providing more comfort to the
+removing the need for single-use electrodes and providing more comfort to the
 wearer. We also spent time investigating different placements of the electrodes,
 with the aim of reducing movement artifacts (caused by electrical activity in
 other muscles) and obtaining an acceptable input signal.
@@ -135,7 +150,8 @@ easily introduced, causing a complete loss of our desired signal.
   </tr>
 </table>
 
-After a little research, I came across an alternative electrode configuration
+Roy and I investigated a number of different electrode placements, but after
+a little research, I came across an alternative electrode configuration
 which is recommended for use in exercise physiology (which involves large
 amounts of movement during tests). The configuration, introduced in "Exercise
 Physiology: Nutrition, Energy, and Human Performance" [^2], has the ground
@@ -158,7 +174,13 @@ susceptible to movement artifacts.
   </tr>
 </table>
 
-This positioning is also suggested by [^3].
+This positioning is also suggested by Hakyung Cho and Joo Hyeon Lee in their
+paper "A Study on the Optimal Positions of ECG Electrodes in a Garment for the
+Design of ECG-Monitoring Clothing for Male" (sic) [^3].
+
+When integrating the electrodes into the shirt (discussed in more detail below),
+we found that moving the ground electrode to the right shoulder produced a very
+similar trace but provided better contact with the skin.
 
 #### Electrode design
 
@@ -417,7 +439,10 @@ References
 ----------
 
 [^1]:
+  Homemade Electrocardiograph
+  Jason Nguyen
   http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html
+  Accessed 2015-10-12
 
 [^2]:
   Exercise Physiology: Nutrition, Energy, and Human Performance
@@ -463,3 +488,6 @@ Links
 
 [^L6]:
   http://gulpjs.com/
+
+[^L7]:
+  http://www.analog.com/en/products/application-specific/medical/ecg/ad8232.html
