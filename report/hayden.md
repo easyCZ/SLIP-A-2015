@@ -314,12 +314,14 @@ voltage obtained from the thermistor into degrees celsius. The temperature (in
 degrees Kelvin) of a thermistor can be approximated using the extended
 "Steinhart and Hart" formula:
 
-  T^(-1) = A1 + B1 * ln(R / Rref) + C1 * ln^2(R / Rref) + D1 * ln^3(R/Rref)
+$$
+  T^{-1} = A_1 + B_1 \times ln(R / R_{ref}) + C_1 \times ln^2(R / R_{ref}) + D_1 \times ln^3(R/R_{ref})
+$$
 
-where A1, B1, C1 and D1 are constants specific to the thermistor. These values
-were obtained from the thermistor's datasheet [^6].
+where $$A_1$$, $$B_1$$, $$C_1$$ and $$D_1$$ are constants specific to the
+thermistor. These values were obtained from the thermistor's datasheet [^6].
 
-Having calculated `T`, it was then simply a case of subtracting 273 to convert
+Having calculated $$T$$, it was then simply a case of subtracting 273 to convert
 to degrees celsius.
 
 As body temperature changes relatively infrequently, the temperature was only
