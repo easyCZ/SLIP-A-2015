@@ -86,6 +86,31 @@ with a live ECG trace and the last aquired temperature being shown to a signed
 in user.</p>
 <p>Data displayed on the website is pulled from the UberVest API, with live data
 being pushed out by Firebase<sup><a href="#fn_L1" id="reffn_L1">L1</a></sup>.</p>
+<h2 id="data-processing-and-analysis">Data Processing and Analysis</h2>
+<p>Data processing and analysis consists largely of the generation of a live beats
+per minute (BPM) feed. Some research and experimentation on future applications of a 
+respiratory sensor has also been completed.</p>
+<p>The live BPM feed takes a moving window (between 4 and 15 seconds) as argument and 
+returns a BPM value. ECG data is filtered through multiple methods to identify beats
+and then extrapolated to 60 seconds. </p>
+<p>With regard to the potential future applications of the respiratory sensor, a method
+has been explored and tested to rank patients by their respiratory fitness and an 
+experiment has been conducted to determine how good an indicator mean respiratory flow 
+is of a young healthy individual&#39;s fitness.</p>
+<h2 id="applications-in-health-and-sport">Applications in Health and Sport</h2>
+<p>Both in health and sport, the use of data analytics is becoming more and more popular. 
+One significant example of this is Calico, a Google-backed biotechnology company that 
+has recently gained access to Ancestry.com&#39;s genetic database with the intention of using
+genetic and family tree related data to improve the human lifespan. Another is the usage 
+of GPS tracking devices in Rugby. We believe that the UberVest is could add to the 
+possiblities of data analytics by providing data. We have also selected some applications 
+that the UberVest could work towards:  </p>
+<ol>
+<li>Heart attack / stroke detection  </li>
+<li>Analysis of continuous temperature monitoring  </li>
+<li>Automatic detection of severe exacterbations in COPD patients (through continuous respiratory monitoring)  </li>
+<li>Respiratory and general fitness testing (for personal use and to identify at risk individuals)  </li>
+</ol>
 <h2 id="links">Links</h2>
 <blockquote id="fn_L1">
 <sup>L1</sup>. <a href="http://firebase.io">http://firebase.io</a><a href="#reffn_L1" title="Jump back to footnote [L1] in the text."> &#8617;</a>
