@@ -12,23 +12,23 @@ CHECK		d) return BPM CHEKC
 Not necessary	e) BPMServices intro
 SEMI		f) challenge: density of data poinst (sparsity and variation) ADD AVG DENSITY or average spacing AND ADD VARIANCE-ish thing
 	2) Method
-		a) Overview
+CHECK		a) Overview
 CHECK			i) overview of BPM code
-		b) step structure
-			i) step structure intro
-				-> why the step structure?
+DIAGRAMS	b) step structure
+CHECK			i) step structure intro
+CHECK				-> why the step structure?
 CHECK					- background: get_peaks
 CHECK					- purpose: freedom to let computation give solution where I am unable (because there is too much data for me to parse manually)
 CHECK					- purpose: possible to build on code with increasing amounts of available data
-			ii) the actual structure
+DIAGRAMS		ii) the actual structure
 CHECK				-> What do the individual steps do and how/why does the format of data change throughout? GRAPHS to illustrate format and how we go from data to bpm
 CHECK					- individual steps no prob
 to be done				- list vs dictionary. consistency throughout (PROS allows me to have fewer functions, more natural way of formatting, sometimes faster. CONS sometimes slower, frequent sorting)
-			iii) table of all available methods GRAPH
+DIAGRAMS		iii) table of all available methods GRAPH
 maybe				-> explain trivial case of all zeros
-				-> which one was deemed best. Testing provides detailed information.
+to be done			-> which one was deemed best. Testing provides detailed information.
 		c) BPM function
-			i) theory behind extrapolation to 60 seconds -> task: find times when beats occur GRAPH
+SEMI			i) theory behind extrapolation to 60 seconds -> task: find times when beats occur GRAPH no graph done
 			ii) error detection factor GRAPH
 			c) Error detection
 				i) Detecting zeros and extreme variance (at_risk)
@@ -43,7 +43,7 @@ maybe				-> explain trivial case of all zeros
 				-> My quality set is going to be of a finite size. In my testing, I determine the size of it and then choose the most largest amount of reasonable settings I can.
 				-> choose setting with highest accuracy
 				-> specs - passing data back and forth
-			ii) 'Programming environment'
+			ii) 'Testing environment'
 				-> graphical format for what i have created to match specs GRAPH
 				-> emulator
 				-> Setting -> BPMServices -> CSV/command prompt   GRAPH
@@ -108,6 +108,7 @@ maybe				-> explain trivial case of all zeros
 			iii) use an established device to record actual beat times so that the quality measure function can be improved
 			iv) make method selection more dependent on data. at the moment only benchmarks vary.
 			v) expand on logical choices for step1 methods. create hierarchies etc...
+			vi) error in BPM on outside shouldn't be counted but is at the moment
 C) RESpeck
 	1) Intro
 		a) monitoring of our health is gaining importance(with good reason) and just measuring the breathing, temperature and BPM of people during the day would provide useful data to research. Obviously, we would like to provide services to users as well.
