@@ -1,0 +1,3 @@
+Figure 1 - take-away box conaining bullet point version of specifications.
+Figure 2 - flow-chart outlining the step structure
+Figure 3 - table of all methods

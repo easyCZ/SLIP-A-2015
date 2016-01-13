@@ -1,0 +1,6 @@
+[1] http://www.bloomberg.com/news/articles/2015-07-21/google-s-calico-to-scour-ancestry-com-data-for-longevity-genes
+[2] http://www.calicolabs.com/
+[3] http://www.ecrc.ed.ac.uk/Researchers/item/Dr-Andy-Sims.html
+[4] LSM lecture notes
+[5] maybe NLAA lecture notes
+[6] maybe python home page

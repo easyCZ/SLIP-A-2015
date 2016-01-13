@@ -1,45 +1,47 @@
 Things to put in my report
 
 A) Intro
-	1) Background on our project and what I was responsible for. I worked on the ECG and with the RESpeck PERHAPS OMIT
+SEMI	1) Background on our project and what I was responsible for. I worked on the ECG and with the RESpeck PERHAPS OMIT. NEED TO ADD STUFF ON RESpeck
 
 B) ECG
 	1) Scope of work GRAPH - this section should cover how my part fits in with the rest
-		a) find bpm
-		b) moving window (0-10 seconds)
-		c) JSON file dictionary {'timestamp':volts}
-		d) return BPM
-		e) BPMServices intro
-		f) challenge: density of data poinst (sparsity and variation)
+CHECK		a) find bpm
+CHECK		b) moving window (0-10 seconds)
+CHECK		c) JSON file dictionary {'timestamp':volts} CHECK
+CHECK		d) return BPM CHEKC
+Not necessary	e) BPMServices intro
+SEMI		f) challenge: density of data poinst (sparsity and variation) ADD AVG DENSITY or average spacing AND ADD VARIANCE-ish thing
 	2) Method
 		a) Overview
-			i) Take set of methods, generate function that maps this set to a quality set (MATHS and GRAPH)
-			ii) My quality set is going to be of a finite size. In my testing, I determine the size of it and then choose the most largest amount of reasonable settings I can.
-			iii) choose setting with highest accuracy
-		b) BPM function
+CHECK			i) overview of BPM code
+		b) step structure
+			i) step structure intro
+				-> why the step structure?
+CHECK					- background: get_peaks
+CHECK					- purpose: freedom to let computation give solution where I am unable (because there is too much data for me to parse manually)
+CHECK					- purpose: possible to build on code with increasing amounts of available data
+			ii) the actual structure
+CHECK				-> What do the individual steps do and how/why does the format of data change throughout? GRAPHS to illustrate format and how we go from data to bpm
+CHECK					- individual steps no prob
+to be done				- list vs dictionary. consistency throughout (PROS allows me to have fewer functions, more natural way of formatting, sometimes faster. CONS sometimes slower, frequent sorting)
+			iii) table of all available methods GRAPH
+maybe				-> explain trivial case of all zeros
+				-> which one was deemed best. Testing provides detailed information.
+		c) BPM function
 			i) theory behind extrapolation to 60 seconds -> task: find times when beats occur GRAPH
 			ii) error detection factor GRAPH
+			c) Error detection
+				i) Detecting zeros and extreme variance (at_risk)
+					-> detecting zeros gives me BS factor - logical to discard zreos because it implies that it is out of range and data is incomplete.
+					-> allows to adjust BPM to fair value
+				ii) Extreme variance is a warning that the data is fishy, but has not been elaborated or tested sufficiently due to time constraints.
 			iii) actual function name and code
-		b) step structure
-			i) step structure overview
-				-> why the step structure?
-					- background: get_peaks
-					- purpose: freedom to let computation give solution where I am unable (because there is too much data for me to parse manually)
-					- purpose: possible to build on code with increasing amounts of available data
-				-> What do the individual steps do and how/why does the format of data change throughout? GRAPHS to illustrate format and how we go from data to bpm
-					- individual steps no prob
-					- list vs dictionary. consistency throughout (PROS allows me to have fewer functions, more natural way of formatting, sometimes faster. CONS sometimes slower, frequent sorting)
-			ii) table of all available methods GRAPH
-				-> justify why some were kept and others weren't
-				-> which one was deemed best. Testing provides detailed information.
-		c) Error detection
-			i) Detecting zeros and extreme variance (at_risk)
-				-> detecting zeros gives me BS factor - logical to discard zreos because it implies that it is out of range and data is incomplete.
-				-> allows to adjust BPM to fair value
-			ii) Extreme variance is a warning that the data is fishy, but has not been elaborated or tested sufficiently due to time constraints.
 		d) Testing
 			i) introduction to testing
-				-> what am I wanting to test - find best setting, how well does my code recognise error data?, impact of window length, per100 factor?
+				-> what am I wanting to test - find best setting, how well does my code recognise error data?, impact of window length, per100 factor
+				-> Take set of methods, generate function that maps this set to a quality set (MATHS and GRAPH)
+				-> My quality set is going to be of a finite size. In my testing, I determine the size of it and then choose the most largest amount of reasonable settings I can.
+				-> choose setting with highest accuracy
 				-> specs - passing data back and forth
 			ii) 'Programming environment'
 				-> graphical format for what i have created to match specs GRAPH
@@ -87,6 +89,7 @@ B) ECG
 					- set my limit at 24 h run time, leaving me ca. 5,000,000 windows to evaluate
 					- narrow down to how many different settings I can test. OBVIOUSLY NOT ENOUGH TO TEST COMPLETE SETTING
 				-> Testing flow chart GRAPH
+					- justify why some were kept and others weren't
 					- Flow chart is clearly imperfect. Huge logical gap by testing one after another as it prevents many potentially effective combinations. I am limiting myself to methods that work reasonably well with the given setting.
 					- not sure which methods were going to be successful, I have a decent feeling regarding benchmarks, iter_window, min_spacing and window_length. also would only be able to test very few methods
 					- Even better feeling for iter_window, window_length and min_spacing. 
@@ -98,11 +101,13 @@ B) ECG
 					- results from round 1 - CSV
 				-> display of optimal method
 	3) Improvements
-		a) quick intro to improvements
+		a) provided a good programming environment and framework for testing, but the actual methods need improvement.
 		b) TABLE with all improvements, feasibility, implementation difficulty, judged scale of impact.
 			i) window_movement improvement
 			ii) quicker code and computer for less flawed testing method
 			iii) use an established device to record actual beat times so that the quality measure function can be improved
+			iv) make method selection more dependent on data. at the moment only benchmarks vary.
+			v) expand on logical choices for step1 methods. create hierarchies etc...
 C) RESpeck
 	1) Intro
 		a) monitoring of our health is gaining importance(with good reason) and just measuring the breathing, temperature and BPM of people during the day would provide useful data to research. Obviously, we would like to provide services to users as well.
@@ -126,3 +131,8 @@ C) RESpeck
 		d) test on my crowd
 		e) conclusion
 D) Conclusion and recap
+
+search these before submissions:
+ITALICS
+HELP
+level and/or heading
