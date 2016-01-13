@@ -28,7 +28,7 @@ The design process was done in steps with review of each step against both the f
 ## Understand the devices
 Firstly, it is essential to understand what kind of devices will need to be able to connect and access the infrastructure. The figure below outlines the different devices required to interact with the infrastructure. There are two devices required to interact with the infrastructure, both with different application programming interface.
 
-![Design Devices](./design_1.png)
+![Design Devices](./res_milan/design_1.png)
 
 ### Device Requirements
 Firstly, the mobile application requires to communicate with the hardware device in order to relay sensory readings to the infrastructure. The communication protocol between the smart phone and the wearable is over Bluetooth. The underlying application implementation is in Java.
@@ -66,7 +66,7 @@ For the API itself, we picked Python and the Django Framework for its simplicity
 ## The Infrastructure
 Given the outline of the components above, the infrastructure looks as follows:
 
-![Infrastructure](./2_api.png)
+![Infrastructure](./res_milan/2_api.png)
 
 There are direct interactions between Django and Firebase in order to process the data which will be outlined in more detail further on. Django then further interacts with PosgreSQL in order to store processed data as well as to serve information about users and devices. Keeping the data stores separate helps maintain separation of concerns and decouples the individual systems from each other.
 
@@ -99,8 +99,8 @@ This workflow using a continous integration agent - Jenkins - greatly simplifies
 ## API
 The API is implemented according to REST [8] design prenciples. As outlined in a paper on REST design [9], REST improves client's ability to understand the data being requested and improves discoverability of resources in the system. In order to develop our REST API quickly, a Django REST Framework [10] is used as a module for Django. Furthermore, a user friendly documentation and exploration of the API is exposed on the API server allowing a user of the API to discover various endpoints of the API. An example of such browsable API is shown below. The browsable API can be accessed through [here](http://api-ubervest.rhcloud.com/).
 
-![Devices API](./3_api_devices.png)
-![Devices BPM API](./4_api_devices_bpm.png)
+![Devices API](./res_milan/3_api_devices.png)
+![Devices BPM API](./res_milan/4_api_devices_bpm.png)
 
 The API application itself is broken down into packages. The top level package of interest is the *devices* package which contains logic for storage and retrieval of devices stored on the system. It can be retrieved through */devices* or */devices/<device_id>* for a particular device. Each device also has BPM readings associated to with it which can be retrieved through */devices/<device_id>/bpm*.
 
@@ -114,14 +114,14 @@ Finally, the processed data is being stored in the PosgreSQL database for future
 ### API
 In order to evaluate the performance of the API server, we can emulate a large number of users accessing the data in the API simultaneously. Using a general purpose load tester vegeta [11], we can execute the following `echo "GET http://api-ubervest.rhcloud.com/devices/" | vegeta attack -duration=5s  | tee results.bin | vegeta report -reporter=plot > plot.html` to obtain a graph of the latency over time over sustained load.
 
-![Evaluation API](./5_eval_api.png)
+![Evaluation API](./res_milan/5_eval_api.png)
 
 From the graph we can observe that the current architecture of the API (with the free version of OpenShift) is not capable of scaling with the number of requests. This is an expected result as the service provided by the free tier of OpenShift delivers service in terms of best effort. Additionally, the API server is running as a singlar instance only and therefore an increased load will have direct impact on all requests being currently processed and increase the latency as visible in the graph above. Despite the linear scaling of the API, we would expect it to be able to handle a sufficient load before a more scalable version would need to be implemented. This comes from the observation that the API is only being contacted over the HTTP protocol for information on processed data which would typically only occur once per browser load and therefore would not generate a sustained heavy load unless a large number of clients were accessing the site at the same time.
 
 ### Firebase
 Using the same approach to load test the FireBase storage, we can run `echo "GET https://ubervest.firebaseio.com/devices/12/bpm" | vegeta attack -duration=5s -rate=1000 | tee results.bin | vegeta report -reporter=plot > firebase.html` to generate a sustained rate of 1k requests per second against Firebase. This is a much higher rate than we used in the case of the API, however, the FireBase storage in our case has much higher data volatility as well as throughput of data as it is storing raw sensory readings. The graph below outlines the performance observations obtained.
 
-![Evaluation API](./6_eval_firebase.png)
+![Evaluation API](./res_milan/6_eval_firebase.png)
 
 We can observe that the Firebase latency is for the majority of the test time above one second, this in itself is not a significant problem as a one second delay between seeing real time data is generally not going to be perceived by the user. Furthermore, it is the throughput which is of importance and in the case of Firebase we are able to handle 1k requests per second which given the free tier plan of FireBase is sufficient load before scaling would be required. It should also be noted that the method of load testing the Firebase over HTTP has overheads in terms of establishing a HTTP connection only to drop it once we have received a response and establish a response again. In our application, web sockets are used which avoid the overhead of having to re-establish connection for each data fetch as well as not having request header overheads. Therefore, in reality, FireBase performs sufficiently well for a free tier application in our scenario.
 
@@ -139,7 +139,7 @@ Thirdly, in order to further increase data resiliency and improve accessibility,
 
 A sample setup with the above improvements included could look as follows:
 
-![Evaluation API](./7_clusters.png)
+![Evaluation API](./res_milan/7_clusters.png)
 
 # Conclusion
 As a team, we have developed a working prototype of the application allowing an elastic vest with sensors to be worn by a user. We have showed that the system is capable of communicating across the devices and that data is sent from the vest, through the mobile application, to the storage layer. Further, we have showed that the live data can be observed on a website in real time.
