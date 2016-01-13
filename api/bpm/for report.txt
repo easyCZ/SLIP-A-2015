@@ -105,12 +105,23 @@ B) ECG
 C) RESpeck
 	1) Intro
 		a) monitoring of our health is gaining importance(with good reason) and just measuring the breathing, temperature and BPM of people during the day would provide useful data to research. Obviously, we would like to provide services to users as well.
-			- looking at a method to rank users' respiratory fitness (in recovery from exercise)
-				+ quick intro to COPD patient experiment.
 			- FEV1 vs predicted - trying to see if we can predict FEV1 or just breathing in general. first step in that direction. also might be good indicator of health in itself.
 				+ outline experiment
-	2) COPD patients - trying to keep this brief
-		
-	3) My experiment - try to elaborate a little bit more on this. I have to prove to DK that not following his exact instruction was warranted.
-
+			- looking at a method to rank users' respiratory fitness (in recovery from exercise)
+				+ quick intro to COPD patient experiment.
+	2) My experiment - try to elaborate a little bit more on this. I have to prove to DK that not following his exact instruction was warranted.
+		a) intro
+			i) Want to figure out how mean inspiratory flow is related to heart rate in recovery after exercise. This has multiple purposes:
+			ii) FEV1 to predicted (predictable using bpm?) as an indicator of respiratory disease
+		b) Method / procedure
+			i) describe procedure in detail and provide justification for lying down etc...
+		c) Results
+			i) GRAPHS
+			ii) correlation between BPM and flow
+ 	3) COPD patients - trying to keep this brief
+		a) trying to guess a formula for resp fitness
+		b) data
+		c) method
+		d) test on my crowd
+		e) conclusion
 D) Conclusion and recap
