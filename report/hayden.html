@@ -285,10 +285,10 @@ up to 25Hz.</p>
 voltage obtained from the thermistor into degrees celsius. The temperature (in
 degrees Kelvin) of a thermistor can be approximated using the extended
 &quot;Steinhart and Hart&quot; formula:</p>
-<p>  T^(-1) = A1 + B1 <em> ln(R / Rref) + C1 </em> ln^2(R / Rref) + D1 * ln^3(R/Rref)</p>
-<p>where A1, B1, C1 and D1 are constants specific to the thermistor. These values
-were obtained from the thermistor&#39;s datasheet <sup><a href="#fn_6" id="reffn_6">6</a></sup>.</p>
-<p>Having calculated <code>T</code>, it was then simply a case of subtracting 273 to convert
+<script type="math/tex; mode=display">
+  T^{-1} = A_1 + B_1 \times ln(R / R_{ref}) + C_1 \times ln^2(R / R_{ref}) + D_1 \times ln^3(R/R_{ref})</script><p>where <script type="math/tex">A_1</script>, <script type="math/tex">B_1</script>, <script type="math/tex">C_1</script> and <script type="math/tex">D_1</script> are constants specific to the
+thermistor. These values were obtained from the thermistor&#39;s datasheet <sup><a href="#fn_6" id="reffn_6">6</a></sup>.</p>
+<p>Having calculated <script type="math/tex">T</script>, it was then simply a case of subtracting 273 to convert
 to degrees celsius.</p>
 <p>As body temperature changes relatively infrequently, the temperature was only
 sampled once every second. While a smaller interval could have been used, this
@@ -432,6 +432,7 @@ and features would be relatively simple.</p>
     </footer>
 
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     <script src="../js/report.js"></script>
   </body>
 </html>
