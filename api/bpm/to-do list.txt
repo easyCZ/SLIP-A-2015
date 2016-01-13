@@ -24,3 +24,6 @@ EXPERIMENT 2 - abs(bpm - actual)
 EXPERIMENT 3
 graph how window length affects data
 graph warm-up time too
+
+do I still have to figure out edges?
+maybe implement super quick algorithm!!! just remove all beats that are outside of window and find new ones towards the end. not relevant for our testing.
