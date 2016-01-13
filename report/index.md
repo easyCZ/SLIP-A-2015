@@ -43,3 +43,18 @@ The design made use of the analogue to digital converter and Bluetooth Low
 Energy tranciever available in the nRF51822 microprocessor, which is included
 on the nRF51-DK. This allows us to read values from the analogue sensors and
 transmit the data on to the Android app.
+
+Web Interface
+-------------
+
+The website provides an overview of the data being collected by the UberVest,
+with a live ECG trace and the last aquired temperature being shown to a signed
+in user.
+
+Data displayed on the website is pulled from the UberVest API, with live data
+being pushed out by Firebase[^L1].
+
+Links
+-----
+
+[^L1]: http://firebase.io

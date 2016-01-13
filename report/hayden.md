@@ -382,7 +382,8 @@ data obtained from the vest.
 
 Users would use the "Login" button in the top left to access their own data.
 Since the API does not yet handle authentication, any email address and password
-may be used to login at this time.
+may be used to login at this time. Unfortunately, the "historic" BPM graph is
+also only a proof of concept, as the data has not been presented by the API.
 
 Taking into account the web hosting facilities that were made available, I
 decided it would be best to create a "static" website (that is, one where pages
