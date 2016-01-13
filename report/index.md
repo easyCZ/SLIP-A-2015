@@ -79,11 +79,11 @@ has recently gained access to Ancestry.com's genetic database with the intention
 genetic and family tree related data to improve the human lifespan. Another is the usage 
 of GPS tracking devices in Rugby. We believe that the UberVest is could add to the 
 possiblities of data analytics by providing data. We have also selected some applications 
-that the UberVest could work towards:
-1. Heart attack / stroke detection
-2. Analysis of continuous temperature monitoring
-3. Automatic detection of severe exacterbations in COPD patients (through continuous respiratory monitoring)
-4. Respiratory and general fitness testing (for personal use and to identify at risk individuals)
+that the UberVest could work towards:  
+1. Heart attack / stroke detection  
+2. Analysis of continuous temperature monitoring  
+3. Automatic detection of severe exacterbations in COPD patients (through continuous respiratory monitoring)  
+4. Respiratory and general fitness testing (for personal use and to identify at risk individuals)  
 
 Links
 -----
