@@ -18,6 +18,7 @@ ____________
 
 Introduction
 ------------
+The main purpose of this project is to implement a working prototype of a wearable vest with a hearth rate monitor and a temperature with the ability to receive real-time updates of sensory readings through either a mobile application or web interface. The main goals aimed to be solved by this project are health monitoring in real time and health analytics obtains from sensory readings over time.
 
 Team Members and Responsibilities
 ------------
