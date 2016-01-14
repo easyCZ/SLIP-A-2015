@@ -33,16 +33,20 @@ Hardware
 
 The UberVest hardware consists of two parts: a compression shirt containing
 electrodes and sensors, and a beltpack that contains signal processing circuits
-and the nRF51-DK board.
+and the nRF51-DK board. These two components are modular and can be removed from each other
+allowing for the shirt to be hand washed. 
 
 The final design included electrodes and amplification / filtering circuitry to
 aquire an electrocardiogram (ECG) of the wearer of the shirt, and a sensor to
-allow monitoring of the wearer's temperature.
+allow monitoring of the wearer's temperature. On board signal processing has been implemented to reduce the load on the webserver. An active low pass filter elimates the noise from the power supply at the 60hz harmonics, yielding a clean visible ECG trace. Resulting on no post processing needed on the server side.
 
 The design made use of the analogue to digital converter and Bluetooth Low
 Energy tranciever available in the nRF51822 microprocessor, which is included
 on the nRF51-DK. This allows us to read values from the analogue sensors and
-transmit the data on to the Android app.
+transmit the data on to the Android app. 
+
+ 
+
 
 
 API
