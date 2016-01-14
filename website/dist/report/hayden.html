@@ -54,6 +54,9 @@ contained the ECG filtering circuit, a simple potential divider for the
 temperature sensor, and the nRF51 Development Kit (nRF51-DK). The NRF51-DK
 provides an easy interface to the nRF51822 microprocessor, which includes an
 analogue to digital converter (ADC) and Bluetooth Low Energy transceiver.</p>
+<p>Note: While efforts have been made to distinguish in the following sections
+where &quot;work&quot; was exclusively carried out by either myself or Roy, a large amount
+of time was spent working together to overcome the challenges described.</p>
 <h3 id="ecg-circuit">ECG Circuit</h3>
 <p>One of the more technically challenging aspects of the project was designing
 and building a circuit for obtaining a clean ECG trace.</p>
@@ -78,10 +81,6 @@ of noise seen in the signal.</p>
 <p>Roy was responsible for the initial circuit design (based on Jason Nguyen&#39;s
 circuit <sup><a href="#fn_1" id="reffn_1">1</a></sup>), which I then built and tested. Following initial testing, Roy and
 myself worked together to tackle the challenges described above.</p>
-<p>Note: While efforts have been made to distinguish in the following sections
-where &quot;work&quot; was exclusively carried out by either myself or Roy, a large amount
-of time was spent working together to overcome the challenges described and
-therefore it is not possible to reasonably split &quot;work&quot;.</p>
 <h4 id="circuit-refinement">Circuit refinement</h4>
 <p>The initial circuit provided a recognizable ECG trace, shown below.</p>
 <table>
@@ -301,8 +300,13 @@ contact area is pushed into the skin a little more, improving the contact surfac
   </tr>
 </table>
 
-<insert something about cloth>
-
+<p>While the copper tape electrodes performed reasonably well while the wearer was
+stationary, we once again found that movement caused the signal to be lost.
+Given the limited time available I suggested sewing small patches of cloth over
+the electrodes, then using an &quot;off the shelf&quot; electrode gel to try and improve
+the contact between the skin and the electrode - even during movement. The cloth
+helped to keep the gel in place, and the gel did indeed reduce movement artifacts
+seen with the dry electrodes.</p>
 <h4 id="evaluation">Evaluation</h4>
 <p>The vest is relatively comfortable to wear, with the main discomfort being
 caused by the poor integration of the signal wires into the vest.</p>
