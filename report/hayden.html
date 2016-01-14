@@ -98,7 +98,7 @@ myself worked together to tackle the challenges described above.</p>
 
 <p>Although recognizable, the trace obtained contains a large amount of noise as
 the first iteration of the circuit made little attempt to filter noise.</p>
-<p>Using a Picoscope, I was able to identify the frequency of the noise introduced:</p>
+<p>Using a Picoscope, Roy and I was able to identify the frequency of the noise introduced:</p>
 <table>
   <tr>
     <td>
@@ -113,7 +113,7 @@ the first iteration of the circuit made little attempt to filter noise.</p>
   </tr>
 </table>
 
-<p>Roy and I identified the troublesome frequencies as being 50Hz and its harmonics
+<p>We identified the troublesome frequencies as being 50Hz and its harmonics
 (100Hz, 200Hz, 400Hz, etc), which was likely introduced by our power supply and
 may not be a problem when the device is running on batteries.
 However, as these are beyond our desired signal frequency of 10Hz we were able
@@ -177,9 +177,9 @@ following output:</p>
 </table>
 
 <p>The frequency trace clearly shows our new 40dB/decade roll-off above the
-frequencies of interest, effectively removing the majority of noise present.
-This also had the advantage of meeting our requirement of reducing frequencies
-beyond 25Hz, preventing any aliasing issues.</p>
+frequencies of interest, effectively removing the majority of noise present.</p>
+<h4 id="final-ecg-circuit-schematic">Final ECG Circuit Schematic</h4>
+<p><img src="pictures/ecg circuit.jpg" alt="ECG Schematic"></p>
 <h4 id="circuit-evaluation">Circuit Evaluation</h4>
 <p>The ECG circuit generally performed pretty well, with P, Q, R, S and T sections
 of the trace clearly visible.</p>
@@ -497,7 +497,7 @@ use it.</p>
 <p>Gulp is configured using a <code>gulpfile</code>, which defines a number of task &quot;streams&quot;.
 A stream is created by selecting source files (such as CoffeeScript files), then
 run through a plugin that performs some manipulation on the stream (such as
-a CoffeeScript compiler), then output to target - either a single file or a
+a CoffeeScript compiler), and output to target - either a single file or a
 directory.</p>
 <p>The final <code>gulpfile</code> is available in the <code>website</code> section of the source code,
 and defines tasks for compiling CoffeeScript, SCSS, handlebars templates, and
