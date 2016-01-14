@@ -22,6 +22,10 @@ temperature sensor, and the nRF51 Development Kit (nRF51-DK). The NRF51-DK
 provides an easy interface to the nRF51822 microprocessor, which includes an
 analogue to digital converter (ADC) and Bluetooth Low Energy transceiver.
 
+Note: While efforts have been made to distinguish in the following sections
+where "work" was exclusively carried out by either myself or Roy, a large amount
+of time was spent working together to overcome the challenges described.
+
 ### ECG Circuit
 
 One of the more technically challenging aspects of the project was designing
@@ -53,11 +57,6 @@ of noise seen in the signal.
 Roy was responsible for the initial circuit design (based on Jason Nguyen's
 circuit [^1]), which I then built and tested. Following initial testing, Roy and
 myself worked together to tackle the challenges described above.
-
-Note: While efforts have been made to distinguish in the following sections
-where "work" was exclusively carried out by either myself or Roy, a large amount
-of time was spent working together to overcome the challenges described and
-therefore it is not possible to reasonably split "work".
 
 #### Circuit refinement
 
