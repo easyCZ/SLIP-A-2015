@@ -111,7 +111,9 @@ form of a standard operational amplifier configuration (pictured below).
     </td>
   </tr>
   <tr class="img-caption">
-    A standard second order low pass filter
+    <td>
+      A standard second order low pass filter
+    </td>
   </tr>
 </table>
 
@@ -125,10 +127,10 @@ The values chosen were as follows:
     <td>R_2</td><td>15K</td>
   </tr>
   <tr>
-    <td>C_1</td><td>1uF</td>
+    <td>C_1</td><td>1µF</td>
   </tr>
   <tr>
-    <td>C_2</td><td>1uF</td>
+    <td>C_2</td><td>1µF</td>
   </tr>
 </table>
 
@@ -137,7 +139,7 @@ The cut-off frequency of the circuit above is calculated as follows:
 $$
   f_c = \frac{1}{2 \pi \sqrt{R_1 R_2 C_1 C_2}}
 \\
-  f_c = \frac{1}{2 \pi \sqrt{7.5K \times 15K \times 1u \times 1u}}
+  f_c = \frac{1}{2 \pi \sqrt{7.5K \times 15K \times 1µ \times 1µ}}
 \\
   f_c = 15Hz
 $$
@@ -446,20 +448,45 @@ this would appear to be the major bottleneck in the system.
 
 ### Packaging
 
+I was responsible for integrating the electrodes and thermistor into the
+compression shirt, and building a belt pack for the electronics.
+
 I sew the ECG electrodes, thermistor and stranded cable into the inside of a
 compression shirt. This ensured that the sensors remained in the same place, and
 the cabling was kept tidy.
 
-![Inside of the compression shirt](pictures/shirt inside.png)
+<table>
+  <tr>
+    <td>
+      <img alt="Inside of the compression shirt" src="pictures/shirt inside.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      The inside of the compression shirt
+    </td>
+  </tr>
+</table>
 
 The 5 cables coming out of the shirt were then loomed together using AT7 PVC
 tape, and connected to a male 9 pin D-Type connector. Using a D-type connector
 allows easy disconnection of the shirt from the belt pack, which allows the
 shirt to be washed.
 
-![The case, opened to show components](pictures/case.jpg)
+<table>
+  <tr>
+    <td>
+      <img alt="The belt pack, opened to show components" src="pictures/case.jpg">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      The belt pack, opened to show components
+    </td>
+  </tr>
+</table>
 
-The ECG and thermometer circuits, together with 3 9V batteries and the nRF51-DK
+The ECG and thermometer circuits, together with 3 x 9V batteries and the nRF51-DK
 were placed into a black plastic case. On the front of the case, I added a power
 switch, indicator LED, and a female 9 pin D-Type connector. I also added 2 female
 headers which were connected to the output of the ECG circuit to allow the
