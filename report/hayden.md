@@ -36,23 +36,30 @@ attached to the body. Unfortunately, there are also a number of challenges to
 overcome.
 
 The differential signal we are trying to obtain is in the order of 500μV,
-meaning we must obtain a gain of around 30dB to obtain a usable signal. This,
+meaning gain of around 30dB must be used to obtain a usable signal. This,
 as is to be expected with high gain amplifiers, introduces a large amount of
 noise into the signal.
 
-We were also aware that the output of the circuit was to be sampled at 50Hz
-(discussed in more detail in the "mbed programming" section below). To avoid
-aliasing, we are forced to ensure that frequencies beyond 25Hz are sufficiently
-filtered out (to conform with the Nyquist–Shannon sampling theorem).
+As that the output of the circuit was to be sampled at 50Hz (discussed in more
+detail in the "mbed programming" section below), one must ensure that
+frequencies beyond 25Hz are sufficiently filtered out to avoid aliasing.
 
 While high-frequency components of an ECG trace can sometimes be of interest,
-the maximum frequency of the basic QRS sequence is 10Hz, allowing us to filter
-at slightly above 10Hz. This not only satisfies our sampling requirement but
-also significantly reduces the amount of noise seen in the signal.
+the maximum frequency of the basic QRS sequence is 10Hz. Roy and I
+decided to use a filter with a cut-off frequency slightly above 10Hz, as this
+is low enough to avoid aliasing and also significantly reduces the amount of
+noise seen in the signal.
 
 Roy was responsible for the initial circuit design (based on Jason Nguyen's
 circuit [^1]), which I then built and tested. Following initial testing, Roy and
 myself worked together to tackle the challenges described above.
+
+While efforts have been made to distinguish in the following sections where "work"
+was exclusively carried out by either myself or Roy, a large amount of time was
+spent working together to overcome the challenges described and therefore it is
+not possible to reasonably split "work". The words "I" and "we" are used as
+indicators of whether a section of "work" was carried out by myself or
+collaboratively.
 
 #### Circuit refinement
 
@@ -63,16 +70,47 @@ The initial circuit provided a recognizable ECG trace, shown below.
 Although recognizable, the trace obtained contains a large amount of noise as
 the first iteration of the circuit made little attempt to filter noise.
 
-Using a Picoscope, we were able to identify the frequency of the noise
-introduced:
+Using a Picoscope, I was able to identify the frequency of the noise introduced:
 
 ![ECG frequency without filter](waveforms/ecg without filter frequency.png)
 
 We identified the troublesome frequencies as being 50Hz and its harmonics
 (100Hz, 200Hz, 400Hz, etc), which was likely introduced by our power supply and
-wouldn't be a problem when the device was running on batteries.
-However, as these are beyond our desired signal frequency of 10Hz, we were able
+may not be a problem when the device is running on batteries.
+However, as these are beyond our desired signal frequency of 10Hz we were able
 to simply add a 2nd order low pass filter to remove the noise.
+
+I was responsible for designing the second-order low pass filter, which took the
+form of a standard operational amplifier configuration (pictured below).
+
+![Second order low pass filter](pictures/Second_order_low_pass_filter.svg)
+
+The values chosen were as follows:
+
+<table class="table">
+  <tr>
+    <td>R_1</td><td>7.5K</td>
+  </tr>
+  <tr>
+    <td>R_2</td><td>15K</td>
+  </tr>
+  <tr>
+    <td>C_1</td><td>1uF</td>
+  </tr>
+  <tr>
+    <td>C_2</td><td>1uF</td>
+  </tr>
+</table>
+
+The cut-off frequency of the circuit above is calculated as follows:
+
+$$
+  f_c = \frac{1}{2 \pi \sqrt{R_1 R_2 C_1 C_2}}
+\\
+  f_c = \frac{1}{2 \pi \sqrt{7.5K \times 15K \times 1u \times 1u}}
+\\
+  f_c = 15Hz
+$$
 
 The addition of the low pass filter had a significant impact, resulting in the
 following output:
@@ -90,7 +128,13 @@ beyond 25Hz, preventing any aliasing issues.
 The ECG circuit generally performed pretty well, with P,Q,R,S and T sections of
 the trace clearly visible.
 
-One issue that was identified later in the project was that the output of the
+The filter added to the initial design reduced the amplitude of noise at 50Hz by
+20dB (as shown in the frequency response pictured above). Unfortunately, the
+filter was less successful as an anti-aliasing filter, as only 8dB had been
+removed by 25Hz. This is certainly an area that would need further looking into
+were the design to be taken any further.
+
+Another issue that was identified later in the project was that the output of the
 circuit was biased at 4.5V. As the range of the ADC of the nRF51822 is 0 - 5V,
 this meant that we were not taking full advantage of the available resolution of
 the ADC, as we could have a maximum output swing of 1V.
