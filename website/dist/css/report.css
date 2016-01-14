@@ -8115,3 +8115,10 @@ body {
     .report-content table td {
       width: 2%;
       padding: 10px; }
+    .report-content table tr.img-caption {
+      font-size: 12px;
+      font-style: italic;
+      color: #1a1a1a;
+      text-align: center; }
+      .report-content table tr.img-caption td {
+        padding-top: 0; }
