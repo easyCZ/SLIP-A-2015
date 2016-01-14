@@ -44,6 +44,18 @@ Energy tranciever available in the nRF51822 microprocessor, which is included
 on the nRF51-DK. This allows us to read values from the analogue sensors and
 transmit the data on to the Android app.
 
+
+API
+-------------
+The application interface aims to bridge the gap between the wearable device and the web interface. By focusing on processing and storage of raw sensory data received from the wearable, it allows us to decouple individual systems into the project. The primary focus of the api is on storage of relational data such as users and their respective devices as well as storage of processed data received from the wearable and making it available for future retrieval.
+
+The API is composed of a Django application which implements a RESTful interface in order to allow the web interface to query relational data stored inside a PosgreSQL database. The same interface is also employed for storage of processed BPM data in order to allow future retrieval.
+
+With the aim of making the project accessible in the public domain, we have deployed the application on a free tier of the OpenShift platform. This has allowed us to keep the costs down as well as make the project available to anyone.
+
+![API Architecture](./pictures/api_architecture.png)
+
+
 Web Interface
 -------------
 
