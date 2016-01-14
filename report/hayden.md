@@ -196,6 +196,7 @@ alternatives - while the circuit performance was acceptable, better results may
 have been obtained by using an IC such as the Analog Devices AD8232 [^L7].
 
 ### Vest Electrodes
+
 Up to this point, Roy and I had been testing using "Skintact" electrodes - an "off the
 shelf" product that is designed to achieve good electrical contact between the
 electrode and the skin. Unfortunately, the electrodes are single use and are
@@ -313,7 +314,13 @@ contact area is pushed into the skin a little more, improving the contact surfac
   </tr>
 </table>
 
-<insert something about cloth>
+While the copper tape electrodes performed reasonably well while the wearer was
+stationary, we once again found that movement caused the signal to be lost.
+Given the limited time available I suggested sewing small patches of cloth over
+the electrodes, then using an "off the shelf" electrode gel to try and improve
+the contact between the skin and the electrode - even during movement. The cloth
+helped to keep the gel in place, and the gel did indeed reduce movement artifacts
+seen with the dry electrodes.
 
 #### Evaluation
 
