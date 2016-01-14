@@ -36,9 +36,9 @@ electrodes and sensors, and a beltpack that contains signal processing circuits
 and the nRF51-DK board. These two components are modular and can be removed from each other
 allowing for the shirt to be hand washed.
 
-The final design included electrodes and amplification / filtering circuitry to
+The final design included electrodes and active low pass filtering circuitry to
 aquire an electrocardiogram (ECG) of the wearer of the shirt, and a sensor to
-allow monitoring of the wearer's temperature. On board signal processing has been implemented to reduce the load on the webserver. An active low pass filter elimates the noise from the power supply at the 50Hz harmonics, yielding a clean visible ECG trace. Resulting on no post processing needed on the server side.
+allow monitoring of the wearer's temperature.
 
 The design made use of the analogue to digital converter and Bluetooth Low
 Energy tranciever available in the nRF51822 microprocessor, which is included
@@ -111,11 +111,11 @@ has recently gained access to Ancestry.com's genetic database with the intention
 genetic and family tree related data to improve the human lifespan. Another is the usage
 of GPS tracking devices in Rugby. We believe that the UberVest is could add to the
 possiblities of data analytics by providing data. Due to the low cost nature of the hardware
-the UberVest is accesible to everyone and not just medical professionals. Bringing Medical level data/insight within reach of commercial users. We have also selected some applications that the UberVest could work towards:  
-1. Heart attack / stroke detection  
-2. Analysis of continuous temperature monitoring  
-3. Automatic detection of severe exacterbations in COPD patients (through continuous respiratory monitoring)  
-4. Respiratory and general fitness testing (for personal use and to identify at risk individuals)  
+the UberVest is accesible to everyone and not just medical professionals. Bringing Medical level data/insight within reach of commercial users. We have also selected some applications that the UberVest could work towards:
+1. Heart attack / stroke detection
+2. Analysis of continuous temperature monitoring
+3. Automatic detection of severe exacterbations in COPD patients (through continuous respiratory monitoring)
+4. Respiratory and general fitness testing (for personal use and to identify at risk individuals)
 
 Links
 -----

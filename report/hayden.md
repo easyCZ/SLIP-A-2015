@@ -69,7 +69,8 @@ introduced:
 ![ECG frequency without filter](waveforms/ecg without filter frequency.png)
 
 We identified the troublesome frequencies as being 50Hz and its harmonics
-(100Hz, 200Hz, 400Hz, etc), which was likely introduced by our power supply.
+(100Hz, 200Hz, 400Hz, etc), which was likely introduced by our power supply and
+wouldn't be a problem when the device was running on batteries.
 However, as these are beyond our desired signal frequency of 10Hz, we were able
 to simply add a 2nd order low pass filter to remove the noise.
 
