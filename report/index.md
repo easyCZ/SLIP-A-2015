@@ -38,7 +38,7 @@ allowing for the shirt to be hand washed.
 
 The final design included electrodes and amplification / filtering circuitry to
 aquire an electrocardiogram (ECG) of the wearer of the shirt, and a sensor to
-allow monitoring of the wearer's temperature. On board signal processing has been implemented to reduce the load on the webserver. An active low pass filter elimates the noise from the power supply at the 60hz harmonics, yielding a clean visible ECG trace. Resulting on no post processing needed on the server side.
+allow monitoring of the wearer's temperature. On board signal processing has been implemented to reduce the load on the webserver. An active low pass filter elimates the noise from the power supply at the 50Hz harmonics, yielding a clean visible ECG trace. Resulting on no post processing needed on the server side.
 
 The design made use of the analogue to digital converter and Bluetooth Low
 Energy tranciever available in the nRF51822 microprocessor, which is included
