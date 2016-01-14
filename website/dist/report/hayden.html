@@ -64,34 +64,64 @@ build an amplifier to amplify the difference in potential between two electrodes
 attached to the body. Unfortunately, there are also a number of challenges to
 overcome.</p>
 <p>The differential signal we are trying to obtain is in the order of 500μV,
-meaning we must obtain a gain of around 30dB to obtain a usable signal. This,
+meaning gain of around 30dB must be used to obtain a usable signal. This,
 as is to be expected with high gain amplifiers, introduces a large amount of
 noise into the signal.</p>
-<p>We were also aware that the output of the circuit was to be sampled at 50Hz
-(discussed in more detail in the &quot;mbed programming&quot; section below). To avoid
-aliasing, we are forced to ensure that frequencies beyond 25Hz are sufficiently
-filtered out (to conform with the Nyquist–Shannon sampling theorem).</p>
+<p>As that the output of the circuit was to be sampled at 50Hz (discussed in more
+detail in the &quot;mbed programming&quot; section below), one must ensure that
+frequencies beyond 25Hz are sufficiently filtered out to avoid aliasing.</p>
 <p>While high-frequency components of an ECG trace can sometimes be of interest,
-the maximum frequency of the basic QRS sequence is 10Hz, allowing us to filter
-at slightly above 10Hz. This not only satisfies our sampling requirement but
-also significantly reduces the amount of noise seen in the signal.</p>
+the maximum frequency of the basic QRS sequence is 10Hz. Roy and I
+decided to use a filter with a cut-off frequency slightly above 10Hz, as this
+is low enough to avoid aliasing and also significantly reduces the amount of
+noise seen in the signal.</p>
 <p>Roy was responsible for the initial circuit design (based on Jason Nguyen&#39;s
 circuit <sup><a href="#fn_1" id="reffn_1">1</a></sup>), which I then built and tested. Following initial testing, Roy and
 myself worked together to tackle the challenges described above.</p>
+<p>While efforts have been made to distinguish in the following sections where &quot;work&quot;
+was exclusively carried out by either myself or Roy, a large amount of time was
+spent working together to overcome the challenges described and therefore it is
+not possible to reasonably split &quot;work&quot;. The words &quot;I&quot; and &quot;we&quot; are used as
+indicators of whether a section of &quot;work&quot; was carried out by myself or
+collaboratively.</p>
 <h4 id="circuit-refinement">Circuit refinement</h4>
 <p>The initial circuit provided a recognizable ECG trace, shown below.</p>
 <p><img src="waveforms/ECG without filter.png" alt="ECG trace without filter"></p>
 <p>Although recognizable, the trace obtained contains a large amount of noise as
 the first iteration of the circuit made little attempt to filter noise.</p>
-<p>Using a Picoscope, we were able to identify the frequency of the noise
-introduced:</p>
+<p>Using a Picoscope, I was able to identify the frequency of the noise introduced:</p>
 <p><img src="waveforms/ecg without filter frequency.png" alt="ECG frequency without filter"></p>
 <p>We identified the troublesome frequencies as being 50Hz and its harmonics
 (100Hz, 200Hz, 400Hz, etc), which was likely introduced by our power supply and
-wouldn&#39;t be a problem when the device was running on batteries.
-However, as these are beyond our desired signal frequency of 10Hz, we were able
+may not be a problem when the device is running on batteries.
+However, as these are beyond our desired signal frequency of 10Hz we were able
 to simply add a 2nd order low pass filter to remove the noise.</p>
-<p>The addition of the low pass filter had a significant impact, resulting in the
+<p>I was responsible for designing the second-order low pass filter, which took the
+form of a standard operational amplifier configuration (pictured below).</p>
+<p><img src="pictures/Second_order_low_pass_filter.svg" alt="Second order low pass filter"></p>
+<p>The values chosen were as follows:</p>
+<table class="table">
+  <tr>
+    <td>R_1</td><td>7.5K</td>
+  </tr>
+  <tr>
+    <td>R_2</td><td>15K</td>
+  </tr>
+  <tr>
+    <td>C_1</td><td>1uF</td>
+  </tr>
+  <tr>
+    <td>C_2</td><td>1uF</td>
+  </tr>
+</table>
+
+<p>The cut-off frequency of the circuit above is calculated as follows:</p>
+<script type="math/tex; mode=display">
+  f_c = \frac{1}{2 \pi \sqrt{R_1 R_2 C_1 C_2}}
+\\
+  f_c = \frac{1}{2 \pi \sqrt{7.5K \times 15K \times 1u \times 1u}}
+\\
+  f_c = 15Hz</script><p>The addition of the low pass filter had a significant impact, resulting in the
 following output:</p>
 <p><img src="waveforms/ECG output waveform.png" alt="ECG trace with filter">
 <img src="waveforms/Spectrum with 2nd order filter_1.png" alt="ECG frequency with filter"></p>
@@ -102,7 +132,12 @@ beyond 25Hz, preventing any aliasing issues.</p>
 <h4 id="circuit-evaluation">Circuit Evaluation</h4>
 <p>The ECG circuit generally performed pretty well, with P,Q,R,S and T sections of
 the trace clearly visible.</p>
-<p>One issue that was identified later in the project was that the output of the
+<p>The filter added to the initial design reduced the amplitude of noise at 50Hz by
+20dB (as shown in the frequency response pictured above). Unfortunately, the
+filter was less successful as an anti-aliasing filter, as only 8dB had been
+removed by 25Hz. This is certainly an area that would need further looking into
+were the design to be taken any further.</p>
+<p>Another issue that was identified later in the project was that the output of the
 circuit was biased at 4.5V. As the range of the ADC of the nRF51822 is 0 - 5V,
 this meant that we were not taking full advantage of the available resolution of
 the ADC, as we could have a maximum output swing of 1V.</p>
