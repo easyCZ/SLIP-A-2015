@@ -99,17 +99,25 @@ is of a young healthy individual's fitness.
 Applications in Health and Sport
 --------
 
-Both in health and sport, the use of data analytics is becoming more and more popular.
+Both in health and sport, the use of data analytics is becoming more and more
+popular.
+
 One significant example of this is Calico, a Google-backed biotechnology company that
 has recently gained access to Ancestry.com's genetic database with the intention of using
 genetic and family tree related data to improve the human lifespan. Another is the usage
-of GPS tracking devices in Rugby. We believe that the UberVest is could add to the
-possiblities of data analytics by providing data. Due to the low cost nature of the hardware
-the UberVest is accesible to everyone and not just medical professionals. Bringing Medical level data/insight within reach of commercial users. We have also selected some applications that the UberVest could work towards:
+of GPS tracking devices in Rugby.
+
+We believe that the UberVest is could add to the possiblities of data analytics
+by providing an easy and comfortable way to collect data. Due to the low cost
+nature of the hardware used, the UberVest is accesible to everyone and not just
+medical professionals.
+
+Some example applications of the UberVest:
+
 1. Heart attack / stroke detection
-2. Analysis of continuous temperature monitoring
+2. Detection of disease through continuous temperature monitoring
 3. Automatic detection of severe exacterbations in COPD patients (through continuous respiratory monitoring)
-4. Respiratory and general fitness testing (for personal use and to identify at risk individuals)
+4. Respiratory and general fitness testing (for personal use and to identify "at risk" individuals)
 
 Links
 -----
