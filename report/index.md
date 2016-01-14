@@ -55,6 +55,8 @@ With the aim of making the project accessible in the public domain, we have depl
 
 ![API Architecture](./pictures/api_architecture.png)
 
+From the diagram above, you can observe that the two data sources - PosgreSQL and Firebase are decoupled with the API serving as a bridge. Firebase is primarily used as a storage of raw data and live information whereas the relational database focuses on longer term storage of information. The architecutre of the application allows us to be flexible with information flow and provides increased development velocity.
+
 
 Web Interface
 -------------
