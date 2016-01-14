@@ -29,13 +29,14 @@ maybe				-> explain trivial case of all zeros
 to be done			-> which one was deemed best. Testing provides detailed information.
 		c) BPM function
 SEMI			i) theory behind extrapolation to 60 seconds -> task: find times when beats occur GRAPH no graph done
-			ii) error detection factor GRAPH
-			c) Error detection
-				i) Detecting zeros and extreme variance (at_risk)
-					-> detecting zeros gives me BS factor - logical to discard zreos because it implies that it is out of range and data is incomplete.
-					-> allows to adjust BPM to fair value
-				ii) Extreme variance is a warning that the data is fishy, but has not been elaborated or tested sufficiently due to time constraints.
-			iii) actual function name and code
+DIAGRAMS		ii) error detection factor GRAPH
+CHECK			c) Error detection
+SEMI				i) error associated with my bad decision need to make calculations section 
+CHECK				i) Detecting zeros and extreme variance (at_risk)
+CHECK					-> detecting zeros gives me BS factor - logical to discard zreos because it implies that it is out of range and data is incomplete.
+CHECL					-> allows to adjust BPM to fair value
+CHECK				ii) Extreme variance is a warning that the data is fishy, but has not been elaborated or tested sufficiently due to time constraints.
+to be done		iii) actual function name and code
 		d) Testing
 			i) introduction to testing
 				-> what am I wanting to test - find best setting, how well does my code recognise error data?, impact of window length, per100 factor
@@ -133,7 +134,16 @@ C) RESpeck
 		e) conclusion
 D) Conclusion and recap
 
-search these before submissions:
+search these (in report) before submissions:
 ITALICS
 HELP
 level and/or heading
+REFORMAT
+FOR TABLE
+
+search these (in outline) before submissions:
+SEMI
+DIAGRAMS
+to be done
+maybe
+not necessary

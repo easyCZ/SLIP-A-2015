@@ -1,4 +1,11 @@
+Change tables from fiugure to Table later on
+
 Figure 1 - take-away box conaining bullet point version of specifications.
 Figure 2 - flow-chart outlining the step structure
 Figure 3 - table of all methods
 Figure 4 - BPM maths
+Figure 5 - BPM formula adjustment due to per100
+Figure 6 - timeline for data window
+Figure 7 - table containing criticisim of 3 cases.
+
+Calculation 1 - Error for my bad error adjustment
