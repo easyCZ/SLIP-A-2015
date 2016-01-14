@@ -1,21 +1,3 @@
-Outline
-____________
-1. What is it?
-    * What does it do
-    * How could a client use it
-    * Medican usage
-2. Components of the system
-3. Team Members and Responsibilities
-4. Hardware
-5. Mobile app
-6. API
-7. Processing
-8. Web interface
-9. Conclusion
-    * Future work
-    * improvements
-    * Health applications
-
 Introduction
 ------------
 The aim of this project is to design and implement a working prototype of a
@@ -25,6 +7,11 @@ shirt includes a heart rate monitor and temperature sensor.
 
 As well as displaying data in real time, the project aims to analyse the
 gathered data to provide an overview of the wearer's health.
+
+System Overview
+-----------------
+
+![System Architecture](pictures/architecture.png)
 
 Team Members and Responsibilities
 ------------
