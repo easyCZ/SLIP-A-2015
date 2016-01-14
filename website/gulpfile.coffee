@@ -100,7 +100,7 @@ gulp.task 'report-markdown', ['sass'], ->
     .pipe gulp.dest 'dist/report'
 
 gulp.task 'report-images', ->
-  gulp.src '../report/**/*.{png,jpg}'
+  gulp.src '../report/**/*.{png,jpg,svg}'
     .pipe gulp.dest 'dist/report'
 
 gulp.task 'report-scripts', ['coffee'], ->
