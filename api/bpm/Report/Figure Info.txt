@@ -7,5 +7,72 @@ Figure 4 - BPM maths
 Figure 5 - BPM formula adjustment due to per100
 Figure 6 - timeline for data window
 Figure 7 - table containing criticisim of 3 cases.
+Figure 8 - Take-away box with goals for testing.
+	1) Determine optimal setting
+	2) Determine quality of BPM code
+	3) Graph effect of changing iter_windowITALICS length
+	4) Graph effect of changing min_spacingITALICS
+	5) Graph effect of changing data window length
+Figure 9 - Set thing
+Figure 10 - Testing Environment Specifications
+	1) The testing environment has to be in a seperate file.
+	2) The testing environment has to emulate the moving window when it goes through test data.
+	3) The testing environment needs to be able to export results.
+	4) The testing environment needs to pass settings to services.py
+	5) The testing environment needs to receive information about the evaluation of each data window it passed to services.py.
+Figure 11 - Testing Environment Diagram - INFORMATION ABOUT EVALUATION details needed
+Figure 12 - Information passed from services.py to local.py
+self.data = data
+	1) window length in time as well as data points
+	2) window density (data points per second)
+	3) BPM code setting (methods, benchmarks)
+	4) Maximum, minimum, average and variance of voltstamps
+	5) Percentage of iter_windowsITALICS used
+	6) BPM
+	7) Beat times and voltstamps
+
+Figure 13 - PROs and CONs of different f_hat(x)
+TABLE Index | Measure | PROs | CONs
+1|
+Measure: |Number of beats in window - actual number of beats in window|
+PROs: Computationally inexpensive. Little manual work.
+CONs: Tells us nothing about the spacing of beats.
+2|
+Measure: |BPM - actual BPM|
+PROs: Measures number of beats and recognises uneven spacing.
+CONs: Systematic error from error adjustment is carried through. Fluctuations in actual BPM either have to be ignored or entered manually. The real beats do not have to be detected because it is only the spacing of them that matters. Different 'violations' carry different weights.
+3|
+Measure: avg(|ti - actual ti|)
+PROs: Would give most accurate measure if beats found by code are very close to actual beats.
+CONs: Infeasible because it requires manual input of actual this. The number of actual and false beats may not be the same, leading to scoring complications.
+
+Figure 14 - Error bounds for BPM as measure
+TABLE Index | Issue | Error | Explanation
+1|
+Issue: Systematic Error from error adjustment
+Error Bound: Copy from 1st table HELP
+Explanation: Result was taken from before.
+Issue: Fluctuations in the actual BPM
+Error Bound: HELP calculations 2.
+Explanation: In reality the heart rate changes constantly. The 'actual' BPM used for testing is an average, so it is not entirely accurate. Variations were less than one beat per 5 seconds.
+
+Figure 15 - Variations in impact on quality measure
+TABLE Index | Scenario | Impact in case of dense iteration of data windows | Impact in case of sparse iteration of data windows
+1| 
+Scenario: Ommission of beat
+Sparse: If the ommitted beat is outside of t1 and tn HELP (where t1 and tn are as in Figure 6ITALICS) it has no impact on the result. If it is inside it causes an error of HELP.
+Dense: Since 
+Explanation: 
+2|
+Scenario:
+Dense:
+Sparse:
+3|
+Scenario:
+Dense:
+Sparse:
 
 Calculation 1 - Error for my bad error adjustment
+
+Calculation 2 - Error for BPM as measurement function
+
