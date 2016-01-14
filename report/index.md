@@ -96,8 +96,8 @@ One significant example of this is Calico, a Google-backed biotechnology company
 has recently gained access to Ancestry.com's genetic database with the intention of using
 genetic and family tree related data to improve the human lifespan. Another is the usage 
 of GPS tracking devices in Rugby. We believe that the UberVest is could add to the 
-possiblities of data analytics by providing data. We have also selected some applications 
-that the UberVest could work towards:  
+possiblities of data analytics by providing data. Due to the low cost nature of the hardware
+the UberVest is accesible to everyone and not just medical professionals. Bringing Medical level data/insight within reach of commercial users. We have also selected some applications that the UberVest could work towards:  
 1. Heart attack / stroke detection  
 2. Analysis of continuous temperature monitoring  
 3. Automatic detection of severe exacterbations in COPD patients (through continuous respiratory monitoring)  
