@@ -78,7 +78,7 @@ The initial circuit provided a recognizable ECG trace, shown below.
 Although recognizable, the trace obtained contains a large amount of noise as
 the first iteration of the circuit made little attempt to filter noise.
 
-Using a Picoscope, I was able to identify the frequency of the noise introduced:
+Using a Picoscope, Roy and I was able to identify the frequency of the noise introduced:
 
 <table>
   <tr>
@@ -94,7 +94,7 @@ Using a Picoscope, I was able to identify the frequency of the noise introduced:
   </tr>
 </table>
 
-Roy and I identified the troublesome frequencies as being 50Hz and its harmonics
+We identified the troublesome frequencies as being 50Hz and its harmonics
 (100Hz, 200Hz, 400Hz, etc), which was likely introduced by our power supply and
 may not be a problem when the device is running on batteries.
 However, as these are beyond our desired signal frequency of 10Hz we were able
@@ -167,8 +167,10 @@ following output:
 
 The frequency trace clearly shows our new 40dB/decade roll-off above the
 frequencies of interest, effectively removing the majority of noise present.
-This also had the advantage of meeting our requirement of reducing frequencies
-beyond 25Hz, preventing any aliasing issues.
+
+#### Final ECG Circuit Schematic
+
+![ECG Schematic](pictures/ecg circuit.jpg)
 
 #### Circuit Evaluation
 
@@ -562,7 +564,7 @@ use it.
 Gulp is configured using a `gulpfile`, which defines a number of task "streams".
 A stream is created by selecting source files (such as CoffeeScript files), then
 run through a plugin that performs some manipulation on the stream (such as
-a CoffeeScript compiler), then output to target - either a single file or a
+a CoffeeScript compiler), and output to target - either a single file or a
 directory.
 
 The final `gulpfile` is available in the `website` section of the source code,
