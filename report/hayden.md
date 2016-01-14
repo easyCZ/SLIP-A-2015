@@ -40,41 +40,62 @@ meaning gain of around 30dB must be used to obtain a usable signal. This,
 as is to be expected with high gain amplifiers, introduces a large amount of
 noise into the signal.
 
-As that the output of the circuit was to be sampled at 50Hz (discussed in more
+As that the output of the circuit is sampled at 50Hz (discussed in more
 detail in the "mbed programming" section below), one must ensure that
 frequencies beyond 25Hz are sufficiently filtered out to avoid aliasing.
 
 While high-frequency components of an ECG trace can sometimes be of interest,
 the maximum frequency of the basic QRS sequence is 10Hz. Roy and I
 decided to use a filter with a cut-off frequency slightly above 10Hz, as this
-is low enough to avoid aliasing and also significantly reduces the amount of
-noise seen in the signal.
+should be sufficient to avoid aliasing and also significantly reduces the amount
+of noise seen in the signal.
 
 Roy was responsible for the initial circuit design (based on Jason Nguyen's
 circuit [^1]), which I then built and tested. Following initial testing, Roy and
 myself worked together to tackle the challenges described above.
 
-While efforts have been made to distinguish in the following sections where "work"
-was exclusively carried out by either myself or Roy, a large amount of time was
-spent working together to overcome the challenges described and therefore it is
-not possible to reasonably split "work". The words "I" and "we" are used as
-indicators of whether a section of "work" was carried out by myself or
-collaboratively.
+Note: While efforts have been made to distinguish in the following sections
+where "work" was exclusively carried out by either myself or Roy, a large amount
+of time was spent working together to overcome the challenges described and
+therefore it is not possible to reasonably split "work".
 
 #### Circuit refinement
 
 The initial circuit provided a recognizable ECG trace, shown below.
 
-![ECG trace without filter](waveforms/ECG without filter.png)
+<table>
+  <tr>
+    <td>
+      <img alt="Initial ECG circuit output before filtering" src="waveforms/ECG without filter.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Initial ECG circuit output before filtering
+    </td>
+  </tr>
+</table>
 
 Although recognizable, the trace obtained contains a large amount of noise as
 the first iteration of the circuit made little attempt to filter noise.
 
 Using a Picoscope, I was able to identify the frequency of the noise introduced:
 
-![ECG frequency without filter](waveforms/ecg without filter frequency.png)
+<table>
+  <tr>
+    <td>
+      <img alt="Frequency analysis of the output of the initial ECG circuit"
+           src="waveforms/ecg without filter frequency.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Frequency analysis of the output of the initial ECG circuit
+    </td>
+  </tr>
+</table>
 
-We identified the troublesome frequencies as being 50Hz and its harmonics
+Roy and I identified the troublesome frequencies as being 50Hz and its harmonics
 (100Hz, 200Hz, 400Hz, etc), which was likely introduced by our power supply and
 may not be a problem when the device is running on batteries.
 However, as these are beyond our desired signal frequency of 10Hz we were able
@@ -83,7 +104,16 @@ to simply add a 2nd order low pass filter to remove the noise.
 I was responsible for designing the second-order low pass filter, which took the
 form of a standard operational amplifier configuration (pictured below).
 
-![Second order low pass filter](pictures/Second_order_low_pass_filter.svg)
+<table>
+  <tr>
+    <td>
+      <img alt="A standard second order low pass filter" src="pictures/Second_order_low_pass_filter.svg">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    A standard second order low pass filter
+  </tr>
+</table>
 
 The values chosen were as follows:
 
@@ -115,8 +145,24 @@ $$
 The addition of the low pass filter had a significant impact, resulting in the
 following output:
 
-![ECG trace with filter](waveforms/ECG output waveform.png)
-![ECG frequency with filter](waveforms/Spectrum with 2nd order filter_1.png)
+<table>
+  <tr>
+    <td>
+      <img alt="ECG trace with filter" src="waveforms/ECG output waveform.png">
+    </td>
+    <td>
+      <img alt="ECG frequency with filter" src="waveforms/Spectrum with 2nd order filter_1.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      ECG trace once the second order filter has been applied
+    </td>
+    <td>
+      Frequency analysis of the filtered output
+    </td>
+  </tr>
+</table>
 
 The frequency trace clearly shows our new 40dB/decade roll-off above the
 frequencies of interest, effectively removing the majority of noise present.
@@ -125,8 +171,8 @@ beyond 25Hz, preventing any aliasing issues.
 
 #### Circuit Evaluation
 
-The ECG circuit generally performed pretty well, with P,Q,R,S and T sections of
-the trace clearly visible.
+The ECG circuit generally performed pretty well, with P, Q, R, S and T sections
+of the trace clearly visible.
 
 The filter added to the initial design reduced the amplitude of noise at 50Hz by
 20dB (as shown in the frequency response pictured above). Unfortunately, the
@@ -134,21 +180,21 @@ filter was less successful as an anti-aliasing filter, as only 8dB had been
 removed by 25Hz. This is certainly an area that would need further looking into
 were the design to be taken any further.
 
-Another issue that was identified later in the project was that the output of the
+Another issue that I identified later in the project was that the output of the
 circuit was biased at 4.5V. As the range of the ADC of the nRF51822 is 0 - 5V,
 this meant that we were not taking full advantage of the available resolution of
 the ADC, as we could have a maximum output swing of 1V.
 
 While this turned out to not normally be an issue, we did occasionally find that
-the ADC was saturated at 5V, so a future revision of the circuit would include
-rebiasing the output to 2.5V.
+the ADC was saturated at 5V, so a future revision of the circuit should include
+re-biasing the output to 2.5V.
 
 It would also have been worth spending more time investigating "off the shelf"
 alternatives - while the circuit performance was acceptable, better results may
 have been obtained by using an IC such as the Analog Devices AD8232 [^L7].
 
 ### Vest Electrodes
-Up to this point, we have been testing using "Skintact" electrodes - an "off the
+Up to this point, Roy and I had been testing using "Skintact" electrodes - an "off the
 shelf" product that is designed to achieve good electrical contact between the
 electrode and the skin. Unfortunately, the electrodes are single use and are
 also uncomfortable (particularly when removing them!).
@@ -180,7 +226,7 @@ easily introduced, causing a complete loss of our desired signal.
       <img src="electrode_placement_trials/placement6_waveform_movement.png">
     </td>
   </tr>
-  <tr>
+  <tr class="img-caption">
     <td></td>
 
     <td>
@@ -244,15 +290,28 @@ pictured below:
 ![Fixing Skintact electrodes into the vest](pictures/cut up skintact positions.jpg)
 
 Unfortunately, we found that the sponge material used in the electrodes became
-very fragile when it dried out, making it unsuitable for longer term use.
+very fragile when it dried out making it unsuitable for longer term use.
 
-Another option was to use conductive copper tape. This was cut into small
+I decided to investigate using conductive copper tape. This was cut into small
 sections of approximately 15mm, and stuck to the inside of the vest. While this
-was somewhat successful, we found that performance was improved by adding a
+was somewhat successful, I found that performance was improved by adding a
 slight bulge to the electrode. By wrapping the tape round a metal stud, the
 contact area is pushed into the skin a little more, improving the contact surface.
 
-![Copper tape electrodes](pictures/conductive tape.jpg)
+<table>
+  <tr>
+    <td>
+      <img alt="Copper tape electrodes" src="pictures/conductive tape.jpg">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      An example of a copper tape electrode
+    </td>
+  </tr>
+</table>
+
+<insert something about cloth>
 
 #### Evaluation
 
@@ -284,7 +343,7 @@ the trace is significantly distorted, and the P section is rarely seen.
     </td>
   </tr>
 
-  <tr>
+  <tr class="img-caption">
     <td>
       The trace obtained using Skintact electrodes
     </td>
@@ -305,8 +364,8 @@ as accelerometers) could be used to recover a reasonable ECG trace.
 
 ### Thermometer Circuit
 
-A reasonably late addition to the vest was adding a thermister and incorporating
-a potential divider circuit in the belt pack so that we could measure the body
+A reasonably late addition to the vest was adding a thermistor and incorporating
+a potential divider circuit in the belt pack so that the vest could measure the body
 temperature of the wearer.
 
 I designed the (very simple) circuit for the sensor, which consisted of a
@@ -341,7 +400,7 @@ celsius.
 
 #### ECG Sampling
 
-In order to show high-frequency components of the ECG trace, we must sample the
+In order to show high-frequency components of the ECG trace, one must sample the
 ECG output as frequently as possible. Sampling was achieved by setting up a
 `Ticker`, which interrupts the CPU at a defined interval and causes a reading
 from the ADC to be taken. The value is then transmitted using Bluetooth Low
