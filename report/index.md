@@ -18,7 +18,13 @@ ____________
 
 Introduction
 ------------
-The main purpose of this project is to implement a working prototype of a wearable vest with a hearth rate monitor and a temperature with the ability to receive real-time updates of sensory readings through either a mobile application or web interface. The main goals aimed to be solved by this project are health monitoring in real time and health analytics obtains from sensory readings over time.
+The aim of this project is to design and implement a working prototype of a
+system to gather health data from a compression shirt, and present the gathered
+data through a mobile application or web interface. The initial prototype of the
+shirt includes a heart rate monitor and temperature sensor.
+
+As well as displaying data in real time, the project aims to analyse the
+gathered data to provide an overview of the wearer's health.
 
 Team Members and Responsibilities
 ------------
