@@ -4,7 +4,7 @@ Sukrit (Roy) Hotrabhvanon
 Introduction
 ------------
 
-The objective of this project is to create a functioning health monitoring vest to aid those recently in recovery from accidents/post-op or those with chronic conditions who need to be monitored when they are put under stress/exercise. There are applications in sports science as well, namely the ability to track athletes biometrics to a higher level than the standard heart rate detection bracelets.  
+The objective of this project is to create a functioning health monitoring vest to aid those recently in recovery from accidents/post-op or those with chronic conditions who need to be monitored when they are put under stress/exercise. There are applications in sports science as well, namely the ability to track athletes biometrics to a higher level than the standard heart rate detection bracelets.
 
 
 The Problem
@@ -193,7 +193,7 @@ As the primary goal of this was to make it as accessible/cheap as possible whils
   <tr>
     <td>
       <img alt="Costing table"
-           src="pictures/componenttable.PNG">
+           src="pictures/componenttable.png">
     </td>
   </tr>
   <tr class="img-caption">
@@ -208,6 +208,7 @@ As shown by the table above the cost of a single unit is 6.061 GBP however in bu
 Shirt and Electrode placement
 -----------------------------
 For the electrode placement we started with the standard medical recommended placement which is the V+ and V- electrodes located as shown in the diagram below. However, unfortunately through testing although this yielded a clear ECG trace the electrodes were placed on muscle masses that are very prone to movement hence we completely lost the signal during any kind of light movement.
+
 
 <table>
   <tr>
@@ -235,6 +236,7 @@ For the electrode placement we started with the standard medical recommended pla
     </td>
   </tr>
 </table>
+
 The table is annotated by my team mate Hayden Ball [2] and the electrode placement modelled by me.
 
 Hayden then found a paper that described a better ECG placement with specific use in wearables, targeting muscle masses and ground points that are less likely prone to movement therefore yielding a cleaner signal with light movement. However, it is still not perfect and there is lots of room for improvement as the signal would still not be acceptable if the user was jogging.
