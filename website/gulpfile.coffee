@@ -103,12 +103,16 @@ gulp.task 'report-images', ->
   gulp.src '../report/**/*.{png,jpg,svg}'
     .pipe gulp.dest 'dist/report'
 
+gulp.task 'report-attachments', ->
+  gulp.src '../report/attachments/*.*'
+    .pipe gulp.dest 'dist/report/attachments'
+
 gulp.task 'report-scripts', ['coffee'], ->
   gulp.src ['.tmp/js/report.js']
     .pipe gulp.dest('dist/js')
 
 
-gulp.task 'report', ['report-markdown', 'report-images', 'report-scripts']
+gulp.task 'report', ['report-markdown', 'report-images', 'report-attachments', 'report-scripts']
 
 #
 # Sample Data
