@@ -455,20 +455,28 @@ The challenging part is choosing XHELP. The number of rows is fixed at ten, but 
 
 Having chosen what should be score, there is still need for a way to score it. The method chosen here uses the sample mean and variance to generate a normal distribution, emulating a larger population. Each metric for each exercise for each participant can then be located on this normal distribution returning what percentile the participant scored for that particular metric and exercise.
 
-Figure 27
-
 The resulting w is HELP, where w provides weights for [avg,min,max,var] respecively. 
 
 ###	Results
 
 We can apply w HELP that was sloved for in this experiment and the way of generating X to data from the previous experiment to test the quality of the method. The resulting ranking can then be compared to several other methods of ranking participants.
 
-Figure 28 
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure26.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 25 - Comparison of Regression Ranking Method to other methods.
+    </td>
+  </tr>
+</table>
 
 ### Conclusion
 
 The rankings of the five participants vary too much to be a useful indicator of how successful the method is. For better testing, the experiment could be expanded.
-
 
 Appendices
 ----------
