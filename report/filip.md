@@ -86,11 +86,33 @@ Simplifying,
 
 Since the ECG is easily affected by movement, the BPM code needs to adjust to unusable data. It does so in two ways. Firstly, it flags data windows with extremely high variance (variance > 60). Secondly, it discards *iter_windows* that contain zero voltstamps. In practice zero voltstamps only occur as a symptom of extreme noise (the normal range is 140 to 250). The percentage of *iter_windows* are used is then computed and used to adjust the BPM formula as described in *Figure 5* below.
 
-Figure 5
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure5.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 5 - BPM Error Adjustment
+    </td>
+  </tr>
+</table>
 
 This adjustment is not correct. This method was chosen due to time constraints, but an alternative method is suggested implicitly in the criticism below. Given a data window such as the one in Figure 6* below, the effect of the error adjustment depends on where the error occurs. The issue with the current method lies in the fact that data outside of t1 and tn HELP is not considered for the BPM but it is considered in the error adjustment. Figure 7* discusses different scenarios.
 
-Figure 6
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure6.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 6 - Data window timeline
+    </td>
+  </tr>
+</table>
 
 Figure 7
 TABLE Index | Scenario | Current Adjustment | Correct Adjustment | Error | Summary
