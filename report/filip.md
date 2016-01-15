@@ -3,21 +3,6 @@ Filip Frahm
 
 With recent news about NSA surveillance, large scale data collection seems to have a negative connotation in our society. While fear for ones' privacy is justified,large scale data collection can be of tremendous benefit. An application of it that stands out is the imrpovement of our society's health. At the University of Edinburgh, researcher Andy Sims is using bioinformatics and genetic data to predict which cancer drugs are most appropriate for a breat cancer patient[^L3]. In San Francisco, Google-backed company Calico[^L2] gained access to Ancestry.com's genetic database with the intention of using genetic and family tree related data to improve the human lifespan[^L1].
 
-
-<table>
-  <tr>
-    <td>
-      <img alt="" src="pictures/picture1.png">
-    </td>
-  </tr>
-  <tr class="img-caption">
-    <td>
-      my first picture. yay!
-    </td>
-  </tr>
-</table>
-
-
 The goal for our project was to create a vest that would 1)have as many health related sensors as possible and 2)process and present that data to the user. We believe that such a vest would not only be attractive for personal use but that it could, similarly to the examples above, also advance medical research by providing data. In the duration of the course, a temperature sensor and an electrocardiogram(ECG) were installed to a vest. Further, a website and mobile application were created to process and present the data. While a respiratory sensor has not yet been integrated to the vest some research regarding future applications of such a sensor has been completed.  
 
 My role in the project was to process data. Data processing included the conversion of data from the ECG to a beats per minute(BPM) value. Additionally, it was my task to explore potential uses of a respiratory sensor (RESpeck).  
@@ -29,8 +14,6 @@ Specifications
 -----------
 
 The requirements for the ECG data processing code (BPM code) were to take ECG data from the server and to then return a BPM. Data passed from the server would be in a python dictionary with unix timestamps as keys and integers representing voltage (voltstamps) as values. Voltstamps theoretically range from zero to 1024 but only range from zero to around 360 in practice. In available data, data points were typically between 0.001 and 0.05 seconds apart. In order to be able to provide a live BPM feed, the BPM code was to be applied to a moving window with length between zero and ten seconds. Of course this moving window always consists of consecutive data points.
-
-Figure 1
 
 Method
 ----------
@@ -45,7 +28,18 @@ To avoid the above-listed issues, a computational approach was pursued. Instead 
 
 The step structure code starts with the window of data as described before and ends with a dictionary of suspected beats. It does so in four steps outlined in *Figure 2*. The individual methods(or conditions) for each step are described in *Figure 3*.   
 
-Figure 2
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure2.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 2 - The Step Structure
+    </td>
+  </tr>
+</table>
 
 Figure 3
 
