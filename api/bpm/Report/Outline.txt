@@ -34,7 +34,7 @@ CHECK			c) Error detection
 SEMI				i) error associated with my bad decision need to make calculations section 
 CHECK				i) Detecting zeros and extreme variance (at_risk)
 CHECK					-> detecting zeros gives me BS factor - logical to discard zreos because it implies that it is out of range and data is incomplete.
-CHECL					-> allows to adjust BPM to fair value
+CHECK					-> allows to adjust BPM to fair value
 CHECK				ii) Extreme variance is a warning that the data is fishy, but has not been elaborated or tested sufficiently due to time constraints.
 to be done		iii) actual function name and code
 		d) Testing
@@ -71,54 +71,54 @@ CHECK				-> quick conclusion saying which ones I've considered and which ones I'
 maybe					-TABLE(Detects uneven spacing, detects number of beats, implementation and Manual Work)
 				-> criticsm of measure of quality
 					- in reality back to back windows were chosen for testing, so there is more room for error
-					- different weights for different violations QUANTIFY - remember that they vary with window size
-						- shift of 1 beat - what about multiple? - what about during the back to back window testing
-						- ommission of 1 beat - what about multiple? - what about during the back to back window testing
-						- addition of 1 beat - what about multiple? - what about during the back to back window testing 
+CHECK					- different weights for different violations QUANTIFY - remember that they vary with window size
+CHECK						- shift of 1 beat - what about multiple? - what about during the back to back window testing
+CHECK						- ommission of 1 beat - what about multiple? - what about during the back to back window testing
+CHECK						- addition of 1 beat - what about multiple? - what about during the back to back window testing 
 			iv) Given a setting, what is my testing algorithm?
-				-> a.k.a. what is the actual function that maps settings to quality measure set?
-				-> loop over reasonable data
-				-> back to back windows because otherwise it would be too expensive (massive improvement possibility here)
-				-> for each window compare BPM to actual BPM
-					- take average
-					- we can expect some fluctuation here, how much (changing with window size,consider roy,myself and hayden)?
-				-> print results to CSV
+CHECK				-> a.k.a. what is the actual function that maps settings to quality measure set?
+CHECK				-> loop over reasonable data
+CHECK				-> back to back windows because otherwise it would be too expensive (massive improvement possibility here)
+not necessery			-> for each window compare BPM to actual BPM
+CHECK					- take average
+CHECK					- we can expect some fluctuation here, how much (changing with window size,consider roy,myself and hayden)?
+CHECK				-> print results to CSV
 				-> CODE and DIAGRAMS to help explain
 MAKE SURE 		v) Testing procedure (which settings did I test etc.?)
 TO GET VARIANCE TOO		-> testing limitations 
-					- per window of size 200 0.017 seconds
-					- set my limit at 24 h run time, leaving me ca. 5,000,000 windows to evaluate
-					- narrow down to how many different settings I can test. OBVIOUSLY NOT ENOUGH TO TEST COMPLETE SETTING
+CHECK					- per window of size 200 0.017 seconds
+CHECK					- set my limit at 24 h run time, leaving me ca. 5,000,000 windows to evaluate
+CHECK					- narrow down to how many different settings I can test. OBVIOUSLY NOT ENOUGH TO TEST COMPLETE SETTING
 				-> Testing flow chart GRAPH
-					- justify why some were kept and others weren't
-					- Flow chart is clearly imperfect. Huge logical gap by testing one after another as it prevents many potentially effective combinations. I am limiting myself to methods that work reasonably well with the given setting.
-					- not sure which methods were going to be successful, I have a decent feeling regarding benchmarks, iter_window, min_spacing and window_length. also would only be able to test very few methods
+DIAGRAMS				- justify why some were kept and others weren't
+CHECK					- Flow chart is clearly imperfect. Huge logical gap by testing one after another as it prevents many potentially effective combinations. I am limiting myself to methods that work reasonably well with the given setting.
+CHECK					- not sure which methods were going to be successful, I have a decent feeling regarding benchmarks, iter_window, min_spacing and window_length. also would only be able to test very few methods
 					- Even better feeling for iter_window, window_length and min_spacing. 
-						+ difference due to min_spacing is practically negligible between 0.25 sec and 0.33 sec
-						+ methods should ideally work for as small a window length as possible so 200 (X sec) was a good benchmark to use.
-						+ iter_window - HELP
+CHECK						+ difference due to min_spacing is practically negligible between 0.25 sec and 0.33 sec
+CHECK						+ methods should ideally work for as small a window length as possible so 200 (X sec) was a good benchmark to use.
+CHECK						+ iter_window - HELP
 			vi) Testing results
-				-> Moving through the flow chart to identify best methods, benchmarks and other settings
-					- results from round 1 - CSV
-				-> display of optimal method
+DIAGRAMS			-> Moving through the flow chart to identify best methods, benchmarks and other settings
+CHECK					- results from round 1,2 and 3 - CSV
+CHECK				-> display of optimal method
 	3) Improvements
-		a) provided a good programming environment and framework for testing, but the actual methods need improvement.
-		b) TABLE with all improvements, feasibility, implementation difficulty, judged scale of impact.
-			i) window_movement improvement
-			ii) quicker code and computer for less flawed testing method
-			iii) use an established device to record actual beat times so that the quality measure function can be improved
-			iv) make method selection more dependent on data. at the moment only benchmarks vary.
-			v) expand on logical choices for step1 methods. create hierarchies etc...
-			vi) error in BPM on outside shouldn't be counted but is at the moment
-			vii) OMG just find beats once per setting and then loop through and generate BPM
+CHECK		a) provided a good programming environment and framework for testing, but the actual methods need improvement. Phase three things pointed out problems. confirmed by quality test.
+CHECK		b) TABLE with all improvements, feasibility, implementation difficulty, judged scale of impact.
+CHECK			i) window_movement improvement
+CHECK			ii) quicker code and computer for less flawed testing method
+CHECK			iii) use an established device to record actual beat times so that the quality measure function can be improved
+CHECK			iv) make method selection more dependent on data. at the moment only benchmarks vary.
+not necessary		v) expand on logical choices for step1 methods. create hierarchies etc...
+CHECK			vi) error in BPM on outside shouldn't be counted but is at the moment
+CHECK			viii) tested towards a particular window length
 C) RESpeck
-	1) Intro
+INTERIM	1) Intro
 		a) monitoring of our health is gaining importance(with good reason) and just measuring the breathing, temperature and BPM of people during the day would provide useful data to research. Obviously, we would like to provide services to users as well.
 			- FEV1 vs predicted - trying to see if we can predict FEV1 or just breathing in general. first step in that direction. also might be good indicator of health in itself.
 				+ outline experiment
 			- looking at a method to rank users' respiratory fitness (in recovery from exercise)
 				+ quick intro to COPD patient experiment.
-	2) My experiment - try to elaborate a little bit more on this. I have to prove to DK that not following his exact instruction was warranted.
+INTERIM	2) My experiment - try to elaborate a little bit more on this. I have to prove to DK that not following his exact instruction was warranted.
 		a) intro
 			i) Want to figure out how mean inspiratory flow is related to heart rate in recovery after exercise. This has multiple purposes:
 			ii) FEV1 to predicted (predictable using bpm?) as an indicator of respiratory disease
@@ -127,8 +127,8 @@ C) RESpeck
 		c) Results
 			i) GRAPHS
 			ii) correlation between BPM and flow
- 	3) COPD patients - trying to keep this brief
-		a) trying to guess a formula for resp fitness
+INTERIM	3) COPD patients - trying to keep this brief
+		a) trying to guess a formula for fitness
 		b) data
 		c) method
 		d) test on my crowd

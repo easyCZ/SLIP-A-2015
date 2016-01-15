@@ -61,18 +61,52 @@ TABLE Index | Scenario | Impact in case of dense iteration of data windows | Imp
 1| 
 Scenario: Ommission of beat
 Sparse: If the ommitted beat is outside of t1 and tn HELP (where t1 and tn are as in Figure 6ITALICS) it has no impact on the result. If it is inside it causes an error of HELP.
-Dense: Since 
-Explanation: 
+Dense: Since the moving window only changes slightly in each iteration, this beat will be ommitted from a number (approximately equal to the number of data points in a each window) of data windows. We see that the average error in these windows is HELP.
 2|
-Scenario:
-Dense:
-Sparse:
+Scenario: Shift of one beat
+Sparse: Inside t1 and tn HELP there is no change, outside the change is HELP.
+Dense: The average change is HELP
 3|
-Scenario:
-Dense:
-Sparse:
+Scenario: Addition of one beat
+Sparse: HELP
+Dense:  Bounded by inside sparse
+
+Figure 16 - Tested methods. Justifying why others were removed.
+Figure 17 - Flow Chart
+Figure 18 - Annotated flow chart
+Figure 19 - min_spacing graph
+Figure 20 - iter_window_len graph
+Figure 21 - window_length graph
+Figure 22 - Improvements
+TABLE Index | Improvement | Difficulty of implementation | impact
+1|
+Improvement: Fix BPM error adjustment
+Difficulty: Not difficult. Alternative methods have already been suggested in the Error Detection and AdjustmentITALICS section.
+Impact: High. The error bounds for systematic error exceeded 10% of the BPM.
+2|
+Improvement: Record the actual time of heart beats so that more accurate measures of quality can be implemented.
+Difficulty: Depending on the amount of available data (or the availability relevant established devices), this could be very time consuming.
+Impact: High. As the results displayed in Testing ResultsITALICS suggest, a more accurate measure of quality is required.
+3|
+Improvement: Allow the selection of methods to vary depending on the data. Currently only benchmarks are adjusted as a function of average voltstamps.
+Difficulty: Implementing this improvement may be challenging as it would require the code to distinguish between different data sets in order to select an appropriate method.
+Impact: Small. Theoretically data from all users should be somewhat similar (even though there are differences in the duration of beats).
+4|
+Improvement: Decrease run time of the testing algorithm.
+Difficulty: Some improvements could be easily implemented. The dense iteration for example, computed the BPM for each window even though only one data point changed.
+Impact: High. A faster algorithm would allow for the testing of more combinations of methods and constants.
+5|
+Improvement: Refrain from using similar data and window length.
+Difficulty: Depending on the run time of the algorithm, this could be simple to implement.
+Impact: Small. An effective quality measure should work for any window size greater than two seconds.
+
+
 
 Calculation 1 - Error for my bad error adjustment
 
 Calculation 2 - Error for BPM as measurement function
 
+Appendix 1 - Data Used
+Appendix 2 - Phase 1 Results
+Appendix 3 - Phase 2 a and b Results
+Appendix 4 - Phase 3 a,b and c Results

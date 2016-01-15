@@ -1,0 +1,19 @@
+TESTING NEEDS
+
+CHECK		1) Which phase 1 methods were tested and which were chosen?
+CHECK		2) which phase 2 benchmarks were tested and which were chosen? produce CSV
+		3) which phase 3 constants were tested and which were chosen?  produce CSV
+40/s		4) Need average density of data points
+105822		5) need number of data points in roy1 + hayden2 + fil2
+90%		6) how high a per100 was needed to keep data window?
+about 7500	7) how many methods did I consider in phase 1
+
+1) Tested duh! chosen step1 = [1,2,1,0,2], [1,2,1,1,0], [1,2,1,1,2],step 15 = 1, step2 =  6 for all three,step3 = 1
+2) Tested ones = [1.00,1.01,1.02]
+    twos = [1.02,1.025,1.03]
+    threes = [1.04,1.05,1.06]
+    fours = [0.2,0.25,0.3,0.35]
+	OLD BEST RESULT: 8.333062705,[1, 2, 1, 0, 2],[[0, 0], [1.01, 0], [1.02, 0], [1.04, 0], [0.35, 0]]
+
+	NEW BEST RESULTS:8.131854159	[1, 2, 1, 0, 2]	[[0, 0], [1.01, 0], [1.015, 0], [1.03, 0], [0.35, 0]]
+3) See CSV files
