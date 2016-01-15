@@ -478,6 +478,22 @@ We can apply w HELP that was sloved for in this experiment and the way of genera
 
 The rankings of the five participants vary too much to be a useful indicator of how successful the method is. For better testing, the experiment could be expanded.
 
+Calculations
+----------
+
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure27.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Calculations 1
+    </td>
+  </tr>
+</table>
+
 Appendices
 ----------
 Appendix 1 - [ECG Data](attachments/filip2_ecg.JSON)  
