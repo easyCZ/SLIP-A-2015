@@ -271,7 +271,7 @@ space on each side of the chest.
   </tr>
   <tr class="img-caption">
     <td>
-      From "Exercise Physiology: Nutrition, Energy, and Human Performance" [^2]
+      From "Exercise Physiology: Nutrition, Energy, and Human Performance" <sup><a href="#fn_2" id="reffn_2">2</a></sup>
     </td>
   </tr>
 </table>
@@ -320,7 +320,7 @@ very fragile when it dried out making it unsuitable for longer term use.
 I decided to investigate using conductive copper tape. This was cut into small
 sections of approximately 15mm and stuck to the inside of the vest. While this
 was somewhat successful, I found that performance was improved by adding a
-slight bulge to the electrode. By wrapping the tape round a metal stud, the
+slight bulge to the electrode. By wrapping the tape round a metal stud the
 contact area is pushed into the skin a little more, improving the contact surface.
 
 <table>
