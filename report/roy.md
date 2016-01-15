@@ -143,7 +143,7 @@ The circuit performs and amplifies well whilst reducing noise artifacts. A major
 
 
 Conversion from the Breadboard to PCB Design
-<<<<<<< HEAD
+--------------------------------------------
 Once we had tested the breadboard and determined it the circuit had designed met the specification, I began the process of converting the schematic into a PCB by hand routing the components and the tracks to minimise the space of the board. The initial design below fit in a 6x4 cm area sized board.
 <table>
   <tr>
