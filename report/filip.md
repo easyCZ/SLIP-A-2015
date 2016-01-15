@@ -423,14 +423,14 @@ The rankings of the five participants vary too much to be a useful indicator of 
 Appendices
 ----------
 Appendix 1 - [ECG Data](attachments/filip2_ecg.JSON)
-Appendix 2 - Phase 1: (attachments/Phase 1.CSV)
-Appendix 3 - Phase 2a: (attachments/Phase2a.CSV)
-Appendix 4 - Phase 2b: (attachments/Phase2b.CSV)
-Appendix 5 - Phase 3a: (attachments/Phase3a.CSV)
-Appendix 6 - Phase 3b: (attachments/Phase3b.CSV)
-Appendix 7 - Phase 3c: (attachments/Phase3c.CSV)
-Appendix 8 - Final: (attachments/Final.CSV)
-Appendix 9 - RESpeck data sample: (attachments/RESpeck 1 - Jan.CSV)
+Appendix 2 - [Phase 1](attachments/Phase 1.CSV)
+Appendix 3 - [Phase 2a](attachments/Phase2a.CSV)
+Appendix 4 - [Phase 2b](attachments/Phase2b.CSV)
+Appendix 5 - [Phase 3a](attachments/Phase3a.CSV)
+Appendix 6 - [Phase 3b](attachments/Phase3b.CSV)
+Appendix 7 - [Phase 3c](attachments/Phase3c.CSV)
+Appendix 8 - [Final](attachments/Final.CSV)
+Appendix 9 - [RESpeck data sample](attachments/RESpeck 1 - Jan.CSV)
 
 References
 ----------
