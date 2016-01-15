@@ -55,11 +55,11 @@ The step structure code starts with the window of data as described before and e
 </table>
 
 Note that for all the step one conditions any of the following five logical statements can be applied to the condition:
-1. Whether the condition is met or not has no impact on the selection of the *iter_window*.
-2. If the condition is met, the *iter_window* will be selected regardless of the results of other methods.
-3. If the condition is not met, the *iter_window* will be selected regardless of the results of other methods.
-4. Unless 2) or 3) occurs, this condition must not be met for the *iter_window* to be selected.
-5. Unless 2) or 3) occurs, this condition must be met for the *iter_window* to be selected.
+1. Whether the condition is met or not has no impact on the selection of the *iter_window*.  
+2. If the condition is met, the *iter_window* will be selected regardless of the results of other methods.  
+3. If the condition is not met, the *iter_window* will be selected regardless of the results of other methods.  
+4. Unless 2) or 3) occurs, this condition must not be met for the *iter_window* to be selected.  
+5. Unless 2) or 3) occurs, this condition must be met for the *iter_window* to be selected.  
 
 As a result of testing (detailed in *Testing*), the best choice of benchmarks and methods emerged to be HELP.
 
