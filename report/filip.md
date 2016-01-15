@@ -278,15 +278,59 @@ This left 3967500 help data windows to be evaluated for phase 1 testing.
 
 #### Testing Results
 
-The results of phases one, two and three can be found in Appendices 2 through7. The best setting was found to be X HELP. Elimination occured as described in *Figures 18*, *19*, *20* and *21*.
+The results of phases one, two and three can be found in Appendices 2 through7. The best setting was found to be X HELP. Elimination occured as described in *Figures 16*, *17*, *18* and *19*.
 
-Figure 18
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure17.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 16 - Flow chart version 2
+    </td>
+  </tr>
+</table>
 
-Figure 19
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure18.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 17 - Window Length vs. Accuracy
+    </td>
+  </tr>
+</table>
 
-Figure 20
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure19.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 18 - Minimum Spacing vs. Accuracy
+    </td>
+  </tr>
+</table>
 
-Figure 21
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure20.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 19 - Iter_Window Length vs. Accuracy
+    </td>
+  </tr>
+</table>
 
 In order to better test the resulting setting, it was applied the available data using dense iteration. The result was X HELP.
 
