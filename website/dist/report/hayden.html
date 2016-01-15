@@ -46,14 +46,14 @@ working with Roy to design and build the sensor hardware.</p>
 health vest, installing them into the vest, and transferring data from the
 sensors to the Android application which could then upload the data for further
 processing and display.</p>
-<p>The final design includes electrodes and analogue filtering circuitry to acquire
+<p>The final design includes electrodes and analog filtering circuitry to acquire
 an electrocardiogram (ECG) of the wearer, and a sensor to allow monitoring of
 the wearer&#39;s temperature.</p>
 <p>The electrodes and temperature sensor are connected to a &quot;belt pack&quot; which
 contained the ECG filtering circuit, a simple potential divider for the
 temperature sensor, and the nRF51 Development Kit (nRF51-DK). The NRF51-DK
 provides an easy interface to the nRF51822 microprocessor, which includes an
-analogue to digital converter (ADC) and Bluetooth Low Energy transceiver.</p>
+analog to digital converter (ADC) and Bluetooth Low Energy transceiver.</p>
 <p>Note: While efforts have been made to distinguish in the following sections
 where &quot;work&quot; was exclusively carried out by either myself or Roy, a large amount
 of time was spent working together to overcome the challenges described.</p>
@@ -67,7 +67,7 @@ build an amplifier to amplify the difference in potential between two electrodes
 attached to the body. Unfortunately, there are also a number of challenges to
 overcome.</p>
 <p>The differential signal we are trying to obtain is in the order of 500μV,
-meaning gain of around 30dB must be used to obtain a usable signal. This,
+meaning a gain of around 30dB must be used to obtain a usable signal. This,
 as is to be expected with high gain amplifiers, introduces a large amount of
 noise into the signal.</p>
 <p>As that the output of the circuit is sampled at 50Hz (discussed in more
@@ -99,7 +99,7 @@ together to tackle the challenges described above.</p>
 
 <p>Although recognizable, the trace obtained contains a large amount of noise as
 the first iteration of the circuit made little attempt to filter noise.</p>
-<p>Using a Picoscope, Roy and I was able to identify the frequency of the noise introduced:</p>
+<p>Using a Picoscope, Roy and I were able to identify the frequency of the noise introduced:</p>
 <table>
   <tr>
     <td>
@@ -186,7 +186,7 @@ highlighted in red.</p>
 <p><img src="pictures/ecg circuit hayden.png" alt="ECG Schematic"></p>
 <h4 id="circuit-evaluation">Circuit Evaluation</h4>
 <p>While it is difficult to quantitively evaluate how well the ECG circuit has
-performed (as we are generating an image rather than a quantative value), P, Q,
+performed (as we are generating an image rather than a quantitative value), P, Q,
 R, S and T sections are clearly identifiable on the trace obtained from the
 circuit, as can be seen in the waveform below:</p>
 <p><img src="waveforms/ECG output waveform annotated.png"></p>
@@ -254,7 +254,7 @@ a little research, I came across an alternative electrode configuration
 which is recommended for use in exercise physiology (which involves large
 amounts of movement during tests). The configuration, introduced in &quot;Exercise
 Physiology: Nutrition, Energy, and Human Performance&quot; <sup><a href="#fn_2" id="reffn_2">2</a></sup>, has the ground
-electrode on the sternum, with the -ve and +ve electrodes in the 5th intercostal
+electrode on the sternum with the -ve and +ve electrodes in the 5th intercostal
 space on each side of the chest.</p>
 <table>
   <tr>
@@ -302,7 +302,7 @@ pictured below:</p>
 <p>Unfortunately, we found that the sponge material used in the electrodes became
 very fragile when it dried out making it unsuitable for longer term use.</p>
 <p>I decided to investigate using conductive copper tape. This was cut into small
-sections of approximately 15mm, and stuck to the inside of the vest. While this
+sections of approximately 15mm and stuck to the inside of the vest. While this
 was somewhat successful, I found that performance was improved by adding a
 slight bulge to the electrode. By wrapping the tape round a metal stud, the
 contact area is pushed into the skin a little more, improving the contact surface.</p>
@@ -328,7 +328,7 @@ the electrodes to keep the gel in place.</p>
 when using our copper tape electrodes, even during movement, and the cloth
 patches did a reasonable job of keeping the gel in place.</p>
 <h4 id="evaluation">Evaluation</h4>
-<p>The requirement to use a conductive gel is disappointing, and makes putting the
+<p>The requirement to use a conductive gel is disappointing and makes putting the
 vest on difficult (as care must be taken to avoid spreading the gel off the
 electrodes). While not particularly uncomfortable, the design would be
 significantly improved if this requirement could be removed. Given the amount
@@ -402,7 +402,7 @@ ECG output as frequently as possible. Sampling was achieved by setting up a
 <code>Ticker</code>, which interrupts the CPU at a defined interval and causes a reading
 from the ADC to be taken. The value is then transmitted using Bluetooth Low
 Energy.</p>
-<p>Due to the overhead of sampling the analogue signal and transmitting the new
+<p>Due to the overhead of sampling the analog signal and transmitting the new
 value, I found that the minimum practical interval for sampling was 20ms. This
 gives a sampling frequency of 50Hz, which is sufficient for sampling signals of
 up to 25Hz.</p>
@@ -547,28 +547,28 @@ from the vest. It has been written in such a way that adding additional sensors
 and features would be relatively simple.</p>
 <h2 id="references">References</h2>
 <p><sup><a href="#fn_1" id="reffn_1">1</a></sup>:
-  Homemade Electrocardiograph
-  Jason Nguyen
-  <a href="http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html">http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html</a>
+  Homemade Electrocardiograph,
+  Jason Nguyen,
+  <a href="http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html">http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html</a>,
   Accessed 2015-10-12</p>
 <p><sup><a href="#fn_2" id="reffn_2">2</a></sup>:
-  Exercise Physiology: Nutrition, Energy, and Human Performance
-  William D. McArdle, Frank I. Katch, Victor L. Katch
+  Exercise Physiology: Nutrition, Energy, and Human Performance,
+  William D. McArdle, Frank I. Katch, Victor L. Katch,
   PP327</p>
 <p><sup><a href="#fn_3" id="reffn_3">3</a></sup>:
-  A Study on the Optimal Positions of ECG Electrodes in a Garment for the Design of ECG-Monitoring Clothing for Male
-  Hakyung Cho, Joo Hyeon Lee
+  A Study on the Optimal Positions of ECG Electrodes in a Garment for the Design of ECG-Monitoring Clothing for Male,
+  Hakyung Cho, Joo Hyeon Lee,
   Journal of Medical Systems, 2015, Vol.39(9), pp.1-14</p>
 <p><sup><a href="#fn_4" id="reffn_4">4</a></sup>:
-  Wearable Textile Electrodes for ECG Measurement
-  Lukas Vojtech, Radoslav Bortel, Marek Neruda, Milos Kozak
+  Wearable Textile Electrodes for ECG Measurement,
+  Lukas Vojtech, Radoslav Bortel, Marek Neruda, Milos Kozak,
   Advances in Electrical and Electronic Engineering, 01 January 2013, Vol.11(5), pp.410-414</p>
 <p><sup><a href="#fn_5" id="reffn_5">5</a></sup>:
-  Fabrication of conductive fabric as textile electrode for ECG monitoring
-  Yun Zhou, Xin Ding, Jingwei Zhang, Yaru Duan, Jiyong Hu, Xudong Yang
+  Fabrication of conductive fabric as textile electrode for ECG monitoring,
+  Yun Zhou, Xin Ding, Jingwei Zhang, Yaru Duan, Jiyong Hu, Xudong Yang,
   Fibers and Polymers, 2014, Vol.15(11), pp.2260-226</p>
 <p><sup><a href="#fn_6" id="reffn_6">6</a></sup>:
-  Vishay NTCLE100E3 NTC Thermistors Data Sheet
+  Vishay NTCLE100E3 NTC Thermistors Data Sheet,
   <a href="http://www.farnell.com/datasheets/1784420.pdf">http://www.farnell.com/datasheets/1784420.pdf</a></p>
 <h2 id="links">Links</h2>
 <p><sup><a href="#fn_L1" id="reffn_L1">L1</a></sup>:
