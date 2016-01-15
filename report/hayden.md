@@ -178,8 +178,12 @@ highlighted in red.
 
 #### Circuit Evaluation
 
-The ECG circuit generally performed pretty well, with P, Q, R, S and T sections
-of the trace clearly visible.
+While it is difficult to quantitively evaluate how well the ECG circuit has
+performed (as we are generating an image rather than a quantative value), P, Q,
+R, S and T sections are clearly identifiable on the trace obtained from the
+circuit, as can be seen in the waveform below:
+
+<img src="waveforms/ECG output waveform annotated.png">
 
 The filter added to the initial design reduced the amplitude of noise at 50Hz by
 20dB (as shown in the frequency response pictured above). Unfortunately, the
