@@ -61,7 +61,7 @@ Note that for all the step one conditions any of the following five logical stat
 4. Unless 2) or 3) occurs, this condition must not be met for the *iter_window* to be selected.  
 5. Unless 2) or 3) occurs, this condition must be met for the *iter_window* to be selected.  
 
-As a result of testing (detailed in *Testing*), the best choice of benchmarks and methods emerged to be HELP.
+As a result of testing (detailed in *Testing*), the best choice of benchmarks and methods emerged to be a combination of variance detection and minimum votlage.
 
 ### Beats per Minute
 
@@ -99,7 +99,7 @@ Since the ECG is easily affected by movement, the BPM code needs to adjust to un
   </tr>
 </table>
 
-This adjustment is not correct. This method was chosen due to time constraints, but an alternative method is suggested implicitly in the criticism below. Given a data window such as the one in Figure 6* below, the effect of the error adjustment depends on where the error occurs. The issue with the current method lies in the fact that data outside of t1 and tn HELP is not considered for the BPM but it is considered in the error adjustment. Figure 7* discusses different scenarios.
+This adjustment is not correct. This method was chosen due to time constraints, but an alternative method is suggested implicitly in the criticism below. Given a data window such as the one in Figure 6* below, the effect of the error adjustment depends on where the error occurs. The issue with the current method lies in the fact that data outside of t1 and tn is not considered for the BPM but it is considered in the error adjustment. Figure 7* discusses different scenarios.
 
 <table>
   <tr>
@@ -127,7 +127,7 @@ This adjustment is not correct. This method was chosen due to time constraints, 
   </tr>
 </table>
 
-In testing, data windows with high error rates (error > X% HELP) were discarded. Nonetheless, the above adjustment could cause significant error. Calculations for the above error bounds are provided in  the *Calculations* seciont (*Calculations 1*).
+In testing, data windows with high error rates (error > 10%) were discarded. Nonetheless, the above adjustment could cause significant error. Calculations for the above error bounds are provided in  the *Calculations* seciont (*Calculations 1*).
 
 ### Testing
 
@@ -135,7 +135,7 @@ The goals for testing were to determine the best possible benchmarks and combina
 
 #### Testing Environment
 
-Goals two through five quickly follow from goal one, so this section will focus on reaching goal one. A more mathematical way of formulating the problem would be to see all possible settings as a set (X HELP). Testing them is equivalent to mapping this set to another set(Y HELP), where each element is a measure of quality,to then choose the best quality and map it back to X HELP. The idea behind the testing environment was to emulate this process. Of course X is far too large to test every setting. The limitations of the testing environment and their impact is discussed in *Testing Procedure*.
+Goals two through five quickly follow from goal one, so this section will focus on reaching goal one. A more mathematical way of formulating the problem would be to see all possible settings as a set (X). Testing them is equivalent to mapping this set to another set(Y), where each element is a measure of quality,to then choose the best quality and map it back to X. The idea behind the testing environment was to emulate this process. Of course X is far too large to test every setting. The limitations of the testing environment and their impact is discussed in *Testing Procedure*.
 
 <table>
   <tr>
@@ -195,7 +195,7 @@ Note that for testing purposes the order in which the code processes data window
 
 #### Measuring Quality
 
-Referring back to the mathematical formulation of the problem, we need a function (f(x):X->Y HELP) that measures the quality of a particular setting. As already suggested in the pseudo code of *Figure 11*, a Monte Carlo style approach was used to determine this funciton. First, a measure of quality for a particular setting and data window was defined (f_hat(x) HELP). This measure of quality was then applied to as many data windows as possible (with the same setting) to generate an expected value for the quality of the setting (f(x) HELP). Three measures were considered for f_hat(x) HELP. 
+Referring back to the mathematical formulation of the problem, we need a function (f(x):X->Y) that measures the quality of a particular setting. As already suggested in the pseudo code of *Figure 11*, a Monte Carlo style approach was used to determine this funciton. First, a measure of quality for a particular setting and data window was defined (f_hat(x)). This measure of quality was then applied to as many data windows as possible (with the same setting) to generate an expected value for the quality of the setting (f(x)). Three measures were considered for f_hat(x). 
 
 <table>
   <tr>
@@ -278,7 +278,7 @@ This left 3967500 data windows to be evaluated for phase 1 testing.
 
 #### Testing Results
 
-The results of phases one, two and three can be found in Appendices 2 through7. The best setting was found to be X HELP. Elimination occured as described in *Figures 16*, *17*, *18* and *19*.
+The results of phases one, two and three can be found in Appendices 2 through 7. Elimination occured as described in *Figures 16*, *17*, *18* and *19*.
 
 <table>
   <tr>
@@ -332,7 +332,7 @@ The results of phases one, two and three can be found in Appendices 2 through7. 
   </tr>
 </table>
 
-In order to better test the resulting setting, it was applied the available data using dense iteration. The result was X HELP.
+In order to better test the resulting setting, it was applied to the available data using dense iteration. The result was a variation of approximately 16 beats per minute.
 
 ### Method Evaluation and Improvements
 
@@ -380,7 +380,7 @@ Only five participants participated in the experiment. All of them are aged betw
 
 The respiratory sensor used is called RESpeck. It measures breathing near the stomach using an accelerometer. A data sample is attached in *Appendix 5*. Heart rate was measured using a POLAR FT4M device. The device failed for one out of five participants, requiring the heart rate monitor of the treadmill to be used. The heart rate as recorded by either device was filmed and synced to data collected using the RESpeck.
 
-Little data processing was required for this experiment. Mean inspiratory flow is given by MIF = IV/ID HELP. The formula is derived from *Figure 21*. 
+Little data processing was required for this experiment. Mean inspiratory flow is given by inspiiratory volume divided by inspiratory duration. The formula is derived from *Figure 21*. 
 
 <table>
   <tr>
@@ -449,17 +449,17 @@ The exact details for the actual data collection are not available to as I did n
 
 ### Data Processing
 
-Mathematically, this problem is a linear regression problem. We generate a matrix X HELP from our data, where the ith row HELP contains the ith HELP participants scores for different metrics (such as the average breathing rate, the maximum breathing rate or the variance of breathing rates) or exercises. From the given fitness ranking of our participants we generate a vector y, where the ith HELP row contains the overall fitness score of the ith HELP participant. We are now looking for a vector w HELP such that w minimises the least squares summation := summation (yi - Xwi). This vector w is then given by the formula HELP regression formula or it can simply be computed using y\X HELP in Matlab.
+Mathematically, this problem is a linear regression problem. We generate a matrix X from our data, where the ith row contains the ith participants scores for different metrics (such as the average breathing rate, the maximum breathing rate or the variance of breathing rates) or exercises. From the given fitness ranking of our participants we generate a vector y, where the ith row contains the overall fitness score of the ith participant. We are now looking for a vector w such that w minimises the least squares summation := summation (yi - Xwi). This vector w is then given by the regression formula or it can simply be computed using y\X in Matlab.
 
-The challenging part is choosing XHELP. The number of rows is fixed at ten, but how can we choose our column dimension and how do we assign values to each column? The only two options that come to mind are to assign different scores to different exercises and to assign different scores to different metrics. Considering the four metrics; average breathing rate, breathing rate variance, minimum breathing rate and maximum breathing rate and the eleven different exercises (including at rest), this gives us 44 different scores to evaluate. However, the mathematical formulation of the problem gives us some restrictions. To attain a sensible answer, the row dimension of X HELP must be larger than or equal to it's column dimension (an underdetermined system would lead to multiple dimensioned solution spaced). In fact the larger its row dimension is in relation to its column dimension the better. Obviously 44 is larger than 10 so the number of scores needs to be cut down. Just considering one metric for each exercise would yield 11 and still not be sufficient. Grouping exercises would be possible but seems futile because we don't know the details of the experiment. Considering each metric for all the exercises and then averaging over all the exercises would reduce the number of scores to four, leaving us with our matrix X HELP.
+The challenging part is choosing X. The number of rows is fixed at ten, but how can we choose our column dimension and how do we assign values to each column? The only two options that come to mind are to assign different scores to different exercises and to assign different scores to different metrics. Considering the four metrics; average breathing rate, breathing rate variance, minimum breathing rate and maximum breathing rate and the eleven different exercises (including at rest), this gives us 44 different scores to evaluate. However, the mathematical formulation of the problem gives us some restrictions. To attain a sensible answer, the row dimension of X must be larger than or equal to it's column dimension (an underdetermined system would lead to multiple dimensioned solution spaced). In fact the larger its row dimension is in relation to its column dimension the better. Obviously 44 is larger than 10 so the number of scores needs to be cut down. Just considering one metric for each exercise would yield 11 and still not be sufficient. Grouping exercises would be possible but seems futile because we don't know the details of the experiment. Considering each metric for all the exercises and then averaging over all the exercises would reduce the number of scores to four, leaving us with our matrix X.
 
 Having chosen what should be score, there is still need for a way to score it. The method chosen here uses the sample mean and variance to generate a normal distribution, emulating a larger population. Each metric for each exercise for each participant can then be located on this normal distribution returning what percentile the participant scored for that particular metric and exercise.
 
-The resulting w is HELP, where w provides weights for [avg,min,max,var] respecively. 
+The resulting w is [1.3903,0.4146,0.7445,0] where w provides weights for [avg,min,max,var] respecively. 
 
 ###	Results
 
-We can apply w HELP that was sloved for in this experiment and the way of generating X to data from the previous experiment to test the quality of the method. The resulting ranking can then be compared to several other methods of ranking participants.
+We can apply the vector w  and the way of generating X to data from the previous experiment to test the quality of the method. The resulting ranking can then be compared to several other methods of ranking participants.
 
 <table>
   <tr>
