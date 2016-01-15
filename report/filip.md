@@ -380,13 +380,63 @@ Only five participants participated in the experiment. All of them are aged betw
 
 The respiratory sensor used is called RESpeck. It measures breathing near the stomach using an accelerometer. A data sample is attached in *Appendix 5*. Heart rate was measured using a POLAR FT4M device. The device failed for one out of five participants, requiring the heart rate monitor of the treadmill to be used. The heart rate as recorded by either device was filmed and synced to data collected using the RESpeck.
 
-Little data processing was required for this experiment. Mean inspiratory flow is given by MIF = IV/ID HELP. The formula is derived from *Figure 23*. 
+Little data processing was required for this experiment. Mean inspiratory flow is given by MIF = IV/ID HELP. The formula is derived from *Figure 21*. 
 
-Figure 23
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure22.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 21 - Inspiratory flow vs Volume
+    </td>
+  </tr>
+</table>
 
 ### Results and Evaluation (level 3 heading)
 
-While heart rate decreased in a nice curve with increasing slope (see *Figure 24*), there was no recognisable pattern to the mean inspiratory flow during recovery from exercise (see *Figure 25 *). The exception to this observation is Figure 26*. From subjective observations during the experiment, breathing seemed more aggressive initially and then cooled down. While it is likely that there is no trend, it is possible that the lack of trend in the mean inspiratory flow during recovery is a result of error in data collection. This error could be a result of participant movement or of the breathing signal being normalised. Since I am not fully aware of how the breathing signal algorithm works, I can neither confirm nor deny that notion. However, it is possible to conclude that in the generated data mean inpiratory flow is not correlated to heart rate.
+While heart rate decreased in a nice curve with increasing slope (see *Figure 22*), there was no recognisable pattern to the mean inspiratory flow during recovery from exercise (see *Figure 23 *). The exception to this observation is Figure 24*. From subjective observations during the experiment, breathing seemed more aggressive initially and then cooled down. While it is likely that there is no trend, it is possible that the lack of trend in the mean inspiratory flow during recovery is a result of error in data collection. This error could be a result of participant movement or of the breathing signal being normalised. Since I am not fully aware of how the breathing signal algorithm works, I can neither confirm nor deny that notion. However, it is possible to conclude that in the generated data mean inpiratory flow is not correlated to heart rate.
+
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure25.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 22 - Heart Rate vs Time during Recovery From Exercise
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure23.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 23 - Flow vs Time during Recovery From Exercise
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure24.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 24 - Flow vs Time during Recovery From Exercise
+    </td>
+  </tr>
+</table>
 
 Fitness Ranking Experiment
 -----------
