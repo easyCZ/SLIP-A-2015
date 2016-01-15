@@ -336,7 +336,7 @@ In order to better test the resulting setting, it was applied the available data
 
 ### Method Evaluation and Improvements
 
-The phase 3 graphs from the previous section were slightly worrying as you would expect the accuracy of the BPM code to increase with window size. Instead, the accuracy decreased. While this may be partially attributed to increased exposure to error data(the sparse method was used) it suggests that the measuring criteria and testing procedure were flawed (the best solution is not generalisable). This notion is supported by the final test using dense iteration as BPM deviated twice as much. *Figure 22* provides suggestions for improvement.
+The phase 3 graphs from the previous section were slightly worrying as you would expect the accuracy of the BPM code to increase with window size. Instead, the accuracy decreased. While this may be partially attributed to increased exposure to error data(the sparse method was used) it suggests that the measuring criteria and testing procedure were flawed (the best solution is not generalisable). This notion is supported by the final test using dense iteration as BPM deviated twice as much. *Figure 20* provides suggestions for improvement.
 
 <table>
   <tr>
@@ -422,7 +422,7 @@ The rankings of the five participants vary too much to be a useful indicator of 
 
 Appendices
 ----------
-Appendix 1 - ECG Data: (attachments/filip2_ecg.JSON)
+Appendix 1 - [ECG Data](attachments/filip2_ecg.JSON)
 Appendix 2 - Phase 1: (attachments/Phase 1.CSV)
 Appendix 3 - Phase 2a: (attachments/Phase2a.CSV)
 Appendix 4 - Phase 2b: (attachments/Phase2b.CSV)
