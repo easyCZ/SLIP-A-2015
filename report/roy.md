@@ -196,7 +196,7 @@ As the primary goal of this was to make it as accessible/cheap as possible whils
   <tr>
     <td>
       <img alt="Costing table"
-           src="pictures/componenttable.png">
+           src="pictures/componenttable.PNG">
     </td>
   </tr>
   <tr class="img-caption">
