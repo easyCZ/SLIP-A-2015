@@ -41,7 +41,18 @@ The step structure code starts with the window of data as described before and e
   </tr>
 </table>
 
-Figure 3
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure3.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 3 - Table of all considered methods
+    </td>
+  </tr>
+</table>
 
 Note that for all the step one conditions any of the following five logical statements can be applied to the condition:
 1) Whether the condition is met or not has no impact on the selection of the *iter_window*.
