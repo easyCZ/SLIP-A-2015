@@ -40,7 +40,7 @@
 
 <h1 id="sukrit-roy-hotrabhvanon">Sukrit (Roy) Hotrabhvanon</h1>
 <h2 id="introduction">Introduction</h2>
-<p>The objective of this project is to create a functioning health monitoring vest to aid those recently in recovery from accidents/post-op or those with chronic conditions who need to be monitored when they are put under stress/exercise. There are applications in sports science as well, namely the ability to track athletes biometrics to a higher level than the standard heart rate detection bracelets.  </p>
+<p>The objective of this project is to create a functioning health monitoring vest to aid those recently in recovery from accidents/post-op or those with chronic conditions who need to be monitored when they are put under stress/exercise. There are applications in sports science as well, namely the ability to track athletes biometrics to a higher level than the standard heart rate detection bracelets.</p>
 <h2 id="the-problem">The Problem</h2>
 <p>There exists no product on the market within the consumer price range that permits the live readout of biosignals to an internet connected device. Thereby allowing remote monitoring of a patient and continuous data gathering. Thereby giving doctors access to more data remotely, and resulting in the patient gaining increased freedom post recovery whilst maintaining peace of mind.</p>
 <h2 id="the-biosensors">The Biosensors</h2>
@@ -167,7 +167,7 @@ During testing Hayden and I found a lot of noise artifacts which once we did a s
   <tr>
     <td>
       <img alt="Costing table"
-           src="pictures/componenttable.PNG">
+           src="pictures/componenttable.png">
     </td>
   </tr>
   <tr class="img-caption">
@@ -180,7 +180,7 @@ During testing Hayden and I found a lot of noise artifacts which once we did a s
 <p>As shown by the table above the cost of a single unit is 6.061 GBP however in bulk (1000 units +) the cost drops massively to 1.63 GBP. Of course this cost does not include the price of the prospeckz board but this price is incredibly reasonable for the results that we gathered from it.</p>
 <h2 id="shirt-and-electrode-placement">Shirt and Electrode placement</h2>
 <p>For the electrode placement we started with the standard medical recommended placement which is the V+ and V- electrodes located as shown in the diagram below. However, unfortunately through testing although this yielded a clear ECG trace the electrodes were placed on muscle masses that are very prone to movement hence we completely lost the signal during any kind of light movement.</p>
-<p><table>
+<table>
   <tr>
     <td>
       <img src="electrode_placement_trials/placement6.jpg">
@@ -193,19 +193,21 @@ During testing Hayden and I found a lot of noise artifacts which once we did a s
     </td>
   </tr>
   <tr class="img-caption">
-    <td></td></p>
-<pre><code>&lt;td&gt;
-  With little movement, a very clear trace is obtained (although in the
-  image the +ve and -ve electrodes have been incorrectly connected,
-  resulting in an inverted trace).
-&lt;/td&gt;
+    <td></td>
 
-&lt;td&gt;
-  However, with movement, the trace becomes unintelligible.
-&lt;/td&gt;
-</code></pre><p>  </tr>
+    <td>
+      With little movement, a very clear trace is obtained (although in the
+      image the +ve and -ve electrodes have been incorrectly connected,
+      resulting in an inverted trace).
+    </td>
+
+    <td>
+      However, with movement, the trace becomes unintelligible.
+    </td>
+  </tr>
 </table>
-The table is annotated by my team mate Hayden Ball [2] and the electrode placement modelled by me.</p>
+
+<p>The table is annotated by my team mate Hayden Ball [2] and the electrode placement modelled by me.</p>
 <p>Hayden then found a paper that described a better ECG placement with specific use in wearables, targeting muscle masses and ground points that are less likely prone to movement therefore yielding a cleaner signal with light movement. However, it is still not perfect and there is lots of room for improvement as the signal would still not be acceptable if the user was jogging.</p>
 <p>As our ambition was to for the vest to be reusable we decided that we were going to look into creating our own electrodes (spearheaded by Hayden). Because of this I obtained a compression base layer top as the thinking was it should be tight enough to compress our electrodes into the skin without requiring the traditional adhesives. (Thereby making it reusable). Our electrode designs were sewn into the inside of the compression layer top meaning all the user has to do is to put the top on.</p>
 <p>Issues developed with contact against the skin and unfortunately we had to succumb to using electrode gel on the pads to increase the contact/conductivity. This is an area of the hardware system that can be improved. With more time better research into different electrode materials such as using conductive cloth and designing a strap which would allow the user to adjust the pressure of the electrodes on the skin. Another major issue is our naivety that we could design a one size fits all vest with fixed electrodes. I believe the best solution in the future to solve this problem is to design a one size fits all vest with removable adhesive electrodes so the position can be altered and fine tuned for every user. As this design would require disposables it is not the most cost effective solution but strikes a good balance between ease of use and quality.</p>
