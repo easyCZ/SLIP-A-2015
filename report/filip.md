@@ -248,15 +248,37 @@ number is far larger than our limitation of 5,000,000.
 
 By selecting the sparse iteration method the number of data windows to be evaluated was cut down to roughly 100,000,000. Further, the number of considered methods was reduced. Instead of the methods from *Figure 3*, only the methods from *Figure 14* were considered. For more reductions in computational cost, the flow chart in *Figure 15* was followed. This flow chart is clearly imperfect. Testing for the best methods and then using those results to test for constants and benchmarks leaves a gap. This approach limnits results to methods that work well with the chosen benchmarks and constants, preventing potentially effective combinations from being selected. I decided to test for methods first because I had a better feeling for which ranges would be acceptable for constants and benchmarks (from informal testing), but I had very little idea about which methods would work most effectively. Regarding the *min_spacing*, *window_size* and *iter_window* constants, I worked under the theoretical assumption that neither of them should have an impact on the data while they are within some accpetable range. 
 
-Figure 
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure15.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 14 - Methods used in experiment
+    </td>
+  </tr>
+</table>
 
-Figure 17
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure16.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 15 - Computation Flow Chart
+    </td>
+  </tr>
+</table>
 
-This left XXX help data windows to be evaluated for phase 1 testing.
+This left 3967500 help data windows to be evaluated for phase 1 testing.
 
 #### Testing Results
 
-The results of phases one, two and three can be found in *Appendix 2*, *Appendix 3* and *Appendix 4* respectively. The best setting was found to be X HELP. Elimination occured as described in *Figures 18*, *19*, *20* and *21*.
+The results of phases one, two and three can be found in Appendices 2 through7. The best setting was found to be X HELP. Elimination occured as described in *Figures 18*, *19*, *20* and *21*.
 
 Figure 18
 
@@ -342,6 +364,18 @@ Figure 28
 
 The rankings of the five participants vary too much to be a useful indicator of how successful the method is. For better testing, the experiment could be expanded.
 
+
+Appendices
+----------
+Appendix 1 - ECG Data: (attachments/filip2_ecg.JSON)
+Appendix 2 - Phase 1: (attachments/Phase 1.CSV)
+Appendix 3 - Phase 2a: (attachments/Phase2a.CSV)
+Appendix 4 - Phase 2b: (attachments/Phase2b.CSV)
+Appendix 5 - Phase 3a: (attachments/Phase3a.CSV)
+Appendix 6 - Phase 3b: (attachments/Phase3b.CSV)
+Appendix 7 - Phase 3c: (attachments/Phase3c.CSV)
+Appendix 8 - Final: (attachments/Final.CSV)
+Appendix 9 - RESpeck data sample: (attachments/RESpeck 1 - Jan.CSV)
 
 References
 ----------
