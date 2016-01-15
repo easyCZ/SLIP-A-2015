@@ -3,8 +3,6 @@ s1232367
 System Level Integration Practical
 Group A: UberVest
 
-INTRODUCTION (Level 1 heading)
-
 With recent news about NSA surveillance, large scale data collection seems to have a negative connotation in our society. While fear for ones' privacy is justified,
 large scale data collection can be of tremendous benefit. An application of it that stands out is the imrpovement of our society's health. At the University of
 Edinburgh, researcher Andy Sims is using bioinformatics and genetic data to predict which cancer drugs are most appropriate for a breat cancer patient[3]. 
@@ -215,5 +213,98 @@ Figure 22ITALICS provides suggestions for improvement.
 
 Figure 22
 
-	RESPIRATORY SENSOR RESEARCH (level 2 heading)
+RESPIRATORY SENSOR RESEARCH (level 1 heading)
+
+The purpose of this section is to explore potential future uses of a respiratory sensor as part of the UberVest. The two explored potential uses of respiratory 
+monitoring (more specifically monitoring of breathing rate and mean inspiratory flow during recovery after exercise) were the ranking of users' fitness level and 
+the diagnosis of respiratory disease. To determine whether breathing rate can be an effective measure of fitness, 10 participants with know fitness levels completed 
+a set of exercises. Linear regression was applied to determine the least squares estimation of a formula for respiratory fitness (given breathing data in recovery from
+exercise).
+
+In another experiment, mean inspiratory flow and heart rate during recovery after exercise were monitored in young healthy individuals to determine whether 
+there was a correlation between the two. In some cases the comparison of expiratory flow to predicted expiratory flow is used to diagnose COPD [7]. This experiment was
+designed to develop some familiarity in making a similar diagnosis.
+
+	MEAN INSPIRATORY FLOW VS. HEART RATE EXPERIMENT (level 2 heading)
+
+		METHOD (level 3 heading)
+
+1. Measured breathing and heart rate at rest for one minute. People are more inclined to breathe abdominally when lying on their back and the respiratory sensor 
+(RESpeck) measures breathing near the stomach, participants were asked to lie down on their back for all measurements of breathing and heart rate.
+2. Participants ran on the treadmill for five minutes at ten km/h.
+3. Measurements were taken as described in step 1. Measurements were taken until the heart rate calmed down to 99 BPM. Further cool down was deemed to time consuming.
+4. Participants ran on the treadmill while I increased the speed until participants asked me stop the treadmill. Participants ran at the following speeds; one minute
+at 10 km/h and 11 km/h followed by 30 seconds at each of the following speeds 12 km/h, 14km/h, 16km/h, 17 km/h, 18 km/h, 19 km/h, 20 km/h, 21 km/h, 22 km/h, 23 km/h 
+and 24 km/h. The earliest participant to quit, quit after reaching 16km/h, the last quit after reaching 24 km/h.
+5. Measurements were taken as described in step 3.
+
+		PARTICIPANTS (level 3 heading)
+
+Only five participants participated in the experiment. All of them are aged between 21 and 23 and are of good health. Four participants were male, one participant was
+female. No smokers participated and all five participants enjoyed recreational (at least weekly) exercise.
+
+		Data Collection and Processing (level 3 heading)
+
+The respiratory sensor used is called RESpeck. It measures breathing near the stomach using an accelerometer. A data sample is attached in Appendix 5ITALICS. Heart 
+rate was measured using a POLAR FT4M device. The device failed for one out of five participants, requiring the heart rate monitor of the treadmill to be used. The 
+heart rate as recorded by either device was filmed and synced to data collected using the RESpeck.
+
+Little data processing was required for this experiment. Mean inspiratory flow is given by MIF = IV/ID HELP. The formula is derived from figure 23ITALICS. 
+
+		Results and Evaluation (level 3 heading)
+
+While heart rate decreased in a nice curve with increasing slope (see Figure 24ITALICS), there was no recognisable pattern to the mean inspiratory flow during recovery
+from exercise (see Figure 25 ITALICS). The exception to this observation is Figure 26ITALICS. From subjective observations during the experiment, breathing seemed more
+aggressive initially and then cooled down. While it is likely that there is no trend, it is possible that the lack of trend in the mean inspiratory flow during 
+recovery is a result of error in data collection. This error could be a result of participant movement or of the breathing signal being normalised. Since I am not
+fully aware of how the breathing signal algorithm works, I can neither confirm nor deny that notion. However, it is possible to conclude that in the generated data 
+mean inpiratory flow is not correlated to heart rate.
+
+	FITNESS RANKING EXPERIMENT (level 2 heading)
+
+More specifically than simply ranking users by fitness, the goal of this experiment was to devise a formula that would return a fitness score to the user after he has
+completed a specified set of exercises.
+
+		Method, Participants and Data Collection (level 3 heading)
+
+The exact details for the actual data collection are not available to as I did not carry out the experiment. However, I know the following; ten respiratory disease 
+patients aged 45 and above completed 10 exercises and measured their breathing rate (using a RESpeck) after each of the exercises. Their breathing at rest was also
+measured. Further, comments about the fitness of paprticipants and a ranking of their fitness was included.
+
+		Data Processing (level 3 heading)
+
+Mathematically, this problem is a linear regression problem. We generate a matrix X HELP from our data, where the ith row HELP contains the ith HELP participants 
+scores for different metrics (such as the average breathing rate, the maximum breathing rate or the variance of breathing rates) or exercises. From the given fitness 
+ranking of our participants we generate a vector y, where the ith HELP row contains the overall fitness score of the ith HELP participant. We are now looking for a 
+vector w HELP such that w minimises the least squares summation := summation (yi - Xwi). This vector w is then given by the formula HELP regression formula or it can
+simply be computed using y\X HELP in Matlab.
+
+The challenging part is choosing XHELP. The number of rows is fixed at ten, but how can we choose our column dimension and how do we assign values to each column? The
+only two options that come to mind are to assign different scores to different exercises and to assign different scores to different metrics. Considering the four 
+metrics; average breathing rate, breathing rate variance, minimum breathing rate and maximum breathing rate and the eleven different exercises (including at rest), 
+this gives us 44 different scores to evaluate. However, the mathematical formulation of the problem gives us some restrictions. To attain a sensible answer, the row 
+dimension of X HELP must be larger than or equal to it's column dimension (an underdetermined system would lead to multiple dimensioned solution spaced). In fact the
+larger its row dimension is in relation to its column dimension the better. Obviously 44 is larger than 10 so the number of scores needs to be cut down. Just 
+considering one metric for each exercise would yield 11 and still not be sufficient. Grouping exercises would be possible but seems futile because we don't know the 
+details of the experiment. Considering each metric for all the exercises and then averaging over all the exercises would reduce the number of scores to four, leaving
+us with our matrix X HELP.
+
+Having chosen what should be score, there is still need for a way to score it. The method chosen here uses the sample mean and variance to generate a normal 
+distribution, emulating a larger population. Each metric for each exercise for each participant can then be located on this normal distribution returning what 
+percentile the participant scored for that particular metric and exercise.
+
+Figure 27
+
+The resulting w is HELP.
+
+		Results (level 3 heading)
+
+We can apply w HELP that was sloved for in this experiment and the way of generating X to data from the previous experiment to test the quality of the method. The
+resulting ranking can then be compared to several other methods of ranking participants.
+
+Figure 28 
+
+		Conclusion (level 3 heading)
+
+
 

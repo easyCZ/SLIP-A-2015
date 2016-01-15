@@ -111,29 +111,65 @@ CHECK			iv) make method selection more dependent on data. at the moment only ben
 not necessary		v) expand on logical choices for step1 methods. create hierarchies etc...
 CHECK			vi) error in BPM on outside shouldn't be counted but is at the moment
 CHECK			viii) tested towards a particular window length
-C) RESpeck
-INTERIM	1) Intro
-		a) monitoring of our health is gaining importance(with good reason) and just measuring the breathing, temperature and BPM of people during the day would provide useful data to research. Obviously, we would like to provide services to users as well.
-			- FEV1 vs predicted - trying to see if we can predict FEV1 or just breathing in general. first step in that direction. also might be good indicator of health in itself.
-				+ outline experiment
-			- looking at a method to rank users' respiratory fitness (in recovery from exercise)
-				+ quick intro to COPD patient experiment.
-INTERIM	2) My experiment - try to elaborate a little bit more on this. I have to prove to DK that not following his exact instruction was warranted.
-		a) intro
-			i) Want to figure out how mean inspiratory flow is related to heart rate in recovery after exercise. This has multiple purposes:
-			ii) FEV1 to predicted (predictable using bpm?) as an indicator of respiratory disease
-		b) Method / procedure
-			i) describe procedure in detail and provide justification for lying down etc...
-		c) Results
-			i) GRAPHS
-			ii) correlation between BPM and flow
-INTERIM	3) COPD patients - trying to keep this brief
-		a) trying to guess a formula for fitness
-		b) data
-		c) method
-		d) test on my crowd
-		e) conclusion
-D) Conclusion and recap
+C) Respiratory Sensor
+CHECK	1) Intro
+CHECK		i) purpose of this section is to
+CHECK			-> explore potential future uses of respiratory sensor
+CHECK		ii) uses explored were - in what way?
+CHECK			-> ranking users' fitness using respiratory measurement by trying to devise formula using linear regression.
+CHECK			-> Trying to find out whether there is a correlation between heart rate and mean inspiratory flow in recovery from exercise.
+CHECK				- ultimate goal of being able to predict somebody's mean respiratory flow. This is used to diagnose COPD. SOURCE HERE
+CHECK	2) My experiment (level 3 heading)
+CHECK		a) Method / procedure
+CHECK			-> Measure breathing and heart rate at rest for one minute. Subjects were meant to lie down. 
+CHECK			-> 5 minutes on treadmill at 10 km/h 
+CHECK			-> Measure breathing. Until heart rate and breathing calmed down. Due to time constraints measurement was typically aborted when participants' BPM reached 98. Same conditions regarding lying down apply.
+CHECK			-> Increasing speed. Exact pattern. same measurement constraints apply.
+CHECK		b) about the participants
+CHECK			-> 5 total
+CHECK			-> all non-smokers 
+CHECK			-> aged 21-23
+CHECK			-> 4 male 1 female. 
+CHECK			-> All 5 enjoy recreational exercise and are in good health.
+CHECK		c) Details on Data collection
+CHECK			-> RESpeck for breathing - provide example in an appendix
+CHECK			-> polar chest band for 4, treadmill for 1.
+CHECK			-> Due to issues with heart rate monitor, 3/5 participants had to stand.
+CHECK			-> heart rate filmed and synced to RESpeck data.
+CHECK		d) Data processing
+SEMI			-> mean respiratory flow generated as follows: bla bla bla - use diagram only use positive signal.
+not necessary		-> duration of breaths.
+CHECK		e) Results
+CHECK			-> Nice trend for heart rate
+CHECK				- flattening slop
+CHECK			-> even though breathing was originally aggressive and then calmed down, there is no visible pattern in the respiratory data
+CHECK				- I do not fully understand the processes behind signal, so could be that signal is normalised. Before further experiments this should be clarified.
+CHECK				- no correlation attempted because no structure to respiratory data could be identified.
+	3) 10 Patients (level 2 heading)
+		a) Method / procedure
+CHECK			-> wasn't me personally who carried out the experiment.
+CHECK			-> 10 exercises and at rest only breathing rate available.
+CHECK		b) about the participants
+CHECLK			-> aged XXX
+CHECK			-> Respiratory disease
+CHECK			-> fitness ranking from doctors available
+CHECLK		c) Data collection
+CHECK			-> RESpeck breathing rate and exercise available for each patient
+CHECK		d) Data processing
+CHECK			-> assuming that exercises are of equal importance (there is no information available about exercises anyways so makeing the formula depend on them seems like a fruitless effort)
+CHECK			-> testing min*w1+max*w2+var*w3+avg*w4
+CHECK			-> explain score by normal
+CHECK			-> avg score by normal per exercise is used giving X (the matrix)
+CHECK			-> we are assuming X*w = Scores, where w is unknown
+CHECK			-> linear regression since we know scores (to some extent)
+CHEKC			-> giving w
+		e) Results
+			-> Using participants from experiment above, we can generate X and multiply by w to achieve scores.
+			-> compare scores to max speed
+			-> compare scores to lowest heart rates
+			-> compare scores to my judgement
+	4) Conclusion (level 2 heading)
+		a) My experiment was fruitless but provides guidance on future research with the RESpeck. 10 patients experiment was ___ but regardless, there are so many ways of ranking patiens' fitness that it seems like an arbitrary experiment.
 
 search these (in report) before submissions:
 ITALICS

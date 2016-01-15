@@ -99,9 +99,25 @@ Impact: High. A faster algorithm would allow for the testing of more combination
 Improvement: Refrain from using similar data and window length.
 Difficulty: Depending on the run time of the algorithm, this could be simple to implement.
 Impact: Small. An effective quality measure should work for any window size greater than two seconds.
-
-
-
+Figure 23 - Mean inspiratory flow
+Figure 24 - Nice heart rate graph(s)
+Figure 25 - breathing graphs
+Figure 26 - Best breathing graphs
+Figure 27 - Normal distribution graph
+Figure 28 - testing of 10 patients method
+TABLE Index | Comparing to | Comparing to ranking | method ranking
+1|
+comparing to: Heart rate(lowest wins)
+ranking: 
+method ranking:
+2|
+comparing to: Maximum speed in test
+ranking: filip, kostas, jan, alec, sue
+method ranking:
+3|
+comparing to: personal judgement
+ranking: alec, filip, jan, kostas, sue
+method ranking:
 Calculation 1 - Error for my bad error adjustment
 
 Calculation 2 - Error for BPM as measurement function
@@ -110,3 +126,4 @@ Appendix 1 - Data Used
 Appendix 2 - Phase 1 Results
 Appendix 3 - Phase 2 a and b Results
 Appendix 4 - Phase 3 a,b and c Results
+Appendix 5 - RESpeck data sample
