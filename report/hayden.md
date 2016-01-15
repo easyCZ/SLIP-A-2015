@@ -474,7 +474,9 @@ been achieved by storing a number of samples and transmitting them in chunks
 
 If more time were available, it would be worth spending a significant amount of
 time investigating more efficient ways of transmitting the data obtained, as
-this would appear to be the major bottleneck in the system.
+this would appear to be the major bottleneck in the system. As an example, one
+might consider gathering a seconds worth of data, then transmitting all the data
+in one go.
 
 ### Packaging
 
