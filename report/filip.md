@@ -210,7 +210,7 @@ Referring back to the mathematical formulation of the problem, we need a functio
   </tr>
 </table>
 
-Measure one is far too inaccurate to be of use and measure three is too impractical. Measure two has significant issues, but is the only viable method. *Figures 13a* and *13b* show an attempt to quantify them. The errors are in deviation from the true BPM. The calculations behind the error bounds are in *Calculation 2*.
+Measure one is far too inaccurate to be of use and measure three is too impractical. Measure two has significant issues, but is the only viable method. *Figures 13a* and *13b* show an attempt to quantify them. The errors are in deviation from the true BPM.
 
 <table>
   <tr>
@@ -489,7 +489,7 @@ Calculations
   </tr>
   <tr class="img-caption">
     <td>
-      Calculations 1
+      Calculation 1
     </td>
   </tr>
 </table>
