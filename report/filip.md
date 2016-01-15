@@ -165,9 +165,31 @@ Goals two through five quickly follow from goal one, so this section will focus 
 
 Since the BPM code is contained in a file (services.py) which is then compiled and used in the server, the testing environment had to be created in a seperate file (local.py). Other specifications required for effective testing are described in *Figure 10*. *Figure 11* displays how information moves between local.py services.py and a CSV file. *Figure 12* lists the information that was passed from services.py to local.py.
 
-Figure 10
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure10.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 10
+    </td>
+  </tr>
+</table>
 
-Figure 11
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure11.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 11 - The Testing Environment
+    </td>
+  </tr>
+</table>
 
 Note that for testing purposes the order in which the code processes data windows is irrelevant as the BPM code draws no connection between consecutive data windows.
 
@@ -189,24 +211,9 @@ Figure 15
 
 #### Testing Procedure
 
-In my experience, it took about 0.017 seconds for a data window containg 200 data points to be evaluated. 200 data points was chosen as window length because it 
-typically correspond to X seconds HELP, 
-which is large enough to generate a BPM, but not so large that the spacing of beats can be uneven without strongly influencing the BPM. Having set restricted run time
-to 24 hours (personal choice) this allowing for roughly 5,000,000 data windows of size 200 to be evaluated. The data available, attached in *Appendix 1*, consists
-of 5.5 minutes of data from three different subjects. The data contains intentional movement to make testing more realistic. Other data not considered in the 
-experiment was collected using electrodes. This was deemed irrelevant as there was significantly less noise. The 5.5 minutes of data corresponds to X data points HELP
-and therefore provide roughly X-600 data windows to be evaluated. Additionally, there were X HELP methods combinations to choose from along with X HELP benchmarks and 
-constants. This left a total of XXX HELP data windows to be evaluated. Obviously this number is far larger than our limitation of 5,000,000. 
+In my experience, it took about 0.017 seconds for a data window containg 200 data points to be evaluated. 200 data points was chosen as window length because it typically correspond to X seconds HELP, which is large enough to generate a BPM, but not so large that the spacing of beats can be uneven without strongly influencing the BPM. Having set restricted run time to 24 hours (personal choice) this allowing for roughly 5,000,000 data windows of size 200 to be evaluated. The data available, attached in *Appendix 1*, consists of 5.5 minutes of data from three different subjects. The data contains intentional movement to make testing more realistic. Other data not considered in the experiment was collected using electrodes. This was deemed irrelevant as there was significantly less noise. The 5.5 minutes of data corresponds to X data points HELP and therefore provide roughly X-600 data windows to be evaluated. Additionally, there were X HELP methods combinations to choose from along with X HELP benchmarks and constants. This left a total of XXX HELP data windows to be evaluated. Obviously this number is far larger than our limitation of 5,000,000.     
 
-By selecting the sparse iteration method the number of data windows to be evaluated was cut down to XXX HELP. Further, the number of considered methods was reduced. 
-Instead of the methods from *Figure 3*, only the methods from *Figure 16* were considered. For more reductions in computational cost, the flow chart in 
-*Figure 17* was followed. This flow chart is clearly imperfect. Testing for the best methods and then using those results to test for constants and benchmarks
-leaves a gap. This approach limnits results to methods that work well with the chosen benchmarks and constants, preventing potentially effective combinations from 
-being selected. I decided to test for methods first because I had a better feeling for which ranges would be acceptable for constants and benchmarks (from informal 
-testing), but I had very little idea about which methods would work most effectively.
-
-Regarding the *min_spacing*, *window_size* and *iter_window* constants, I worked under the theoretical assumption that neither of them should have an
-impact on the data while they are within some accpetable range. 
+By selecting the sparse iteration method the number of data windows to be evaluated was cut down to XXX HELP. Further, the number of considered methods was reduced. Instead of the methods from *Figure 3*, only the methods from *Figure 16* were considered. For more reductions in computational cost, the flow chart in *Figure 17* was followed. This flow chart is clearly imperfect. Testing for the best methods and then using those results to test for constants and benchmarks leaves a gap. This approach limnits results to methods that work well with the chosen benchmarks and constants, preventing potentially effective combinations from being selected. I decided to test for methods first because I had a better feeling for which ranges would be acceptable for constants and benchmarks (from informal testing), but I had very little idea about which methods would work most effectively. Regarding the *min_spacing*, *window_size* and *iter_window* constants, I worked under the theoretical assumption that neither of them should have an impact on the data while they are within some accpetable range. 
 
 Figure 17
 
