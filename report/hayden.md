@@ -54,9 +54,10 @@ decided to use a filter with a cut-off frequency slightly above 10Hz, as this
 should be sufficient to avoid aliasing and also significantly reduces the amount
 of noise seen in the signal.
 
-Roy was responsible for the initial circuit design (based on Jason Nguyen's
-circuit [^1]), which I then built and tested. Following initial testing, Roy and
-myself worked together to tackle the challenges described above.
+Roy was responsible for the initial circuit design (including filtering and
+isolation inspired by Jason Nguyen's "Homemade Electrocardiograph" circuit [^1]),
+which I then built and tested. Following initial testing, Roy and myself worked
+together to tackle the challenges described above.
 
 #### Circuit refinement
 
