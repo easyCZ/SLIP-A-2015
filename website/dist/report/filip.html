@@ -430,11 +430,22 @@ and 24 km/h. The earliest participant to quit, quit after reaching 16km/h, the l
 <p>Mathematically, this problem is a linear regression problem. We generate a matrix X HELP from our data, where the ith row HELP contains the ith HELP participants scores for different metrics (such as the average breathing rate, the maximum breathing rate or the variance of breathing rates) or exercises. From the given fitness ranking of our participants we generate a vector y, where the ith HELP row contains the overall fitness score of the ith HELP participant. We are now looking for a vector w HELP such that w minimises the least squares summation := summation (yi - Xwi). This vector w is then given by the formula HELP regression formula or it can simply be computed using y\X HELP in Matlab.</p>
 <p>The challenging part is choosing XHELP. The number of rows is fixed at ten, but how can we choose our column dimension and how do we assign values to each column? The only two options that come to mind are to assign different scores to different exercises and to assign different scores to different metrics. Considering the four metrics; average breathing rate, breathing rate variance, minimum breathing rate and maximum breathing rate and the eleven different exercises (including at rest), this gives us 44 different scores to evaluate. However, the mathematical formulation of the problem gives us some restrictions. To attain a sensible answer, the row dimension of X HELP must be larger than or equal to it&#39;s column dimension (an underdetermined system would lead to multiple dimensioned solution spaced). In fact the larger its row dimension is in relation to its column dimension the better. Obviously 44 is larger than 10 so the number of scores needs to be cut down. Just considering one metric for each exercise would yield 11 and still not be sufficient. Grouping exercises would be possible but seems futile because we don&#39;t know the details of the experiment. Considering each metric for all the exercises and then averaging over all the exercises would reduce the number of scores to four, leaving us with our matrix X HELP.</p>
 <p>Having chosen what should be score, there is still need for a way to score it. The method chosen here uses the sample mean and variance to generate a normal distribution, emulating a larger population. Each metric for each exercise for each participant can then be located on this normal distribution returning what percentile the participant scored for that particular metric and exercise.</p>
-<p>Figure 27</p>
 <p>The resulting w is HELP, where w provides weights for [avg,min,max,var] respecively. </p>
 <h3 id="results">Results</h3>
 <p>We can apply w HELP that was sloved for in this experiment and the way of generating X to data from the previous experiment to test the quality of the method. The resulting ranking can then be compared to several other methods of ranking participants.</p>
-<p>Figure 28 </p>
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure26.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 25 - Comparison of Regression Ranking Method to other methods.
+    </td>
+  </tr>
+</table>
+
 <h3 id="conclusion">Conclusion</h3>
 <p>The rankings of the five participants vary too much to be a useful indicator of how successful the method is. For better testing, the experiment could be expanded.</p>
 <h2 id="appendices">Appendices</h2>
