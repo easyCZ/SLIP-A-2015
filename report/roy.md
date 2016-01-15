@@ -235,7 +235,7 @@ For the electrode placement we started with the standard medical recommended pla
     </td>
   </tr>
 </table>
-
+The table is annotated by my team mate Hayden Ball [2] and the electrode placement modelled by me.
 
 Hayden then found a paper that described a better ECG placement with specific use in wearables, targeting muscle masses and ground points that are less likely prone to movement therefore yielding a cleaner signal with light movement. However, it is still not perfect and there is lots of room for improvement as the signal would still not be acceptable if the user was jogging.
 
@@ -251,3 +251,7 @@ References
   J Nguyen
   http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html
   Accessed 2015-10-1
+[^2]:
+  SLIP Report
+  Hayden Ball
+  Accessed 2016-1-14
