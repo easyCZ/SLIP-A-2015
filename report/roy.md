@@ -96,10 +96,23 @@ During testing Hayden and I found a lot of noise artifacts which once we did a s
   </tr>
 </table>
 
-The spectrum analysis of the signal
+##### The spectrum analysis of the signal
+<table>
+  <tr>
+    <td>
+      <img alt="Fast Fourier Transform of the initial ECG output exposing frequency components"
+           src="waveforms/ecg without filter frequency.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Frequency analysis of the output of the initial ECG circuit
+    </td>
+  </tr>
+</table>
 
 
-Since all our information is at 10Hz and below we decided to build another low pass filter on the output stage to cut off frequencies of greater than 10Hz which Hayden calculated from first principles. And resulted in the following ECG output trace and spectrum signal. 
+Since all our information is at 10Hz and below Hayden built another low pass filter on the output stage to cut off frequencies of greater than 10Hz which he calculated from first principles. And resulted in the following ECG output trace and spectrum signal. 
 
 Ecg + spec signal pic here
 
