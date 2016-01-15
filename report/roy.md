@@ -257,6 +257,13 @@ As our ambition was to for the vest to be reusable we decided that we were going
 
 Issues developed with contact against the skin and unfortunately we had to succumb to using electrode gel on the pads to increase the contact/conductivity. This is an area of the hardware system that can be improved. With more time better research into different electrode materials such as using conductive cloth and designing a strap which would allow the user to adjust the pressure of the electrodes on the skin. Another major issue is our naivety that we could design a one size fits all vest with fixed electrodes. I believe the best solution in the future to solve this problem is to design a one size fits all vest with removable adhesive electrodes so the position can be altered and fine tuned for every user. As this design would require disposables it is not the most cost effective solution but strikes a good balance between ease of use and quality.
 
+Future Work
+-----------
+As a potential sensor that was to be integrated into this project I started designing a reflectance based pulse oximeter. This sensor is wrist based and outputs blood oxygenation levels and heart rate. The way it works is that LED's shine into the skin and photodetectors placed near the LED's pick up the change of light each heartbeat. The circuit for this is similar to the one designed for the ECG however there is no differential amplification needed which cuts out most of the complexity. 3 op amps can be used for this circuit (and therefore a single chip). Split into Pre amplification, low pass filter, output gain. This design got to the breadboard stage however due to myself misordering the LED (the wattage was not high enough). The LED I used was not bright enough to penetrate the skin. There was not enough time to reorder components so the pulse oximeter is being filed down as future work. 
+For the bracelet I was going to mould something out of SUGRU (a rapid prototyping soft set plastic) mounting the LDR and LED's into the plastic. 
+
+In addition to the above we would like to get the ECG tested against a commercial grade unit by a Doctor. We managed to get our ECG compared to a real one, however there was no time to statistically or quantively confirm and compare our results. However the detection and presentation of the p, qrs complex, and t wave were consistant with the model of a ecg trace. 
+
 
 Conclusion 
 ----------
