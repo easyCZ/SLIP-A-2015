@@ -12,7 +12,7 @@ With recent news about NSA surveillance, large scale data collection seems to ha
   </tr>
   <tr class="img-caption">
     <td>
-      Initial ECG circuit output before filtering
+      my first picture. yay!
     </td>
   </tr>
 </table>
