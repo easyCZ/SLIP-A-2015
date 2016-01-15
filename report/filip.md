@@ -54,7 +54,7 @@ The step structure code starts with the window of data as described before and e
   </tr>
 </table>
 
-Note that for all the step one conditions any of the following five logical statements can be applied to the condition:
+Note that for all the step one conditions any of the following five logical statements can be applied to the condition:  
 1. Whether the condition is met or not has no impact on the selection of the *iter_window*.  
 2. If the condition is met, the *iter_window* will be selected regardless of the results of other methods.  
 3. If the condition is not met, the *iter_window* will be selected regardless of the results of other methods.  
@@ -69,7 +69,18 @@ The idea of the BPM is not to project how many beats a user will have in one min
 
 Simplifying,
 
-Figure 4
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure4.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 4 - BPM Manipulations
+    </td>
+  </tr>
+</table>
 
 #### Error Detection and Adjustment
 
