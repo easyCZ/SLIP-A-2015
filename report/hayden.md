@@ -623,33 +623,33 @@ References
 ----------
 
 [^1]:
-  Homemade Electrocardiograph
-  Jason Nguyen
-  http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html
+  Homemade Electrocardiograph,
+  Jason Nguyen,
+  http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html,
   Accessed 2015-10-12
 
 [^2]:
-  Exercise Physiology: Nutrition, Energy, and Human Performance
-  William D. McArdle, Frank I. Katch, Victor L. Katch
+  Exercise Physiology: Nutrition, Energy, and Human Performance,
+  William D. McArdle, Frank I. Katch, Victor L. Katch,
   PP327
 
 [^3]:
-  A Study on the Optimal Positions of ECG Electrodes in a Garment for the Design of ECG-Monitoring Clothing for Male
-  Hakyung Cho, Joo Hyeon Lee
+  A Study on the Optimal Positions of ECG Electrodes in a Garment for the Design of ECG-Monitoring Clothing for Male,
+  Hakyung Cho, Joo Hyeon Lee,
   Journal of Medical Systems, 2015, Vol.39(9), pp.1-14
 
 [^4]:
-  Wearable Textile Electrodes for ECG Measurement
-  Lukas Vojtech, Radoslav Bortel, Marek Neruda, Milos Kozak
+  Wearable Textile Electrodes for ECG Measurement,
+  Lukas Vojtech, Radoslav Bortel, Marek Neruda, Milos Kozak,
   Advances in Electrical and Electronic Engineering, 01 January 2013, Vol.11(5), pp.410-414
 
 [^5]:
-  Fabrication of conductive fabric as textile electrode for ECG monitoring
-  Yun Zhou, Xin Ding, Jingwei Zhang, Yaru Duan, Jiyong Hu, Xudong Yang
+  Fabrication of conductive fabric as textile electrode for ECG monitoring,
+  Yun Zhou, Xin Ding, Jingwei Zhang, Yaru Duan, Jiyong Hu, Xudong Yang,
   Fibers and Polymers, 2014, Vol.15(11), pp.2260-226
 
 [^6]:
-  Vishay NTCLE100E3 NTC Thermistors Data Sheet
+  Vishay NTCLE100E3 NTC Thermistors Data Sheet,
   http://www.farnell.com/datasheets/1784420.pdf
 
 Links
