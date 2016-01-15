@@ -108,16 +108,16 @@ Figure 28 - testing of 10 patients method
 TABLE Index | Comparing to | Comparing to ranking | method ranking
 1|
 comparing to: Heart rate(lowest wins)
-ranking: 
-method ranking:
+ranking: alec, kostas, sue, jan, filip
+method ranking: Alec, Filip/Sue, Jan, Kostas
 2|
 comparing to: Maximum speed in test
 ranking: filip, kostas, jan, alec, sue
-method ranking:
+method ranking: Alec, Filip/Sue, Jan, Kostas
 3|
 comparing to: personal judgement
 ranking: alec, filip, jan, kostas, sue
-method ranking:
+method ranking: Alec, Filip/Sue, Jan, Kostas
 Calculation 1 - Error for my bad error adjustment
 
 Calculation 2 - Error for BPM as measurement function

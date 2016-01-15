@@ -295,7 +295,7 @@ percentile the participant scored for that particular metric and exercise.
 
 Figure 27
 
-The resulting w is HELP.
+The resulting w is HELP, where w provides weights for [avg,min,max,var] respecively. 
 
 		Results (level 3 heading)
 
@@ -306,5 +306,4 @@ Figure 28
 
 		Conclusion (level 3 heading)
 
-
-
+The rankings of the five participants vary too much to be a useful indicator of how successful the method is. For better testing, the experiment could be expanded.

@@ -1,4 +1,20 @@
-w
+w - using backslash - negative to zero.
+ 1.3903
+    0.4146
+    0.7445
+   -1.0605
+
 method applied to 5
 method applied to 5 ranking
-heart rate 5 ranking
+heart rate 5 ranking CHECK
+
+   1.3135 Alec
+    1.4889 Filip
+    1.6574 Jan
+    2.2751 Kostas
+    1.4889 Sue
+
+Kostas
+Jan
+Filip /Sue
+Alec
