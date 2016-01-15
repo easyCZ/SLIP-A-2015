@@ -12,7 +12,7 @@ health vest, installing them into the vest, and transferring data from the
 sensors to the Android application which could then upload the data for further
 processing and display.
 
-The final design includes electrodes and analogue filtering circuitry to acquire
+The final design includes electrodes and analog filtering circuitry to acquire
 an electrocardiogram (ECG) of the wearer, and a sensor to allow monitoring of
 the wearer's temperature.
 
@@ -20,7 +20,7 @@ The electrodes and temperature sensor are connected to a "belt pack" which
 contained the ECG filtering circuit, a simple potential divider for the
 temperature sensor, and the nRF51 Development Kit (nRF51-DK). The NRF51-DK
 provides an easy interface to the nRF51822 microprocessor, which includes an
-analogue to digital converter (ADC) and Bluetooth Low Energy transceiver.
+analog to digital converter (ADC) and Bluetooth Low Energy transceiver.
 
 Note: While efforts have been made to distinguish in the following sections
 where "work" was exclusively carried out by either myself or Roy, a large amount
@@ -40,7 +40,7 @@ attached to the body. Unfortunately, there are also a number of challenges to
 overcome.
 
 The differential signal we are trying to obtain is in the order of 500μV,
-meaning gain of around 30dB must be used to obtain a usable signal. This,
+meaning a gain of around 30dB must be used to obtain a usable signal. This,
 as is to be expected with high gain amplifiers, introduces a large amount of
 noise into the signal.
 
@@ -79,7 +79,7 @@ The initial circuit provided a recognizable ECG trace, shown below.
 Although recognizable, the trace obtained contains a large amount of noise as
 the first iteration of the circuit made little attempt to filter noise.
 
-Using a Picoscope, Roy and I was able to identify the frequency of the noise introduced:
+Using a Picoscope, Roy and I were able to identify the frequency of the noise introduced:
 
 <table>
   <tr>
@@ -180,7 +180,7 @@ highlighted in red.
 #### Circuit Evaluation
 
 While it is difficult to quantitively evaluate how well the ECG circuit has
-performed (as we are generating an image rather than a quantative value), P, Q,
+performed (as we are generating an image rather than a quantitative value), P, Q,
 R, S and T sections are clearly identifiable on the trace obtained from the
 circuit, as can be seen in the waveform below:
 
@@ -259,7 +259,7 @@ a little research, I came across an alternative electrode configuration
 which is recommended for use in exercise physiology (which involves large
 amounts of movement during tests). The configuration, introduced in "Exercise
 Physiology: Nutrition, Energy, and Human Performance" [^2], has the ground
-electrode on the sternum, with the -ve and +ve electrodes in the 5th intercostal
+electrode on the sternum with the -ve and +ve electrodes in the 5th intercostal
 space on each side of the chest.
 
 <table>
@@ -317,7 +317,7 @@ Unfortunately, we found that the sponge material used in the electrodes became
 very fragile when it dried out making it unsuitable for longer term use.
 
 I decided to investigate using conductive copper tape. This was cut into small
-sections of approximately 15mm, and stuck to the inside of the vest. While this
+sections of approximately 15mm and stuck to the inside of the vest. While this
 was somewhat successful, I found that performance was improved by adding a
 slight bulge to the electrode. By wrapping the tape round a metal stud, the
 contact area is pushed into the skin a little more, improving the contact surface.
@@ -347,7 +347,7 @@ patches did a reasonable job of keeping the gel in place.
 
 #### Evaluation
 
-The requirement to use a conductive gel is disappointing, and makes putting the
+The requirement to use a conductive gel is disappointing and makes putting the
 vest on difficult (as care must be taken to avoid spreading the gel off the
 electrodes). While not particularly uncomfortable, the design would be
 significantly improved if this requirement could be removed. Given the amount
@@ -438,7 +438,7 @@ ECG output as frequently as possible. Sampling was achieved by setting up a
 from the ADC to be taken. The value is then transmitted using Bluetooth Low
 Energy.
 
-Due to the overhead of sampling the analogue signal and transmitting the new
+Due to the overhead of sampling the analog signal and transmitting the new
 value, I found that the minimum practical interval for sampling was 20ms. This
 gives a sampling frequency of 50Hz, which is sufficient for sampling signals of
 up to 25Hz.
