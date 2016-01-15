@@ -63,8 +63,8 @@ At its most basic we have a signal amplification problem that can be split into 
 We can create a virtual ground in two ways, using a potential divider or in this case we have used an Op-Amp as it has a better current output. (Also due to the fact that multiple Op-Amps are put on chips it works out well as there are usually unused spares).</p>
 <h2 id="gain-selection">Gain selection</h2>
 <p>This is the most important part of the circuit, the amplification of the signal. For this we will be doing a differential amplification on the V+ and V- electrodes. The first stage of this is to pre amplify the signal as to be able to conduct filtering for it. What we did was to amplify V+ and V- by 10 times by setting the resistors to 10k and 100k on the Op-Amps.
-At the output stage I combined both signals from the preamp stage into a single output amplifier with a gain of 20, 200k/10k resistors used to create this amplifier.</p>
-<p>Essentially the circuit we have now is what is called an instrumentation amplifier as shown below.</p>
+At the output stage I combined both signals from the preamp stage into a single output amplifier with a gain of 20, 200k/10k resistors used to create this amplifier.<sup><a href="#fn_3" id="reffn_3">3</a></sup></p>
+<p>Essentially the circuit we have now is what is called an instrumentation amplifier<sup><a href="#fn_3" id="reffn_3">3</a></sup> as shown below.</p>
 <p><img src="pictures/IAamplifier.png" alt="ECG Schematic"></p>
 <p>Whose gain is given by (1+((100k/10k)x(200k/10k))) which is approximately 200 
 Thereby we would be expecting a 0- 1.5 volt swing voltage on the output which puts it neatly within all our defined margins of Vswing &lt; Vdd/2 meaning that the signal will never go out of scope and “hit the rails”.</p>
@@ -224,6 +224,10 @@ During testing Hayden and I found a lot of noise artifacts which once we did a s
 <p>Hayden then found a paper that described a better ECG placement with specific use in wearables, targeting muscle masses and ground points that are less likely prone to movement therefore yielding a cleaner signal with light movement. However, it is still not perfect and there is lots of room for improvement as the signal would still not be acceptable if the user was jogging.</p>
 <p>As our ambition was to for the vest to be reusable we decided that we were going to look into creating our own electrodes (spearheaded by Hayden). Because of this I obtained a compression base layer top as the thinking was it should be tight enough to compress our electrodes into the skin without requiring the traditional adhesives. (Thereby making it reusable). Our electrode designs were sewn into the inside of the compression layer top meaning all the user has to do is to put the top on.</p>
 <p>Issues developed with contact against the skin and unfortunately we had to succumb to using electrode gel on the pads to increase the contact/conductivity. This is an area of the hardware system that can be improved. With more time better research into different electrode materials such as using conductive cloth and designing a strap which would allow the user to adjust the pressure of the electrodes on the skin. Another major issue is our naivety that we could design a one size fits all vest with fixed electrodes. I believe the best solution in the future to solve this problem is to design a one size fits all vest with removable adhesive electrodes so the position can be altered and fine tuned for every user. As this design would require disposables it is not the most cost effective solution but strikes a good balance between ease of use and quality.</p>
+<h2 id="future-work">Future Work</h2>
+<p>As a potential sensor that was to be integrated into this project I started designing a reflectance based pulse oximeter. This sensor is wrist based and outputs blood oxygenation levels and heart rate. The way it works is that LED&#39;s shine into the skin and photodetectors placed near the LED&#39;s pick up the change of light each heartbeat. The circuit for this is similar to the one designed for the ECG however there is no differential amplification needed which cuts out most of the complexity. 3 op amps can be used for this circuit (and therefore a single chip). Split into Pre amplification, low pass filter, output gain. This design got to the breadboard stage however due to myself misordering the LED (the wattage was not high enough). The LED I used was not bright enough to penetrate the skin. There was not enough time to reorder components so the pulse oximeter is being filed down as future work. 
+For the bracelet I was going to mould something out of SUGRU (a rapid prototyping soft set plastic) mounting the LDR and LED&#39;s into the plastic. </p>
+<p>In addition to the above we would like to get the ECG tested against a commercial grade unit by a Doctor. We managed to get our ECG compared to a real one, however there was no time to statistically or quantively confirm and compare our results. However the detection and presentation of the p, qrs complex, and t wave were consistant with the model of a ecg trace. </p>
 <h2 id="conclusion">Conclusion </h2>
 <p>The UberVest works end to end with lots of room for future potential expansion. The vest gives reliable readings whilst still and with small movements. As the design has been kept very modular each component can be upgraded independantly of each other, such as the addition of sensors to the vest, upgrading the ECG circuit etc... However as it stands we, as a team, have managed to produce a Low cost reliable ECG vest that is linked directly to the internet. </p>
 <h2 id="references">References</h2>
@@ -231,11 +235,20 @@ During testing Hayden and I found a lot of noise artifacts which once we did a s
   Homemade ECG
   J Nguyen
   <a href="http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html">http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html</a>
-  Accessed 2015-10-1</p>
+  Accessed 2015-10-5</p>
 <p><sup><a href="#fn_2" id="reffn_2">2</a></sup>:
   SLIP Report
   Hayden Ball
   Accessed 2016-1-14</p>
+<p><sup><a href="#fn_3" id="reffn_3">3</a></sup>
+  A Designers Guide to Instrumentation Amplifiers 
+  Charles Kitchin and Lew Count
+  <a href="http://www.x2y.com/publications/emi/amp.pdf">http://www.x2y.com/publications/emi/amp.pdf</a>
+  Accessed 2015-10-1</p>
+<h2 id="links">Links</h2>
+<p>[1] Texas Instruments Quad Op-Amp Datasheet <a href="http://www.ti.com/lit/ds/symlink/lm124-n.pdf">http://www.ti.com/lit/ds/symlink/lm124-n.pdf</a></p>
+<p>[2] Texas Instruments Dual Op-Amp Datasheet  <a href="http://www.ti.com/product/LM358">http://www.ti.com/product/LM358</a></p>
+<p>[3] TARGET PCB software <a href="http://ibfriedrich.com/index.htm">http://ibfriedrich.com/index.htm</a></p>
 
     </div> <!-- .container -->
 
