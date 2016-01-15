@@ -60,7 +60,8 @@ At the output stage I combined both signals from the preamp stage into a single 
 
 Essentially the circuit we have now is what is called an instrumentation amplifier as shown below.
 
-<screenshot of IA circuit>
+![ECG Schematic](pictures/IAamplifier.png)
+
 
 Whose gain is given by Av = 1 + 2R/Rb
 Which therefore gives us an overall gain of 20, thereby we would be expecting a 0- 1.5 volt swing voltage on the output which puts it neatly within all our defined margins of Vswing < Vdd/2 meaning that the signal will never go out of scope and “hit the rails”.
@@ -77,7 +78,7 @@ Now that we have the power supply, the instrumentation amplifier circuit, the vi
 
 The final circuit diagram is shown below.
 
-![ECG Schematic](pictures/ecg circuit.png)
+![ECG Schematic](pictures/ecg circuit.jpg)
 
 
 
