@@ -209,7 +209,32 @@ Shirt and Electrode placement
 -----------------------------
 For the electrode placement we started with the standard medical recommended placement which is the V+ and V- electrodes located as shown in the diagram below. However, unfortunately through testing although this yielded a clear ECG trace the electrodes were placed on muscle masses that are very prone to movement hence we completely lost the signal during any kind of light movement.
 
-diagram
+<table>
+  <tr>
+    <td>
+      <img src="electrode_placement_trials/placement6.jpg">
+    </td>
+    <td>
+      <img src="electrode_placement_trials/placement6_waveform_normal.png">
+    </td>
+    <td>
+      <img src="electrode_placement_trials/placement6_waveform_movement.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td></td>
+
+    <td>
+      With little movement, a very clear trace is obtained (although in the
+      image the +ve and -ve electrodes have been incorrectly connected,
+      resulting in an inverted trace).
+    </td>
+
+    <td>
+      However, with movement, the trace becomes unintelligible.
+    </td>
+  </tr>
+</table>
 
 
 Hayden then found a paper that described a better ECG placement with specific use in wearables, targeting muscle masses and ground points that are less likely prone to movement therefore yielding a cleaner signal with light movement. However, it is still not perfect and there is lots of room for improvement as the signal would still not be acceptable if the user was jogging.
