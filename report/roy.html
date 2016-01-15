@@ -66,8 +66,8 @@ We can create a virtual ground in two ways, using a potential divider or in this
 At the output stage I combined both signals from the preamp stage into a single output amplifier with a gain of 20, 200k/10k resistors used to create this amplifier.</p>
 <p>Essentially the circuit we have now is what is called an instrumentation amplifier as shown below.</p>
 <p><img src="pictures/IAamplifier.png" alt="ECG Schematic"></p>
-<p>Whose gain is given by Av = 1 + 2R/Rb
-Which therefore gives us an overall gain of 20, thereby we would be expecting a 0- 1.5 volt swing voltage on the output which puts it neatly within all our defined margins of Vswing &lt; Vdd/2 meaning that the signal will never go out of scope and “hit the rails”.</p>
+<p>Whose gain is given by (1+((100k/10k)x(200k/10k))) which is approximately 200 
+Thereby we would be expecting a 0- 1.5 volt swing voltage on the output which puts it neatly within all our defined margins of Vswing &lt; Vdd/2 meaning that the signal will never go out of scope and “hit the rails”.</p>
 <h2 id="opto-isolation">Opto Isolation</h2>
 <p>This is a very important safety aspect of the design, we require there to be no way for any current to be fed back towards the electrodes. As even small currents placed across the heart and stop it and hence is incredibly dangerous! JNuguyen [1] had the wrote about the idea of instead of using dedicated opto isolating hardware, just by placing a series of diodes across all the inputs it will mean for the case that the voltage difference between them is &lt;0.7v there will be no current flowing between the electrodes. As the voltages between the electrodes are in the millivolts the case where current is allowed to flow between the electrodes is highly statistically improbable[1].</p>
 <h2 id="putting-the-circuit-all-together">Putting the circuit all together</h2>
@@ -207,7 +207,7 @@ During testing Hayden and I found a lot of noise artifacts which once we did a s
   </tr>
 </table>
 
-<p>The table is annotated by my team mate Hayden Ball [2] and the electrode placement modelled by me.</p>
+<p>The table is annotated by my team mate Hayden Ball [2] </p>
 <p>Hayden then found a paper that described a better ECG placement with specific use in wearables, targeting muscle masses and ground points that are less likely prone to movement therefore yielding a cleaner signal with light movement. However, it is still not perfect and there is lots of room for improvement as the signal would still not be acceptable if the user was jogging.</p>
 <p>As our ambition was to for the vest to be reusable we decided that we were going to look into creating our own electrodes (spearheaded by Hayden). Because of this I obtained a compression base layer top as the thinking was it should be tight enough to compress our electrodes into the skin without requiring the traditional adhesives. (Thereby making it reusable). Our electrode designs were sewn into the inside of the compression layer top meaning all the user has to do is to put the top on.</p>
 <p>Issues developed with contact against the skin and unfortunately we had to succumb to using electrode gel on the pads to increase the contact/conductivity. This is an area of the hardware system that can be improved. With more time better research into different electrode materials such as using conductive cloth and designing a strap which would allow the user to adjust the pressure of the electrodes on the skin. Another major issue is our naivety that we could design a one size fits all vest with fixed electrodes. I believe the best solution in the future to solve this problem is to design a one size fits all vest with removable adhesive electrodes so the position can be altered and fine tuned for every user. As this design would require disposables it is not the most cost effective solution but strikes a good balance between ease of use and quality.</p>
@@ -216,8 +216,8 @@ During testing Hayden and I found a lot of noise artifacts which once we did a s
   Homemade ECG
   J Nguyen
   <a href="http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html">http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html</a>
-  Accessed 2015-10-1
-<sup><a href="#fn_2" id="reffn_2">2</a></sup>:
+  Accessed 2015-10-1</p>
+<p><sup><a href="#fn_2" id="reffn_2">2</a></sup>:
   SLIP Report
   Hayden Ball
   Accessed 2016-1-14</p>
