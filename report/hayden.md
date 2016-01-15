@@ -336,28 +336,24 @@ contact area is pushed into the skin a little more, improving the contact surfac
 
 While the copper tape electrodes performed reasonably well while the wearer was
 stationary, we once again found that movement caused the signal to be lost.
-Given the limited time available I suggested sewing small patches of cloth over
-the electrodes, then using an "off the shelf" electrode gel to try and improve
-the contact between the skin and the electrode - even during movement. The cloth
-helped to keep the gel in place, and the gel did indeed reduce movement artifacts
-seen with the dry electrodes.
+Roy and I investigated using an electrode gel to improve contact between the
+skin and the electrode, and I suggested sewing small patches of cloth over
+the electrodes to keep the gel in place.
+
+We found that the use of an electrode gel significantly reduced the noise seen
+when using our copper tape electrodes, even during movement, and the cloth
+patches did a reasonable job of keeping the gel in place.
 
 #### Evaluation
 
-The vest is relatively comfortable to wear, with the main discomfort being
-caused by the poor integration of the signal wires into the vest.
-
-The requirement to use a conductive gel is disappointing, and makes putting on
-the vest difficult. While not particularly uncomfortable, the design would be
+The requirement to use a conductive gel is disappointing, and makes putting the
+vest on difficult (as care must be taken to avoid spreading the gel off the
+electrodes). While not particularly uncomfortable, the design would be
 significantly improved if this requirement could be removed. Given the amount
-of research into conductive materials and wearable technology, it is likely that
-this could be overcome with a little more time and research.
+of current research into conductive materials and wearable technology, it is
+likely that this could be overcome with a little more time and research.
 
 The output obtained from the vest leaves much to be desired.
-
-The R and S sections of the trace are quite clearly visible (although small),
-with the Q section of the trace occasionally obtained. However, the T section of
-the trace is significantly distorted, and the P section is rarely seen.
 
 <table>
   <tr>
@@ -384,6 +380,12 @@ the trace is significantly distorted, and the P section is rarely seen.
     </td>
   </tr>
 </table>
+
+The R and S sections of the trace are quite clearly visible (although small),
+with the Q section of the trace occasionally obtained. However, the T section of
+the trace is significantly distorted, and the P section is rarely seen.
+
+![Annotated vest ECG trace](waveforms/vest final annotated.png)
 
 As seen above, movement is still an issue. However, even during movement R and S
 sections of the ECG trace can be identified. While it has not been possible as
@@ -524,9 +526,14 @@ evaluation and composing the group's reports.
 
 Unfortunately, the belt pack was very large. This is largely due to the size of
 the nRF51-DK, and the ECG circuit PCB. This made it cumbersome to carry around,
-and would need to be improved if more time were available. The compression shirt
-worked reasonably well, although use of thinner stranded cable would have
-reduced the small amount of discomfort caused by the routing of sensor cables.
+and would need to be improved if more time were available.
+
+The compression shirt successfully held the electrodes and temperature sensor in
+the correct places, and is not uncomfortable to wear. Use of thinner
+stranded cable would have reduced the small amount of discomfort that results
+from the routing of the sensor and electrode cables. With more time, the cables
+could be better integrated into the shirt, perhaps by sewing material over the
+whole length of the cable.
 
 Website
 -------
