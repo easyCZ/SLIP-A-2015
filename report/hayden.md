@@ -100,8 +100,9 @@ may not be a problem when the device is running on batteries.
 However, as these are beyond our desired signal frequency of 10Hz we were able
 to simply add a 2nd order low pass filter to remove the noise.
 
-I was responsible for designing the second-order low pass filter, which took the
-form of a standard operational amplifier configuration (pictured below).
+I was responsible for designing a second-order low pass filter, which was added
+after the final gain stage. The design took the form of a standard operational
+amplifier configuration (pictured below).
 
 <table>
   <tr>
@@ -170,7 +171,10 @@ frequencies of interest, effectively removing the majority of noise present.
 
 #### Final ECG Circuit Schematic
 
-![ECG Schematic](pictures/ecg circuit.jpg)
+The full circuit schematic is printed below, with the filter that I added
+highlighted in red.
+
+![ECG Schematic](pictures/ecg circuit hayden.png)
 
 #### Circuit Evaluation
 
