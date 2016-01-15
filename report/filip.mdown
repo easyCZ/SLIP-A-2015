@@ -3,6 +3,21 @@ Filip Frahm
 
 With recent news about NSA surveillance, large scale data collection seems to have a negative connotation in our society. While fear for ones' privacy is justified,large scale data collection can be of tremendous benefit. An application of it that stands out is the imrpovement of our society's health. At the University of Edinburgh, researcher Andy Sims is using bioinformatics and genetic data to predict which cancer drugs are most appropriate for a breat cancer patient[^L3]. In San Francisco, Google-backed company Calico[^L2] gained access to Ancestry.com's genetic database with the intention of using genetic and family tree related data to improve the human lifespan[^L1].
 
+
+<table>
+  <tr>
+    <td>
+      <img alt="Hi there" src="pictures/picture1.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Initial ECG circuit output before filtering
+    </td>
+  </tr>
+</table>
+
+
 The goal for our project was to create a vest that would 1)have as many health related sensors as possible and 2)process and present that data to the user. We believe that such a vest would not only be attractive for personal use but that it could, similarly to the examples above, also advance medical research by providing data. In the duration of the course, a temperature sensor and an electrocardiogram(ECG) were installed to a vest. Further, a website and mobile application were created to process and present the data. While a respiratory sensor has not yet been integrated to the vest some research regarding future applications of such a sensor has been completed.  
 
 My role in the project was to process data. Data processing included the conversion of data from the ECG to a beats per minute(BPM) value. Additionally, it was my task to explore potential uses of a respiratory sensor (RESpeck).  
@@ -200,7 +215,7 @@ Figure 23
 
 ### Results and Evaluation (level 3 heading)
 
-While heart rate decreased in a nice curve with increasing slope (see *Figure 24*), there was no recognisable pattern to the mean inspiratory flow during recovery from exercise (see *Figure 25 *). The exception to this observation is *Figure 26*. From subjective observations during the experiment, breathing seemed more aggressive initially and then cooled down. While it is likely that there is no trend, it is possible that the lack of trend in the mean inspiratory flow during recovery is a result of error in data collection. This error could be a result of participant movement or of the breathing signal being normalised. Since I am not fully aware of how the breathing signal algorithm works, I can neither confirm nor deny that notion. However, it is possible to conclude that in the generated data mean inpiratory flow is not correlated to heart rate.
+While heart rate decreased in a nice curve with increasing slope (see *Figure 24*), there was no recognisable pattern to the mean inspiratory flow during recovery from exercise (see *Figure 25 *). The exception to this observation is Figure 26*. From subjective observations during the experiment, breathing seemed more aggressive initially and then cooled down. While it is likely that there is no trend, it is possible that the lack of trend in the mean inspiratory flow during recovery is a result of error in data collection. This error could be a result of participant movement or of the breathing signal being normalised. Since I am not fully aware of how the breathing signal algorithm works, I can neither confirm nor deny that notion. However, it is possible to conclude that in the generated data mean inpiratory flow is not correlated to heart rate.
 
 Fitness Ranking Experiment
 -----------
