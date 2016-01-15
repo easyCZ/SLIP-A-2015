@@ -153,7 +153,7 @@ Goals two through five quickly follow from goal one, so this section will focus 
 <table>
   <tr>
     <td>
-      <img alt="" src="pictures/filip/Figure9.png">
+      <img alt="" src="pictures/filip/figure9.png">
     </td>
   </tr>
   <tr class="img-caption">
