@@ -77,7 +77,7 @@ Now that we have the power supply, the instrumentation amplifier circuit, the vi
 
 The final circuit diagram is shown below.
 
-![ECG Schematic](pictures/ecg circuit.png)
+![ECG Schematic](pictures/ecg circuit.jpg)
 
 
 
