@@ -65,16 +65,15 @@ We can create a virtual ground in two ways, using a potential divider or in this
 <p>This is the most important part of the circuit, the amplification of the signal. For this we will be doing a differential amplification on the V+ and V- electrodes. The first stage of this is to pre amplify the signal as to be able to conduct filtering for it. What we did was to amplify V+ and V- by 10 times by setting the resistors to 10k and 100k on the Op-Amps.
 At the output stage I combined both signals from the preamp stage into a single output amplifier with a gain of 20, 200k/10k resistors used to create this amplifier.</p>
 <p>Essentially the circuit we have now is what is called an instrumentation amplifier as shown below.</p>
-<screenshot of IA circuit>
-
+<p><img src="pictures/IAamplifier.png" alt="ECG Schematic"></p>
 <p>Whose gain is given by Av = 1 + 2R/Rb
 Which therefore gives us an overall gain of 20, thereby we would be expecting a 0- 1.5 volt swing voltage on the output which puts it neatly within all our defined margins of Vswing &lt; Vdd/2 meaning that the signal will never go out of scope and “hit the rails”.</p>
 <h2 id="opto-isolation">Opto Isolation</h2>
-<p>This is a very important safety aspect of the design, we require there to be no way for any current to be fed back towards the electrodes. As even small currents placed across the heart and stop it and hence is incredibly dangerous! JNuguyen had the wrote about the idea of instead of using dedicated opto isolating hardware, just by placing a series of diodes across all the inputs it will mean for the case that the voltage difference between them is &lt;0.7v there will be no current flowing between the electrodes. As the voltages between the electrodes are in the millivolts the case where current is allowed to flow between the electrodes is highly statistically improbable.</p>
+<p>This is a very important safety aspect of the design, we require there to be no way for any current to be fed back towards the electrodes. As even small currents placed across the heart and stop it and hence is incredibly dangerous! JNuguyen [1] had the wrote about the idea of instead of using dedicated opto isolating hardware, just by placing a series of diodes across all the inputs it will mean for the case that the voltage difference between them is &lt;0.7v there will be no current flowing between the electrodes. As the voltages between the electrodes are in the millivolts the case where current is allowed to flow between the electrodes is highly statistically improbable[1].</p>
 <h2 id="putting-the-circuit-all-together">Putting the circuit all together</h2>
-<p>Now that we have the power supply, the instrumentation amplifier circuit, the virtual ground circuit and the optoisolation we are ready to put all the pieces together to form the full circuit. I tested JNuguyen active low pass filter design using the picoscope and integrated it into the middle of our instrument amplifier before the output gain stage and before the pre-amp. Hayden then added an additional filter at the output of the circuit to remove power line noise. I then generated the schematic in TARGET; a circuit/PCB manufacturing program.</p>
+<p>Now that we have the power supply, the instrumentation amplifier circuit, the virtual ground circuit and the optoisolation we are ready to put all the pieces together to form the full circuit. I tested JNuguyen active low pass filter [1] design using the picoscope and integrated it into the middle of our instrument amplifier before the output gain stage and before the pre-amp. Hayden then added an additional filter at the output of the circuit to remove power line noise. I then generated the schematic in TARGET; a circuit/PCB manufacturing program.</p>
 <p>The final circuit diagram is shown below.</p>
-<p>&lt;<Circuit Diagram>&gt;</p>
+<p><img src="pictures/ecg circuit.jpg" alt="ECG Schematic"></p>
 <p>Testing and additional filtering
 During testing Hayden and I found a lot of noise artifacts which once we did a spectrum analysis using the picoscope we found it to occur at the power line frequency (50Hz) and its harmonics (100Hz,200Hz,400Hz...) The picture below illustrates the signal ECG signal with this interference.</p>
 <table>
@@ -164,52 +163,38 @@ Once we had tested the breadboard and determined it the circuit had designed met
 <p>Future PCB improvements
 We were limited to using single layer and through hole technology in the design and production of this PCB, resulting in a larger PCB than practical. However the exact same circuit replaced by the SMD version of its components would be the size of a 50p coin making it perfect to be sown into the lining of a shirt.</p>
 <h2 id="">=======</h2>
-<p>Once we had tested the breadboard and determined it the circuit had designed met the specification, I began the process of converting the schematic into a PCB by hand routing the components and the tracks to minimise the space of the board. The initial design below fit in a 6x4 cm area sized board. However I had made a mistake in the design and mixed up the orientation of the chip requiring a redesign. For the second attempt I combined hand routing and auto-routing algorithms to speed up the process (as we were very close to the demo day). The trade off was that the board was significantly larger than the initial version, but it worked. </p>
+<p>Once we had tested the breadboard and determined it the circuit had designed met the specification, I began the process of converting the schematic into a PCB by hand routing the components and the tracks to minimise the space of the board. The initial design below fit in a 6x4 cm area sized board. However I had made a mistake in the design and mixed up the orientation of the chip requiring a redesign. For the second attempt I combined hand routing and auto-routing algorithms to speed up the process (as we were very close to the demo day). The trade off was that the board was significantly larger than the initial version, but it worked.</p>
 <h2 id="future-pcb-improvements">Future PCB improvements</h2>
-<p>We were limited to using single layer and through hole technology in the design and production of this PCB, resulting in a larger PCB than practical. However the exact same circuit replaced by the SMD version of its components would be the size of a 50p coin making it perfect to be sown into the lining of a shirt. </p>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>d8901a347c1194f04bb0f420c2e664cf81a97d81</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
+<p>We were limited to using single layer and through hole technology in the design and production of this PCB, resulting in a larger PCB than practical. However the exact same circuit replaced by the SMD version of its components would be the size of a 50p coin making it perfect to be sown into the lining of a shirt.</p>
 <h2 id="costing">Costing</h2>
 <p>As the primary goal of this was to make it as accessible/cheap as possible whilst not sacrificing performance. Below is a cost estimate of the components and estimates of scale for bulk manufacture.</p>
+<table>
+  <tr>
+    <td>
+      <img alt="Costing table"
+           src="pictures/componenttable.PNG">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Version 2 of the PCB Design
+    </td>
+  </tr>
+</table>
+
 <p>As shown by the table above the cost of a single unit is 6.061 GBP however in bulk (1000 units +) the cost drops massively to 1.63 GBP. Of course this cost does not include the price of the prospeckt board but this price is incredibly reasonable for the results that we gathered from it.</p>
-<p>Shirt and Electrode placement
-For the electrode placement we started with the standard medical recommended placement which is the V+ and V- electrodes located as shown in the diagram below. However, unfortunately through testing although this yielded a clear ECG trace the electrodes were placed on muscle masses that are very prone to movement hence we completely lost the signal during any kind of light movement.</p>
+<h2 id="shirt-and-electrode-placement">Shirt and Electrode placement</h2>
+<p>For the electrode placement we started with the standard medical recommended placement which is the V+ and V- electrodes located as shown in the diagram below. However, unfortunately through testing although this yielded a clear ECG trace the electrodes were placed on muscle masses that are very prone to movement hence we completely lost the signal during any kind of light movement.</p>
 <p>diagram</p>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
-Hayden then found a paper that described a better ECG placement with specific use in wearables, targeting muscle masses and ground points that are less likely prone to movement therefore yielding a cleaner signal with light movement. However, it is still not perfect and there is lots of room for improvement as the signal would still not be acceptable if the user was jogging.</p>
+<p>Hayden then found a paper that described a better ECG placement with specific use in wearables, targeting muscle masses and ground points that are less likely prone to movement therefore yielding a cleaner signal with light movement. However, it is still not perfect and there is lots of room for improvement as the signal would still not be acceptable if the user was jogging.</p>
 <p>As our ambition was to for the vest to be reusable we decided that we were going to look into creating our own electrodes (spearheaded by Hayden). Because of this I obtained a compression base layer top as the thinking was it should be tight enough to compress our electrodes into the skin without requiring the traditional adhesives. (Thereby making it reusable). Our electrode designs were sewn into the inside of the compression layer top meaning all the user has to do is to put the top on.</p>
-<h1 id="issues-developed-with-contact-against-the-skin-and-unfortunately-we-had-to-succumb-to-using-electrode-gel-on-the-pads-to-increase-the-contact-conductivity-this-is-an-area-of-the-hardware-system-that-can-be-improved-with-more-time-better-research-into-different-electrode-materials-such-as-using-conductive-cloth-and-designing-a-strap-which-would-allow-the-user-to-adjust-the-pressure-of-the-electrodes-on-the-skin-another-major-issue-is-our-naivety-that-we-could-design-a-one-size-fits-all-vest-with-fixed-electrodes-i-believe-the-best-solution-in-the-future-to-solve-this-problem-is-to-design-a-one-size-fits-all-vest-with-removable-adhesive-electrodes-so-the-position-can-be-altered-and-fine-tuned-for-every-user-as-this-design-would-require-disposables-it-is-not-the-most-cost-effective-solution-but-strikes-a-good-balance-between-ease-of-use-and-quality">Issues developed with contact against the skin and unfortunately we had to succumb to using electrode gel on the pads to increase the contact/conductivity. This is an area of the hardware system that can be improved. With more time better research into different electrode materials such as using conductive cloth and designing a strap which would allow the user to adjust the pressure of the electrodes on the skin. Another major issue is our naivety that we could design a one size fits all vest with fixed electrodes. I believe the best solution in the future to solve this problem is to design a one size fits all vest with removable adhesive electrodes so the position can be altered and fine tuned for every user. As this design would require disposables it is not the most cost effective solution but strikes a good balance between ease of use and quality.</h1>
-<p>Hayden then found a paper that described a better ECG placement with specific use in wearables, targeting muscle masses and ground points that are less likely prone to movement therefore yielding a cleaner signal with light movement. However, it is still not perfect and there is lots of room for improvement as the signal would still not be acceptable if the user was jogging. </p>
-<p>As our ambition was to for the vest to be reusable we decided that we were going to look into creating our own electrodes (spearheaded by Hayden). Because of this I obtained a compression base layer top as the thinking was it should be tight enough to compress our electrodes into the skin without requiring the traditional adhesives. (Thereby making it reusable). Our electrode designs were sewn into the inside of the compression layer top meaning all the user has to do is to put the top on. </p>
-<p>Issues developed with contact against the skin and unfortunately we had to succumb to using electrode gel on the pads to increase the contact/conductivity. This is an area of the hardware system that can be improved. With more time better research into different electrode materials such as using conductive cloth and designing a strap which would allow the user to adjust the pressure of the electrodes on the skin. Another major issue is our naivety that we could design a one size fits all vest with fixed electrodes. I believe the best solution in the future to solve this problem is to design a one size fits all vest with removable adhesive electrodes so the position can be altered and fine tuned for every user. As this design would require disposables it is not the most cost effective solution but strikes a good balance between ease of use and quality. </p>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>d8901a347c1194f04bb0f420c2e664cf81a97d81</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
+<p>Issues developed with contact against the skin and unfortunately we had to succumb to using electrode gel on the pads to increase the contact/conductivity. This is an area of the hardware system that can be improved. With more time better research into different electrode materials such as using conductive cloth and designing a strap which would allow the user to adjust the pressure of the electrodes on the skin. Another major issue is our naivety that we could design a one size fits all vest with fixed electrodes. I believe the best solution in the future to solve this problem is to design a one size fits all vest with removable adhesive electrodes so the position can be altered and fine tuned for every user. As this design would require disposables it is not the most cost effective solution but strikes a good balance between ease of use and quality.</p>
+<h2 id="references">References</h2>
+<p><sup><a href="#fn_1" id="reffn_1">1</a></sup>:
+  Homemade ECG
+  J Nguyen
+  <a href="http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html">http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html</a>
+  Accessed 2015-10-1</p>
 
     </div> <!-- .container -->
 
