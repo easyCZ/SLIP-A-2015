@@ -26,7 +26,7 @@ Temperature Sensor - Monitoring of skin temperature, useful during exercise to p
 My Contribution
 ---------------
 
-My contribution to this project was purely hardware based. Due to the fact that we decided on to make the project as low cost and accessible as possible, we had to design the circuit from the ground up without using any pre built circuit boards apart from the prospeckt to allow us to easily set up a bluetooth connection. As normal with analog circuits and very small signals the design process is relatively complicated leading for me to collaborate with Hayden Ball to share the workload throughout the design process.
+My contribution to this project was purely hardware based. Due to the fact that we decided on to make the project as low cost and accessible as possible, we had to design the circuit from the ground up without using any pre built circuit boards apart from the prospeckz to allow us to easily set up a bluetooth connection. As normal with analog circuits and very small signals the design process is relatively complicated leading for me to collaborate with Hayden Ball to share the workload throughout the design process.
 
 Part 1 - Building the ECG Circuit
 ---------------------------------
@@ -41,9 +41,9 @@ Now that we have what our inputs are going to be, let define our ideal output. W
 Selecting Vdd
 -------------
 
-Due to the fact that the prospeckt runs on a 3.3v power supply to keep the circuit its most simple power wise it would mean picking a 3.3v power source. However, if we were to select 3.3v for our ECG power supply it would mean that the signal would be biased at 1.515v and the swing would be less than that. This presents a major problem when we want come to the ADC stage as a lower voltage would mean less quantization levels and therefore much less resolution when the analog signal is digitalized. This is not an acceptable trade-off.
+Due to the fact that the prospeckz runs on a 3.3v power supply to keep the circuit its most simple power wise it would mean picking a 3.3v power source. However, if we were to select 3.3v for our ECG power supply it would mean that the signal would be biased at 1.515v and the swing would be less than that. This presents a major problem when we want come to the ADC stage as a lower voltage would mean less quantization levels and therefore much less resolution when the analog signal is digitalized. This is not an acceptable trade-off.
 
-The next best solution is to run the whole circuit off 9V batteries and use a voltage regulator to step down the power for the prospeckt board. This leaves the ECG circuit with a 4.5v bias and around a 3v swing based on the gain. This should therefore yield adequate resolution when passed through the ADC.
+The next best solution is to run the whole circuit off 9V batteries and use a voltage regulator to step down the power for the prospeckz board. This leaves the ECG circuit with a 4.5v bias and around a 3v swing based on the gain. This should therefore yield adequate resolution when passed through the ADC.
 
 Another power problem
 ---------------------
@@ -203,7 +203,7 @@ As the primary goal of this was to make it as accessible/cheap as possible whils
   </tr>
 </table>
 
-As shown by the table above the cost of a single unit is 6.061 GBP however in bulk (1000 units +) the cost drops massively to 1.63 GBP. Of course this cost does not include the price of the prospeckt board but this price is incredibly reasonable for the results that we gathered from it.
+As shown by the table above the cost of a single unit is 6.061 GBP however in bulk (1000 units +) the cost drops massively to 1.63 GBP. Of course this cost does not include the price of the prospeckz board but this price is incredibly reasonable for the results that we gathered from it.
 
 Shirt and Electrode placement
 -----------------------------
