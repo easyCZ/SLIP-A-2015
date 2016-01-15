@@ -7,7 +7,7 @@ With recent news about NSA surveillance, large scale data collection seems to ha
 <table>
   <tr>
     <td>
-      <img alt="Hi there" src="pictures/picture1.png">
+      <img alt="" src="pictures/picture1.png">
     </td>
   </tr>
   <tr class="img-caption">
