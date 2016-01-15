@@ -56,9 +56,9 @@ Gain selection
 --------------
 
 This is the most important part of the circuit, the amplification of the signal. For this we will be doing a differential amplification on the V+ and V- electrodes. The first stage of this is to pre amplify the signal as to be able to conduct filtering for it. What we did was to amplify V+ and V- by 10 times by setting the resistors to 10k and 100k on the Op-Amps.
-At the output stage I combined both signals from the preamp stage into a single output amplifier with a gain of 20, 200k/10k resistors used to create this amplifier.
+At the output stage I combined both signals from the preamp stage into a single output amplifier with a gain of 20, 200k/10k resistors used to create this amplifier.[^3]
 
-Essentially the circuit we have now is what is called an instrumentation amplifier as shown below.
+Essentially the circuit we have now is what is called an instrumentation amplifier[^3] as shown below.
 
 ![ECG Schematic](pictures/IAamplifier.png)
 
@@ -277,9 +277,26 @@ References
   Homemade ECG
   J Nguyen
   http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html
-  Accessed 2015-10-1
+  Accessed 2015-10-5
   
 [^2]:
   SLIP Report
   Hayden Ball
   Accessed 2016-1-14
+  
+[^3]
+  A Designers Guide to Instrumentation Amplifiers 
+  Charles Kitchin and Lew Count
+  http://www.x2y.com/publications/emi/amp.pdf
+  Accessed 2015-10-1
+  
+Links
+-----
+
+[1] Texas Instruments Quad Op-Amp Datasheet http://www.ti.com/lit/ds/symlink/lm124-n.pdf
+
+[2] Texas Instruments Dual Op-Amp Datasheet  http://www.ti.com/product/LM358
+
+[3] TARGET PCB software http://ibfriedrich.com/index.htm
+
+
