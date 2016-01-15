@@ -133,13 +133,35 @@ In testing, data windows with high error rates (error > X% HELP) were discarded.
 
 The goals for testing were to determine the best possible benchmarks and combinations of methods (setting) for the step structure and to measure their effectiveness. Further objectives were to graph the effect of changing the minimum spacing between beats, the length of *iter_windows* and most importantly the length of data windows.
 
-Figure 8
-
 #### Testing Environment
 
-Goals two through five quickly follow from goal one, so this section will focus on reaching goal one. A more mathematical way of formulating the problem would be to see all possible settings as a set (X HELP). Testing them is equivalent to mapping this set to another set(Q HELP), where each element is a measure of quality,to then choose the best quality and map it back to X HELP. The idea behind the testing environment was to emulate this process. Of course X is far too large to test every setting. The limitations of the testing environment and their impact is discussed in *Testing Procedure*.
+Goals two through five quickly follow from goal one, so this section will focus on reaching goal one. A more mathematical way of formulating the problem would be to see all possible settings as a set (X HELP). Testing them is equivalent to mapping this set to another set(Y HELP), where each element is a measure of quality,to then choose the best quality and map it back to X HELP. The idea behind the testing environment was to emulate this process. Of course X is far too large to test every setting. The limitations of the testing environment and their impact is discussed in *Testing Procedure*.
 
-Figure 9
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure6.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 8
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure7.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 9
+    </td>
+  </tr>
+</table>
 
 Since the BPM code is contained in a file (services.py) which is then compiled and used in the server, the testing environment had to be created in a seperate file (local.py). Other specifications required for effective testing are described in *Figure 10*. *Figure 11* displays how information moves between local.py services.py and a CSV file. *Figure 12* lists the information that was passed from services.py to local.py.
 
@@ -153,7 +175,7 @@ Figure 12
 
 #### Measuring Quality
 
-Referring back to the mathematical formulation of the problem, we need a function (f(x):X->Q HELP) that measures the quality of a particular setting. As already suggested in the pseudo code of *Figure 11*, a Monte Carlo style approach was used to determine this funciton. First, a measure of quality for a particular setting and data window was defined (f_hat(x) HELP). This measure of quality was then applied to as many data windows as possible (with the same setting) to generate an expected value for the quality of the setting (f(x) HELP). Three measures were considered for f_hat(x) HELP.
+Referring back to the mathematical formulation of the problem, we need a function (f(x):X->Y HELP) that measures the quality of a particular setting. As already suggested in the pseudo code of *Figure 11*, a Monte Carlo style approach was used to determine this funciton. First, a measure of quality for a particular setting and data window was defined (f_hat(x) HELP). This measure of quality was then applied to as many data windows as possible (with the same setting) to generate an expected value for the quality of the setting (f(x) HELP). Three measures were considered for f_hat(x) HELP.
 
 Figure 13
 
