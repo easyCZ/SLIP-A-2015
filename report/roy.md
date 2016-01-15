@@ -63,8 +63,8 @@ Essentially the circuit we have now is what is called an instrumentation amplifi
 ![ECG Schematic](pictures/IAamplifier.png)
 
 
-Whose gain is given by Av = 1 + 2R/Rb
-Which therefore gives us an overall gain of 20, thereby we would be expecting a 0- 1.5 volt swing voltage on the output which puts it neatly within all our defined margins of Vswing < Vdd/2 meaning that the signal will never go out of scope and “hit the rails”.
+Whose gain is given by (1+((100k/10k)x(200k/10k))) which is approximately 200 
+Thereby we would be expecting a 0- 1.5 volt swing voltage on the output which puts it neatly within all our defined margins of Vswing < Vdd/2 meaning that the signal will never go out of scope and “hit the rails”.
 
 Opto Isolation
 --------------
@@ -183,8 +183,6 @@ We were limited to using single layer and through hole technology in the design 
 
 
 
-
-
 Costing
 -------
 As the primary goal of this was to make it as accessible/cheap as possible whilst not sacrificing performance. Below is a cost estimate of the components and estimates of scale for bulk manufacture.
@@ -237,7 +235,7 @@ For the electrode placement we started with the standard medical recommended pla
   </tr>
 </table>
 
-The table is annotated by my team mate Hayden Ball [2] and the electrode placement modelled by me.
+The table is annotated by my team mate Hayden Ball [2] 
 
 Hayden then found a paper that described a better ECG placement with specific use in wearables, targeting muscle masses and ground points that are less likely prone to movement therefore yielding a cleaner signal with light movement. However, it is still not perfect and there is lots of room for improvement as the signal would still not be acceptable if the user was jogging.
 
@@ -253,6 +251,7 @@ References
   J Nguyen
   http://www.eng.utah.edu/~jnguyen/ecg/long_story_3.html
   Accessed 2015-10-1
+  
 [^2]:
   SLIP Report
   Hayden Ball
