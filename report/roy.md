@@ -175,6 +175,20 @@ However I had made a mistake in the design and mixed up the orientation of the c
   </tr>
 </table>
 
+I subsequently soldered the PCB and Hayden [^2] designed and fitted it into its enclosure or "belt pack".
+
+<table>
+  <tr>
+    <td>
+      <img alt="The belt pack, opened to show components" src="pictures/case.jpg">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      The belt pack, opened to show components
+    </td>
+  </tr>
+</table>
 
 Future PCB improvements
 -----------------------
@@ -242,6 +256,12 @@ Hayden then found a paper that described a better ECG placement with specific us
 As our ambition was to for the vest to be reusable we decided that we were going to look into creating our own electrodes (spearheaded by Hayden). Because of this I obtained a compression base layer top as the thinking was it should be tight enough to compress our electrodes into the skin without requiring the traditional adhesives. (Thereby making it reusable). Our electrode designs were sewn into the inside of the compression layer top meaning all the user has to do is to put the top on.
 
 Issues developed with contact against the skin and unfortunately we had to succumb to using electrode gel on the pads to increase the contact/conductivity. This is an area of the hardware system that can be improved. With more time better research into different electrode materials such as using conductive cloth and designing a strap which would allow the user to adjust the pressure of the electrodes on the skin. Another major issue is our naivety that we could design a one size fits all vest with fixed electrodes. I believe the best solution in the future to solve this problem is to design a one size fits all vest with removable adhesive electrodes so the position can be altered and fine tuned for every user. As this design would require disposables it is not the most cost effective solution but strikes a good balance between ease of use and quality.
+
+
+Conclusion 
+----------
+
+The UberVest works end to end with lots of room for future potential expansion. The vest gives reliable readings whilst still and with small movements. As the design has been kept very modular each component can be upgraded independantly of each other, such as the addition of sensors to the vest, upgrading the ECG circuit etc... However as it stands we, as a team, have managed to produce a Low cost reliable ECG vest that is linked directly to the internet. 
 
 References
 ----------
