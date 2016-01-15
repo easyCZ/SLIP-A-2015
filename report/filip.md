@@ -114,26 +114,18 @@ This adjustment is not correct. This method was chosen due to time constraints, 
   </tr>
 </table>
 
-Figure 7
-TABLE Index | Scenario | Current Adjustment | Correct Adjustment | Error | Summary
-1|
-Scenario: Error occurs only in between t1 and tn HELP.
-Current Adjustment: 100*BPM¬old / percentage of windows used HELP
-Correct Adjustment: BPM¬old*(tn-t1)/(tn-t1-error_duration) HELP
-Error Bounds: HELP
-Summary: Adujstment is not severe enough.
-2|
-Scenario: Error occurs only outside of t1 and tn HELP
-Current Adjustment: 100*BPM¬old / percentage of windows used HELP
-Correct Adjustment: No adjustment
-Error Bounds: HELP
-Summary: Adjustment is too severe.
-3|
-Scenario: Error occurs inbetween t1 and tn HELP and outside of t1 and tn HELP
-Current Adjustment: 100*BPM¬old / percentage of windows used HELP
-Correct Adjustment: BPM¬old*(tn-t1)/(tn-t1-inside_error_duration) HELP
-Error Bounds: weighted combination of 1 and 2 HELP so worst one.
-Summary: Adjustment could be too severe or not sever enough.
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure7.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 7 - Criticism of Error Adjustment Factor
+    </td>
+  </tr>
+</table>
 
 In testing, data windows with high error rates (error > X% HELP) were discarded. Nonetheless, the above adjustment could cause significant error. Calculations for the above error bounds are provided in  the *Calculations* seciont (*Calculations 1*).
 
