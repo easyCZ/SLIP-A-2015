@@ -168,7 +168,8 @@ following output:
 </table>
 
 The frequency trace clearly shows our new 40dB/decade roll-off above the
-frequencies of interest, effectively removing the majority of noise present.
+frequencies of interest and shows that the "noise floor" has moved from around
+60dB to below 85dB, effectively removing the majority of noise present.
 
 #### Final ECG Circuit Schematic
 
