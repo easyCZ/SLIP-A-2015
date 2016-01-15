@@ -274,7 +274,7 @@ By selecting the sparse iteration method the number of data windows to be evalua
   </tr>
 </table>
 
-This left 3967500 help data windows to be evaluated for phase 1 testing.
+This left 3967500 data windows to be evaluated for phase 1 testing.
 
 #### Testing Results
 
@@ -338,7 +338,18 @@ In order to better test the resulting setting, it was applied the available data
 
 The phase 3 graphs from the previous section were slightly worrying as you would expect the accuracy of the BPM code to increase with window size. Instead, the accuracy decreased. While this may be partially attributed to increased exposure to error data(the sparse method was used) it suggests that the measuring criteria and testing procedure were flawed (the best solution is not generalisable). This notion is supported by the final test using dense iteration as BPM deviated twice as much. *Figure 22* provides suggestions for improvement.
 
-Figure 22
+<table>
+  <tr>
+    <td>
+      <img alt="" src="pictures/filip/Figure21.png">
+    </td>
+  </tr>
+  <tr class="img-caption">
+    <td>
+      Figure 20 - Improvements
+    </td>
+  </tr>
+</table>
 
 Respiratory Sensor Research
 =========
